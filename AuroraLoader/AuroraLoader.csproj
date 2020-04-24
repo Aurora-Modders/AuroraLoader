@@ -51,9 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-  <Content Include="Mods\mods.txt">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
   <None Include="bin\Debug\netcoreapp3.1\Aurora.exe">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
