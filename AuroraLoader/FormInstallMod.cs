@@ -32,7 +32,7 @@ namespace AuroraLoader
                 update = KnownMods[selected];
             }
 
-            Debug.WriteLine(update);
+            Log.Debug(update);
 
             try
             {
@@ -70,8 +70,10 @@ namespace AuroraLoader
                     MessageBox.Show("Mod installed");
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
+                Log.Error("Mod installation failed", exc);
+
                 Cursor = Cursors.Default;
                 MessageBox.Show("Failed to install mod");
             }
@@ -115,9 +117,9 @@ namespace AuroraLoader
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-
+                Log.Error("Failed to get known mods.", exc);
             }
 
             UpdateCombo();

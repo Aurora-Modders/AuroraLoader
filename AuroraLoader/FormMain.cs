@@ -88,9 +88,9 @@ namespace AuroraLoader
                     ModUpdates.Add(kvp.Key, kvp.Value);
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-
+                Log.Error("Failed to get mod updates.", exc);
             }
 
             ButtonUpdateMods.Enabled = false;
@@ -337,7 +337,7 @@ namespace AuroraLoader
                     {
                         current = songs[rng.Next(songs.Count)];
 
-                        Debug.WriteLine("Playing song: " + Path.GetFileNameWithoutExtension(current.File));
+                        Log.Debug("Playing song: " + Path.GetFileNameWithoutExtension(current.File));
                         current.Play();
                     }
                     else
@@ -462,7 +462,7 @@ namespace AuroraLoader
         private void ButtonUpdateMods_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-            Debug.WriteLine("Start updating");
+            Log.Debug("Start updating");
 
             var urls = ModUpdates;
             if (urls.Count == 0)
@@ -474,13 +474,15 @@ namespace AuroraLoader
             {
                 foreach (var kvp in urls)
                 {
-                    Debug.WriteLine("Updating: " + kvp.Key.Name + " at " + kvp.Value);
+                    Log.Debug("Updating: " + kvp.Key.Name + " at " + kvp.Value);
                     try
                     {
                         Updater.Update(kvp.Value);
                     }
-                    catch (Exception)
+                    catch (Exception exc)
                     {
+                        Log.Error("Failed to update mod: " + kvp.Key.Name, exc);
+
                         Cursor = Cursors.Default;
                         MessageBox.Show("Failed to update " + kvp.Key.Name);
                         Cursor = Cursors.WaitCursor;
@@ -495,7 +497,7 @@ namespace AuroraLoader
                 MessageBox.Show("Updated " + urls.Count + " mods.");
             }
 
-            Debug.WriteLine("Stop updating");
+            Log.Debug("Stop updating");
         }
 
         private void ComboExe_SelectedIndexChanged(object sender, EventArgs e)
