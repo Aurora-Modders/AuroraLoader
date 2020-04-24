@@ -21,7 +21,7 @@ namespace AuroraLoader
 
         public int CompareTo(GameVersion other)
         {
-            return Version.CompareTo(other);
+            return Version.CompareByPrecedence(other.Version);
         }
     }
 }
