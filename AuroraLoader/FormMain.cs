@@ -88,9 +88,9 @@ namespace AuroraLoader
                     ModUpdates.Add(kvp.Key, kvp.Value);
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
-
+                Log.Error("Failed to get mod updates.", exc);
             }
 
             ButtonUpdateMods.Enabled = false;
@@ -479,8 +479,10 @@ namespace AuroraLoader
                     {
                         Updater.Update(kvp.Value);
                     }
-                    catch (Exception)
+                    catch (Exception exc)
                     {
+                        Log.Error("Failed to update mod: " + kvp.Key.Name, exc);
+
                         Cursor = Cursors.Default;
                         MessageBox.Show("Failed to update " + kvp.Key.Name);
                         Cursor = Cursors.WaitCursor;

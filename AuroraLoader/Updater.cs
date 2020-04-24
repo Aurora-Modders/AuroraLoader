@@ -51,8 +51,10 @@ namespace AuroraLoader
                             }
                         }
                     }
-                    catch (Exception)
+                    catch (Exception exc)
                     {
+                        Log.Error("Failed to get mod updates.", exc);
+
                         if (versions.ContainsKey(mod))
                         {
                             versions.Remove(mod);
