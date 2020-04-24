@@ -358,6 +358,11 @@ namespace AuroraLoader
                 Thread.Sleep(1000);
             }
 
+            foreach (var song in songs)
+            {
+                song.Stop();
+            }
+
             Invoke((MethodInvoker)delegate
             {
                 EndGame();
