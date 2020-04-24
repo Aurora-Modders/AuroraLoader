@@ -1,0 +1,96 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <StartupObject>AuroraLoader.Program</StartupObject>
+    <ApplicationIcon>Aurora.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestUpdates\**" />
+    <EmbeddedResource Remove="TestUpdates\**" />
+    <None Remove="TestUpdates\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.3" />
+    <PackageReference Include="NAudio" Version="1.10.0" />
+    <PackageReference Include="Semver" Version="2.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="FormInstallMod.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormInstallMod.Designer.cs">
+      <DependentUpon>FormInstallMod.cs</DependentUpon>
+    </Compile>
+    <Compile Update="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="FormInstallMod.resx">
+      <DependentUpon>FormInstallMod.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+  <Content Include="Mods\mods.txt">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <None Include="bin\Debug\netcoreapp3.1\Aurora.exe">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+  <None Include="Resources\Aurora.ico" />
+  <Content Include="Music\README.txt">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 01 Red Giant.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 02 Airglow.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 04 Light Years.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 05 In Time.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 06 Cepheid.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 07 Comet Halley.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 08 Ultra Deep Field.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Include="Music\Stellardrone - Light Years - 10 Messier 45.mp3">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
