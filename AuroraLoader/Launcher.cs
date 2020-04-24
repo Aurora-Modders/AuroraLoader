@@ -14,18 +14,18 @@ namespace AuroraLoader
             {
                 if (mod.Type == Mod.ModType.ROOT_UTILITY)
                 {
-                    Debug.WriteLine("Root Utility: " + mod.Name);
+                    Log.Debug("Root Utility: " + mod.Name);
                     CopyToRoot(mod);
                     Run(AppDomain.CurrentDomain.BaseDirectory, mod.Exe);
                 }
                 else if (mod.Type == Mod.ModType.UTILITY)
                 {
-                    Debug.WriteLine("Utility: " + mod.Name);
+                    Log.Debug("Utility: " + mod.Name);
                     Run(Path.GetDirectoryName(mod.DefFile), mod.Exe);
                 }
                 else if (mod.Type == Mod.ModType.DATABASE)
                 {
-                    Debug.WriteLine("Database: " + mod.Name);
+                    Log.Debug("Database: " + mod.Name);
                     throw new Exception("Database mods not supported yet: " + mod.Name);
                 }
                 else
@@ -36,14 +36,14 @@ namespace AuroraLoader
 
             if (exe.Name.Equals("Base Game"))
             {
-                Debug.WriteLine("Exe: " + exe.Name);
+                Log.Debug("Exe: " + exe.Name);
                 var process = Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
 
                 return process;
             }
             else
             {
-                Debug.WriteLine("Exe: " + exe.Name);
+                Log.Debug("Exe: " + exe.Name);
                 CopyToRoot(exe);
                 var process = Run(AppDomain.CurrentDomain.BaseDirectory, exe.Exe);
 
@@ -65,7 +65,7 @@ namespace AuroraLoader
         {
             //var java = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") + @"\Common Files\Oracle\Java\javapath";
 
-            Debug.WriteLine("Running: " + command);
+            Log.Debug("Running: " + command);
             var info = new ProcessStartInfo()
             {
                 WorkingDirectory = folder,

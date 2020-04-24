@@ -66,7 +66,7 @@ namespace AuroraLoader
 
         public static void Update(string url)
         {
-            Debug.WriteLine("Updating from: " + url);
+            Log.Debug("Updating from: " + url);
             var folder = Path.Combine(Path.GetTempPath(), "Mods");
             if (!Directory.Exists(folder))
             {

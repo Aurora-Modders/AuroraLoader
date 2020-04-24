@@ -32,7 +32,7 @@ namespace AuroraLoader
                 update = KnownMods[selected];
             }
 
-            Debug.WriteLine(update);
+            Log.Debug(update);
 
             try
             {
