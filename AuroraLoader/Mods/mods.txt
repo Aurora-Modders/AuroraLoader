@@ -1,2 +1,0 @@
-﻿AuroraMod=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraMod/updates.txt
-AuroraElectrons=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraElectrons/updates.txt

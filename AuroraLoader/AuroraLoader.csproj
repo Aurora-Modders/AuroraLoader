@@ -51,9 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-  <Content Include="Mods\mods.txt">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
   <None Include="bin\Debug\netcoreapp3.1\Aurora.exe">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </None>
@@ -89,6 +86,12 @@
 
   <ItemGroup>
     <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Mods\aurora_versions.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Mods\mirrors.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

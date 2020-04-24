@@ -14,26 +14,31 @@ namespace AuroraLoader
 {
     public partial class FormMain : Form
     {
-        private GameVersion AuroraVersion => _gameInstallation.InstalledVersion;
+        private GameVersion AuroraVersion => GameInstallation.InstalledVersion;
         private readonly List<Mod> Mods = new List<Mod>();
         private readonly Dictionary<Mod, string> ModUpdates = new Dictionary<Mod, string>();
-        
-        private readonly IConfiguration _configuration;
-        private readonly GameInstallation _gameInstallation;
+        private readonly IConfiguration Configuration;
 
+        private GameInstallation GameInstallation { get; set; } = null;
         private Thread AuroraThread { get; set; } = null;
 
         public FormMain(IConfiguration configuration)
         {
             InitializeComponent();
-            _configuration = configuration;
-            _gameInstallation = new GameInstallation(configuration);
+            Configuration = configuration;
         }
 
-        private void LoadVersion()
+        private void LoadGame()
         {
-            LabelChecksum.Text = $"Aurora checksum: {_gameInstallation.InstalledVersion.Checksum}";
-            LabelVersion.Text = $"Aurora version: {_gameInstallation.InstalledVersion.Version}";
+            var exe = Configuration["executable_location"];
+            var checksum = Program.GetChecksum(File.ReadAllBytes(exe));
+            var known_versions = GameVersion.GetKnownGameVersions();
+            var version = known_versions.Single(v => v.Checksum.Equals(checksum));
+
+            GameInstallation = new GameInstallation(version, exe);
+
+            LabelChecksum.Text = $"Aurora checksum: {GameInstallation.InstalledVersion.Checksum}";
+            LabelVersion.Text = $"Aurora version: {GameInstallation.InstalledVersion.Version}";
             if (AuroraVersion == null)
             {
                 LabelVersion.Text = "Aurora version: Unknown";
@@ -44,15 +49,18 @@ namespace AuroraLoader
             ButtonUpdateAurora.ForeColor = Color.Black;
             ButtonUpdateAurora.Enabled = false;
 
-            //if (highest != null)
-            //{
-            //    if (!highest.Equals(AuroraVersion))
-            //    {
-            //        ButtonUpdateAurora.Text = "Update Aurora: " + highest;
-            //        ButtonUpdateAurora.ForeColor = Color.Green;
-            //        ButtonUpdateAurora.Enabled = true;
-            //    }
-            //}
+            if (known_versions.Count > 0)
+            {
+                known_versions.Sort();
+                var highest = known_versions[known_versions.Count - 1];
+
+                if (highest.CompareTo(AuroraVersion) == 1)
+                {
+                    ButtonUpdateAurora.Text = "Update Aurora: " + highest;
+                    ButtonUpdateAurora.ForeColor = Color.Green;
+                    ButtonUpdateAurora.Enabled = true;
+                }
+            }
         }
 
         private void LoadMods()
@@ -384,7 +392,7 @@ namespace AuroraLoader
             TabUtilityMods.Enabled = true;
             TabGameMods.Enabled = true;
 
-            LoadVersion();
+            LoadGame();
             LoadMods();
             UpdateLists();
             UpdateButtons();
@@ -398,7 +406,7 @@ namespace AuroraLoader
             MessageBox.Show("AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
 
-            LoadVersion();
+            LoadGame();
             LoadMods();
             UpdateLists();
             UpdateButtons();
