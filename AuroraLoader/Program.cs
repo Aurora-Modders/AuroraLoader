@@ -4,16 +4,14 @@ using Semver;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace AuroraLoader
 {
     static class Program
     {
-        public static readonly string[] MIRRORS =
-        {
-            "https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/"
-        };
+        public static string[] MIRRORS => File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", "mirrors.txt"));
 
         /// <summary>
         /// The main entry point for the application.
@@ -29,6 +27,15 @@ namespace AuroraLoader
                     .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
                     .Build();
             Application.Run(new FormMain(configuration));
+        }
+
+        public static string GetChecksum(byte[] bytes)
+        {
+            using var sha = SHA256.Create();
+            var hash = sha.ComputeHash(bytes);
+            var str = Convert.ToBase64String(hash);
+
+            return str.Replace("/", "").Replace("+", "").Replace("=", "").Substring(0, 6);
         }
     }
 }
