@@ -59,6 +59,7 @@
             this.Controls.Add(this.LabelWorking);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "FormProgress";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FormProgress";
             this.UseWaitCursor = true;
             this.Load += new System.EventHandler(this.FormProgress_Load);
