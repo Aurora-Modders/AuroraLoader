@@ -6,87 +6,82 @@ using System.Linq;
 
 namespace AuroraLoader
 {
-    static class Launcher
-    {
-        public static Process Launch(Mod exe, List<Mod> others, string folder)
-        {
-            foreach (var mod in others)
-            {
-                if (mod.Type == Mod.ModType.ROOT_UTILITY)
-                {
-                    Log.Debug("Root Utility: " + mod.Name);
-                    CopyToFolder(mod, folder);
-                    Run(AppDomain.CurrentDomain.BaseDirectory, mod.Exe);
-                }
-                else if (mod.Type == Mod.ModType.UTILITY)
-                {
-                    Log.Debug("Utility: " + mod.Name);
-                    Run(Path.GetDirectoryName(mod.DefFile), mod.Exe);
-                }
-                else if (mod.Type == Mod.ModType.DATABASE)
-                {
-                    Log.Debug("Database: " + mod.Name);
-                    throw new Exception("Database mods not supported yet: " + mod.Name);
-                }
-                else
-                {
-                    throw new Exception("Invalid mod: " + mod.Name);
-                }
-            }
+	static class Launcher
+	{
+		public static Process Launch(Mod exe, List<Mod> others)
+		{
+			// TODO change signature to string executablePath and put this logic elsewhere
+			foreach (var mod in others)
+			{
+				if (mod.Type == Mod.ModType.ROOT_UTILITY)
+				{
+					Log.Debug("Root Utility: " + mod.Name);
+					CopyToRoot(mod);
+					Run(AppDomain.CurrentDomain.BaseDirectory, mod.Exe);
+				}
+				else if (mod.Type == Mod.ModType.UTILITY)
+				{
+					Log.Debug("Utility: " + mod.Name);
+					Run(Path.GetDirectoryName(mod.RawModDefinitionFileContents), mod.Exe);
+				}
+				else if (mod.Type == Mod.ModType.DATABASE)
+				{
+					Log.Debug("Database: " + mod.Name);
+					throw new Exception("Database mods not supported yet: " + mod.Name);
+				}
+				else
+				{
+					throw new Exception("Invalid mod: " + mod.Name);
+				}
+			}
 
-            if (exe.Name.Equals("Base Game"))
-            {
-                Log.Debug("Exe: " + exe.Name);
-                var process = Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
+			var process = Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
 
-                return process;
-            }
-            else
-            {
-                Log.Debug("Exe: " + exe.Name);
-                CopyToFolder(exe, folder);
-                var process = Run(AppDomain.CurrentDomain.BaseDirectory, exe.Exe);
+			return process;
 
-                return process;
-            }
-        }
+			//if (exe.Name.Equals("Base Game"))
+			//{
+			//    Log.Debug("Exe: " + exe.Name);
+			//    var process = Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
 
-        private static void CopyToFolder(Mod mod, string folder)
-        {
-            var dir = Path.GetDirectoryName(mod.DefFile);
-            Program.CopyDirectory(dir, folder);
-        }
+			//    return process;
+			//}
+			//else
+			//{
+			//    Log.Debug("Exe: " + exe.Name);
+			//    CopyToRoot(exe);
+			//    var process = Run(AppDomain.CurrentDomain.BaseDirectory, exe.Exe);
 
-        private static Process Run(string folder, string command)
-        {
-            //var java = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") + @"\Common Files\Oracle\Java\javapath";
+			//    return process;
+			//}
+		}
 
-            var pieces = command.Split(' ');
-            var exe = pieces[0];
-            var args = "";
-            if (pieces.Length > 1)
-            {
-                for (int i = 1; i < pieces.Length; i++)
-                {
-                    args += " " + pieces[i];
-                }
+		private static void CopyToRoot(Mod mod)
+		{
+			var dir = Path.GetDirectoryName(mod.RawModDefinitionFileContents);
+			var out_dir = AppDomain.CurrentDomain.BaseDirectory;
+			foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
+			{
+				File.Copy(file, Path.Combine(out_dir, Path.GetFileName(file)), true);
+			}
+		}
 
-                args = args.Substring(1);
-            }
+		private static Process Run(string folder, string command)
+		{
+			//var java = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") + @"\Common Files\Oracle\Java\javapath";
 
-            Log.Debug("Running: " + command);
-            var info = new ProcessStartInfo()
-            {
-                WorkingDirectory = folder,
-                FileName = exe, 
-                Arguments = args,
-                UseShellExecute = true,
-                CreateNoWindow = true
-            };
-            //info.EnvironmentVariables["PATH"] = java + ";" + Environment.GetEnvironmentVariable("PATH");
-            
-            var process = Process.Start(info);
-            return process;
-        }
-    }
+			Log.Debug("Running: " + command);
+			var info = new ProcessStartInfo()
+			{
+				WorkingDirectory = folder,
+				FileName = command,
+				UseShellExecute = true,
+				CreateNoWindow = true
+			};
+			//info.EnvironmentVariables["PATH"] = java + ";" + Environment.GetEnvironmentVariable("PATH");
+
+			var process = Process.Start(info);
+			return process;
+		}
+	}
 }

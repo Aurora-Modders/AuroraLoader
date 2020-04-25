@@ -95,8 +95,8 @@ namespace AuroraLoader
 
             ZipFile.ExtractToDirectory(zip, extract_folder);
 
-            var mod = Mod.GetMod(Path.Combine(extract_folder, "mod.ini"));
-            var mod_version_folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", mod.Name, mod.VersionFolder.ToString());
+            var mod = Mod.Parse(Path.Combine(extract_folder, "mod.ini"));
+            var mod_version_folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", mod.Name, mod.TargetAuroraVersion.ToString());
             if (Directory.Exists(mod_version_folder))
             {
                 Directory.Delete(mod_version_folder, true);

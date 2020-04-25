@@ -1,12 +1,6 @@
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Semver;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace AuroraLoader
@@ -28,16 +22,9 @@ namespace AuroraLoader
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
                     .Build();
-            Application.Run(new FormMain(configuration));
-        }
 
-        public static string GetChecksum(byte[] bytes)
-        {
-            using var sha = SHA256.Create();
-            var hash = sha.ComputeHash(bytes);
-            var str = Convert.ToBase64String(hash);
-
-            return str.Replace("/", "").Replace("+", "").Replace("=", "").Substring(0, 6);
+            var registry = new AuroraLoaderRegistry(configuration);
+            Application.Run(new FormMain(configuration, registry));
         }
 
         public static void OpenBrowser(string url)
