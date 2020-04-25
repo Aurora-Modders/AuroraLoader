@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
 using Semver;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
@@ -16,12 +15,14 @@ namespace AuroraLoader
         private readonly Dictionary<string, string> KnownMods = new Dictionary<string, string>();
         private readonly IConfiguration _configuration;
         private readonly LocalModRegistry _localRegistry;
+        private readonly RemoteModRegistry _remoteRegistry;
 
-        public FormInstallMod(IConfiguration configuration, LocalModRegistry registry)
+        public FormInstallMod(IConfiguration configuration, LocalModRegistry localRegistry, RemoteModRegistry remoteRegistry)
         {
             InitializeComponent();
             _configuration = configuration;
-            _localRegistry = registry;
+            _localRegistry = localRegistry;
+            _remoteRegistry = remoteRegistry;
         }
 
         private void ButtonOk_Click(object sender, EventArgs e)
@@ -103,10 +104,10 @@ namespace AuroraLoader
         {
             ComboMods.Items.Clear();
 
-            bool localModsFound = _localRegistry.LocalMods.Any();
+            bool localModsFound = _localRegistry.ModInstallations.Any();
             if (localModsFound)
             {
-                ComboMods.Items.AddRange(_localRegistry.LocalMods.Select(mod => mod.Name).ToArray());
+                ComboMods.Items.AddRange(_localRegistry.ModInstallations.Select(mod => mod.Name).ToArray());
             }
             else
             {

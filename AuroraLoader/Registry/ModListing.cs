@@ -4,11 +4,14 @@ using System.Linq;
 using System.Net;
 using Semver;
 
-namespace AuroraLoader
+namespace AuroraLoader.Registry
 {
     public class ModListing
     {
         public string ModName { get; }
+
+        public ModType Type { get; private set; } = ModType.EXE;
+
         public string UpdateUrl { get; }
 
         // <SemVersion, DownloadUrl>

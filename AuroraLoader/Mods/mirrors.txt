@@ -1,1 +1,2 @@
 ﻿https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/
+https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/

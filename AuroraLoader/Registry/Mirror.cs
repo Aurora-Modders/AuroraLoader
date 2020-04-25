@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace AuroraLoader
+namespace AuroraLoader.Registry
 {
     public class Mirror
     {
@@ -15,7 +15,7 @@ namespace AuroraLoader
 
         public IList<AuroraVersion> KnownAuroraVersions { get; private set; }
 
-        public IList<ModListing> ModDirectory { get; private set; }
+        public IList<ModListing> ModListings { get; private set; }
 
         private readonly IConfiguration _configuration;
 
@@ -79,7 +79,7 @@ namespace AuroraLoader
                     Log.Error($"Failed to download mod listing from {ModsUrl}", e);
                 }
             }
-            ModDirectory = modListingAtMirror;
+            ModListings = modListingAtMirror;
         }
     }
 }

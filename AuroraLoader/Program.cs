@@ -26,9 +26,11 @@ namespace AuroraLoader
                     .Build();
 
             var mirrorRegistry = new MirrorRegistry(configuration);
-            var localRegistry = new LocalModRegistry(configuration, mirrorRegistry);
+            var auroraVersionRegistry = new AuroraVersionRegistry(configuration, mirrorRegistry);
+            var localRegistry = new LocalModRegistry(configuration);
             var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
-            Application.Run(new FormMain(configuration, localRegistry, remoteRegistry));
+            var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
+            Application.Run(new FormMain(configuration, localRegistry, remoteRegistry, auroraVersionRegistry, modRegistry));
         }
 
         public static void OpenBrowser(string url)

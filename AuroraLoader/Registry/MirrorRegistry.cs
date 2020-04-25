@@ -5,8 +5,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {
-
-    public class MirrorRegistry
+    /// <summary>
+    /// Must be initialized by calling Update()
+    /// </summary>
+    public class MirrorRegistry : Registry
     {
         public IList<Mirror> Mirrors { get; private set; }
 
@@ -15,10 +17,9 @@ namespace AuroraLoader.Registry
         public MirrorRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
-            UpdateMirrors();
         }
 
-        public void UpdateMirrors()
+        public void Update()
         {
             var mirrors = new List<Mirror>();
             try
@@ -34,6 +35,11 @@ namespace AuroraLoader.Registry
             }
 
             Mirrors = mirrors;
+        }
+
+        public void AddMirror(Mirror mirror)
+        {
+            Mirrors.Add(mirror);
         }
     }
 }

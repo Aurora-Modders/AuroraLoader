@@ -1,14 +1,16 @@
-﻿using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AuroraLoader
+namespace AuroraLoader.Registry
 {
-    public class RemoteModRegistry
+    /// <summary>
+    /// Must be initialized by calling Update()
+    /// </summary>
+    public class RemoteModRegistry : Registry
     {
-        public IEnumerable<ModListing> Mods;
+        public IEnumerable<ModListing> ModListings;
 
         private readonly IConfiguration _configuration;
         private readonly MirrorRegistry _mirrorRegistry;
@@ -17,24 +19,12 @@ namespace AuroraLoader
         {
             _configuration = configuration;
             _mirrorRegistry = mirrorRegistry;
-            UpdateModeListings();
         }
 
-        public void UpdateModeListings()
+        public void Update()
         {
-            foreach (var mirror in _mirrorRegistry.Mirrors)
-            {
-                try
-                {
-                    mirror.UpdateModListings();
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to update mod listings from {mirror.ModsUrl}", e);
-                }
-            }
-
-            Mods = _mirrorRegistry.Mirrors.Select(mirror => mirror.ModDirectory).SelectMany(mods => mods);
+            _mirrorRegistry.Update();
+            ModListings = _mirrorRegistry.Mirrors.Select(mirror => mirror.ModListings).SelectMany(mods => mods);
         }
     }
 }

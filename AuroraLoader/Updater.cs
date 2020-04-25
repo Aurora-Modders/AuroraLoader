@@ -1,4 +1,5 @@
-﻿using Semver;
+﻿using AuroraLoader.Registry;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,11 +11,11 @@ namespace AuroraLoader
 {
     static class Updater
     {
-        // TODO should be subsumed by Mirror.ModDirectory / ModListing
-        public static Dictionary<Mod, string> GetUpdateUrls(IList<Mod> mods)
+        // TODO leverage registries
+        public static Dictionary<ModInstallation, string> GetUpdateUrls(IList<ModInstallation> mods)
         {
-            var updaters = new Dictionary<string, Mod>();
-            
+            var updaters = new Dictionary<string, ModInstallation>();
+
             foreach (var mod in mods.Where(m => m.Updates != null))
             {
                 if (!updaters.ContainsKey(mod.Name))
@@ -27,8 +28,8 @@ namespace AuroraLoader
                 }
             }
 
-            var urls = new Dictionary<Mod, string>();
-            var versions = new Dictionary<Mod, SemVersion>();
+            var urls = new Dictionary<ModInstallation, string>();
+            var versions = new Dictionary<ModInstallation, SemVersion>();
 
             using (var client = new WebClient())
             {
@@ -95,7 +96,7 @@ namespace AuroraLoader
 
             ZipFile.ExtractToDirectory(zip, extract_folder);
 
-            var mod = Mod.Parse(Path.Combine(extract_folder, "mod.ini"));
+            var mod = ModInstallation.Parse(Path.Combine(extract_folder, "mod.ini"));
             var mod_version_folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", mod.Name, mod.TargetAuroraVersion.ToString());
             if (Directory.Exists(mod_version_folder))
             {
