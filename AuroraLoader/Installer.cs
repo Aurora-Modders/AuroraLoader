@@ -72,6 +72,9 @@ namespace AuroraLoader
                     }
 
                     client.DownloadFile(aurora_files[piece], zip);
+
+                    Directory.Delete(extract_folder, true);
+                    Directory.CreateDirectory(extract_folder);
                     ZipFile.ExtractToDirectory(zip, extract_folder);
 
                     // need to delete exe and db before overwriting
