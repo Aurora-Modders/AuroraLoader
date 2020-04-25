@@ -481,12 +481,12 @@ namespace AuroraLoader
 
         private void ButtonAuroraForums_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://aurora2.pentarch.org/index.php?action=forum#c14");
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?action=forum#c14");
         }
 
         private void ButtonAuroraBugs_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://aurora2.pentarch.org/index.php?board=273.0");
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
         }
 
         private void ButtonAuroraUpdates_Click(object sender, EventArgs e)
@@ -504,7 +504,7 @@ namespace AuroraLoader
 
         private void ButtonModsSubreddit_Click(object sender, EventArgs e)
         {
-            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
         }
 
         private void ButtonUpdateMods_Click(object sender, EventArgs e)
