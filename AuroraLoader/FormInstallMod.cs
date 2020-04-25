@@ -93,20 +93,11 @@ namespace AuroraLoader
 
             try
             {
-                var mods = Config.FromString(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", "mods.txt")));
-                foreach (var kvp in mods)
-                {
-                    if (!installed.Contains(kvp.Key))
-                    {
-                        KnownMods[kvp.Key] = kvp.Value;
-                    }
-                }
-
                 using (var client = new WebClient())
                 {
                     foreach (var mirror in Program.MIRRORS)
                     {
-                        mods = Config.FromString(client.DownloadString(mirror + "Mods/mods.txt"));
+                        var mods = Config.FromString(client.DownloadString(mirror + "Mods/mods.txt"));
                         foreach (var kvp in mods)
                         {
                             if (!installed.Contains(kvp.Key))

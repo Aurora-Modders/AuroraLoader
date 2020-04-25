@@ -8,14 +8,14 @@ namespace AuroraLoader
 {
     static class Launcher
     {
-        public static Process Launch(Mod exe, List<Mod> others)
+        public static Process Launch(Mod exe, List<Mod> others, string folder)
         {
             foreach (var mod in others)
             {
                 if (mod.Type == Mod.ModType.ROOT_UTILITY)
                 {
                     Log.Debug("Root Utility: " + mod.Name);
-                    CopyToRoot(mod);
+                    CopyToFolder(mod, folder);
                     Run(AppDomain.CurrentDomain.BaseDirectory, mod.Exe);
                 }
                 else if (mod.Type == Mod.ModType.UTILITY)
@@ -44,32 +44,42 @@ namespace AuroraLoader
             else
             {
                 Log.Debug("Exe: " + exe.Name);
-                CopyToRoot(exe);
+                CopyToFolder(exe, folder);
                 var process = Run(AppDomain.CurrentDomain.BaseDirectory, exe.Exe);
 
                 return process;
             }
         }
 
-        private static void CopyToRoot(Mod mod)
+        private static void CopyToFolder(Mod mod, string folder)
         {
             var dir = Path.GetDirectoryName(mod.DefFile);
-            var out_dir = AppDomain.CurrentDomain.BaseDirectory;
-            foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
-            {
-                File.Copy(file, Path.Combine(out_dir, Path.GetFileName(file)), true);
-            }
+            Program.CopyDirectory(dir, folder);
         }
 
         private static Process Run(string folder, string command)
         {
             //var java = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") + @"\Common Files\Oracle\Java\javapath";
 
+            var pieces = command.Split(' ');
+            var exe = pieces[0];
+            var args = "";
+            if (pieces.Length > 1)
+            {
+                for (int i = 1; i < pieces.Length; i++)
+                {
+                    args += " " + pieces[i];
+                }
+
+                args = args.Substring(1);
+            }
+
             Log.Debug("Running: " + command);
             var info = new ProcessStartInfo()
             {
                 WorkingDirectory = folder,
-                FileName = command, 
+                FileName = exe, 
+                Arguments = args,
                 UseShellExecute = true,
                 CreateNoWindow = true
             };

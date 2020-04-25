@@ -51,9 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-  <None Include="bin\Debug\netcoreapp3.1\Aurora.exe">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </None>
   <None Include="Resources\Aurora.ico" />
   <Content Include="Music\README.txt">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
