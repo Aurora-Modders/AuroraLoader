@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Windows.Forms;
 
 namespace AuroraLoader
 {
@@ -30,7 +31,8 @@ namespace AuroraLoader
             var clean = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
             if (!Directory.Exists(clean))
             {
-                throw new Exception("No clean install available");
+                MessageBox.Show("A clean install will be downloaded.");
+                InstallClean();
             }
             
             if (Directory.Exists(folder))
