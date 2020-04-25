@@ -43,6 +43,7 @@ namespace AuroraLoader
 
         public static void DownloadAuroraPieces(string folder, Dictionary<string, string> aurora_files)
         {
+            // TODO retain folder structure
             var zip = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var extract_folder = Path.Combine(Path.GetTempPath(), "aurora_installs");
 
@@ -65,20 +66,26 @@ namespace AuroraLoader
                     }
 
                     client.DownloadFile(aurora_files[piece], zip);
-                    // unzipping straight into the folder might not work, 
                     ZipFile.ExtractToDirectory(zip, extract_folder);
 
+                    var dest_folder = Path.Combine(folder, piece);
+                    if (piece.Equals("Major") || piece.Equals("Minor") || piece.Equals("Patch") || piece.Equals("Rev"))
+                    {
+                        dest_folder = folder;
+                    }
+
+                    // need to delete exe and db before overwriting
                     foreach (var file in Directory.EnumerateFiles(extract_folder))
                     {
-                        var dest = Path.Combine(folder, Path.GetFileName(file));
+                        var dest = Path.Combine(dest_folder, Path.GetFileName(file));
 
                         if (File.Exists(dest))
                         {
                             File.Delete(dest);
                         }
-
-                        File.Copy(file, dest);
                     }
+
+                    ZipFile.ExtractToDirectory(zip, dest_folder);
                 }
             }
 
