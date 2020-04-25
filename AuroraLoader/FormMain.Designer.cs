@@ -414,6 +414,7 @@
             this.ButtonInstallAurora.TabIndex = 18;
             this.ButtonInstallAurora.Text = "Install Aurora";
             this.ButtonInstallAurora.UseVisualStyleBackColor = true;
+            this.ButtonInstallAurora.Click += new System.EventHandler(this.ButtonInstallAurora_Click);
             // 
             // ButtonModBugs
             // 

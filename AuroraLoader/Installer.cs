@@ -12,10 +12,15 @@ namespace AuroraLoader
 {
     class Installer
     {
-        public static void InstallClean()
+        public static string GetLatestUrl()
+        {
+            return "https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/aurora_files.ini";
+        }
+
+        private static void InstallClean()
         {
             var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
-            var url = "https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/aurora_files.ini";
+            var url = GetLatestUrl();
 
             using (var client = new WebClient())
             {
@@ -40,7 +45,7 @@ namespace AuroraLoader
                 Directory.Delete(folder, true);
             }
 
-            Copy(clean, folder);
+            Program.CopyDirectory(clean, folder);
         }
 
         public static void UpdateAurora(GameInstallation current, Dictionary<string, string> aurora_files)
@@ -122,40 +127,12 @@ namespace AuroraLoader
                         }
                     }
 
-                    Copy(extract_folder, folder);
+                    Program.CopyDirectory(extract_folder, folder);
                 }
             }
 
             File.Delete(zip);
             Directory.Delete(extract_folder, true);
-        }
-
-        private static void Copy(string sourceDirectory, string targetDirectory)
-        {
-            var diSource = new DirectoryInfo(sourceDirectory);
-            var diTarget = new DirectoryInfo(targetDirectory);
-
-            CopyAll(diSource, diTarget);
-        }
-
-        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
-        {
-            Directory.CreateDirectory(target.FullName);
-
-            // Copy each file into the new directory.
-            foreach (FileInfo fi in source.GetFiles())
-            {
-                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
-                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
-            }
-
-            // Copy each subdirectory using recursion.
-            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
-            {
-                DirectoryInfo nextTargetSubDir =
-                    target.CreateSubdirectory(diSourceSubDir.Name);
-                CopyAll(diSourceSubDir, nextTargetSubDir);
-            }
         }
     }
 }

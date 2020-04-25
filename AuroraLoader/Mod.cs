@@ -86,22 +86,22 @@ namespace AuroraLoader
                 {
                     if (val.Equals("Approved"))
                     {
-                        Status = Mod.ModStatus.APPROVED;
+                        Status = ModStatus.APPROVED;
                     }
                     else if (val.Equals("Public"))
                     {
-                        Status = Mod.ModStatus.PUBLIC;
+                        Status = ModStatus.PUBLIC;
                     }
                     else if (val.Equals("Poweruser"))
                     {
-                        Status = Mod.ModStatus.POWERUSER;
+                        Status = ModStatus.POWERUSER;
                     }
                     else
                     {
                         throw new Exception("Invalid mod status");
                     }
                 }
-                else if (key.Equals("Exe"))
+                else if (key.Equals("Exe") || key.Equals("ExecuteCommand")) // Exe deprecated
                 {
                     if (val.Equals("Aurora.exe"))
                     {
@@ -134,7 +134,7 @@ namespace AuroraLoader
                         AuroraPatch = int.Parse(pieces[2]);
                     }
                 }
-                else if (key.Equals("Config"))
+                else if (key.Equals("Config") || key.Equals("ConfigCommand")) // Config deprecated
                 {
                     ConfigFile = val;
                 }

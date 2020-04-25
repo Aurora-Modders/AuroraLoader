@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -30,7 +31,23 @@ namespace AuroraLoader
 
         private void LoadGame()
         {
-            var exe = Configuration["executable_location"];
+            var exe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Configuration["executable_location"]);
+            if (!File.Exists(exe))
+            {
+                var dialog = MessageBox.Show("Aurora not installed. Install?", "Install Aurora", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.No)
+                {
+                    Application.Exit();
+                }
+
+                var installation = new GameInstallation(new GameVersion("0.0.0", ""), exe);
+                
+                using (var client = new WebClient())
+                {
+                    var aurora_files = Config.FromString(client.DownloadString(Installer.GetLatestUrl()));
+                    Installer.DownloadAuroraPieces(Path.GetDirectoryName(exe), aurora_files);
+                }
+            }
             var checksum = Program.GetChecksum(File.ReadAllBytes(exe));
             var known_versions = GameVersion.GetKnownGameVersions();
             var version = known_versions.Single(v => v.Checksum.Equals(checksum));
@@ -311,7 +328,7 @@ namespace AuroraLoader
                 others.Add(ListUtilityMods.CheckedItems[i] as Mod);
             }
 
-            var process = Launcher.Launch(exe, others);
+            var process = Launcher.Launch(exe, others, AppDomain.CurrentDomain.BaseDirectory);
 
             AuroraThread = new Thread(() => RunGame(process))
             {
@@ -579,7 +596,12 @@ namespace AuroraLoader
 
         private void ButtonMultiPlayer_Click(object sender, EventArgs e)
         {
-            MessageBox
+
+        }
+
+        private void ButtonInstallAurora_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
