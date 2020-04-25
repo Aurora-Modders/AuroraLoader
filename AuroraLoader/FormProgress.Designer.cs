@@ -43,7 +43,7 @@
             // 
             this.LabelWorking.AutoSize = true;
             this.LabelWorking.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.LabelWorking.Location = new System.Drawing.Point(88, 71);
+            this.LabelWorking.Location = new System.Drawing.Point(127, 48);
             this.LabelWorking.Name = "LabelWorking";
             this.LabelWorking.Size = new System.Drawing.Size(95, 30);
             this.LabelWorking.TabIndex = 0;
@@ -54,7 +54,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(717, 390);
+            this.ClientSize = new System.Drawing.Size(459, 193);
             this.ControlBox = false;
             this.Controls.Add(this.LabelWorking);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
