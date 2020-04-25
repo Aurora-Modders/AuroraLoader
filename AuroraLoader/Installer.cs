@@ -50,7 +50,6 @@ namespace AuroraLoader
         {
             aurora_files.Remove("Version");
 
-            // TODO retain folder structure
             var zip = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var extract_folder = Path.Combine(Path.GetTempPath(), "aurora_installs");
 
