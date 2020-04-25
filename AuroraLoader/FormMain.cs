@@ -44,8 +44,15 @@ namespace AuroraLoader
                 
                 using (var client = new WebClient())
                 {
-                    var aurora_files = Config.FromString(client.DownloadString(Installer.GetLatestUrl()));
-                    Installer.DownloadAuroraPieces(Path.GetDirectoryName(exe), aurora_files);
+                    var thread = new Thread(() =>
+                    {
+                        var aurora_files = Config.FromString(client.DownloadString(Installer.GetLatestUrl()));
+                        Installer.DownloadAuroraPieces(Path.GetDirectoryName(exe), aurora_files);
+                    });
+                    thread.Start();
+
+                    var progress = new FormProgress(thread);
+                    progress.ShowDialog();
                 }
             }
             var checksum = Program.GetChecksum(File.ReadAllBytes(exe));
