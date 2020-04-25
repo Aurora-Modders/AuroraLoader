@@ -8,7 +8,7 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class MirrorRegistry : Registry
+    public class MirrorRegistry : IRegistry
     {
         public IList<Mirror> Mirrors { get; private set; }
 

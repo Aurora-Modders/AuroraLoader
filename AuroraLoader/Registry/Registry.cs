@@ -1,6 +1,6 @@
 ﻿namespace AuroraLoader.Registry
 {
-    public interface Registry
+    public interface IRegistry
     {
         /// <summary>
         /// Registries must be initialized by calling Update().

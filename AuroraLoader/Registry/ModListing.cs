@@ -10,7 +10,7 @@ namespace AuroraLoader.Registry
     {
         public string ModName { get; }
 
-        public ModType Type { get; private set; } = ModType.EXE;
+        public ModType Type { get; private set; }
 
         public string UpdateUrl { get; }
 

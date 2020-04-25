@@ -38,16 +38,55 @@ namespace AuroraLoader
             _modRegistry = modRegistry;
         }
 
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            //Icon = Properties.Resources.Aurora;
+            MessageBox.Show("AuroraLoader will check for updates and then launch, this might take a moment.");
+            Cursor = Cursors.WaitCursor;
+
+            InitializeListView();
+            RefreshAuroraInstallData();
+            LoadMods();
+            // UpdateLists();
+            UpdateButtons();
+
+            Cursor = Cursors.Default;
+            TabMods.SelectedTab = modsTab;
+        }
+
+        public void InitializeListView()
+        {
+            _modRegistry.Update();
+            allModsListView.AllowColumnReorder = true;
+            allModsListView.View = View.Details;
+            allModsListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            allModsListView.Columns.Add("Name");
+            allModsListView.Columns.Add("Type");
+            allModsListView.Columns.Add("Aurora Version");
+            allModsListView.Columns.Add("Installed");
+            allModsListView.Columns.Add("Latest");
+
+            foreach (var mod in _modRegistry.Mods)
+            {
+                var li = new ListViewItem(new string[] {
+                    mod.Name,
+                    mod.Type.ToString(),
+                    mod.Installation?.TargetAuroraVersion.ToString(),
+                    mod.Installation?.Version.ToString(),
+                    mod.Listing.LatestVersion.ToString()
+                });
+                allModsListView.Items.Add(li);
+            }
+
+            // TODO 'Install' button shown and enabled when !mod.Installed
+            // TODO 'Update' button shown and enabled when mod.Installation.Version < mod.Listing.LatestVersion
+            // TODO Launch/Configure/Enable/etc buttons
+        }
+
         private void RefreshAuroraInstallData()
         {
             _auroraVersionRegistry.Update();
-            if (_auroraVersionRegistry.CurrentAuroraInstallVersion == null)
-            {
-                LabelVersion.Text = "Aurora version: Unknown";
-                CheckMods.Enabled = false;
-                return;
-            }
-
+            _auroraVersionRegistry.Update();
             LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraInstallVersion.Checksum}";
             LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraInstallVersion.Version}";
 
@@ -66,47 +105,11 @@ namespace AuroraLoader
 
         private void LoadMods()
         {
-            Mods.Clear();
-            ModUpdates.Clear();
             _modRegistry.Update();
-
-
-            // TODO likely don't need the rest of this
-            var latest = new Dictionary<string, ModInstallation>();
-
-            foreach (var mod in _localRegistry.ModInstallations)
-            {
-                if (mod.WorksForVersion(_auroraVersionRegistry.CurrentAuroraInstallVersion))
-                {
-                    if (!latest.ContainsKey(mod.Name))
-                    {
-                        latest.Add(mod.Name, mod);
-                    }
-                    else if (mod.Version.CompareByPrecedence(latest[mod.Name].Version) == 1)
-                    {
-                        latest[mod.Name] = mod;
-                    }
-                }
-            }
-
-            Mods.AddRange(latest.Values);
-
-            try
-            {
-                var urls = Updater.GetUpdateUrls(Mods);
-                foreach (var kvp in urls)
-                {
-                    ModUpdates.Add(kvp.Key, kvp.Value);
-                }
-            }
-            catch (Exception exc)
-            {
-                Log.Error("Failed to get mod updates.", exc);
-            }
 
             ButtonUpdateMods.Enabled = false;
             ButtonUpdateMods.ForeColor = Color.Black;
-            if (ModUpdates.Count > 0)
+            if (_modRegistry.Mods.Any(mod => mod.Installed && mod.Listing.LatestVersion > mod.Installation.Version))
             {
                 ButtonUpdateMods.Enabled = true;
                 ButtonUpdateMods.ForeColor = Color.Green;
@@ -116,7 +119,6 @@ namespace AuroraLoader
         private void UpdateLists()
         {
             _modRegistry.Update();
-
             var status_approved = CheckApproved.Checked;
             var status_public = CheckPublic.Checked;
             var status_poweruser = CheckPower.Checked;
@@ -126,24 +128,23 @@ namespace AuroraLoader
 
             if (status_approved)
             {
-                exeMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.EXE && m.Installation.Status == ModStatus.APPROVED));
-                dbMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.DATABASE && m.Installation.Status == ModStatus.APPROVED));
+                exeMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.EXE && m.Installation?.Status == ModStatus.APPROVED));
+                dbMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.DATABASE && m.Installation?.Status == ModStatus.APPROVED));
             }
 
             if (status_public)
             {
-                exeMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.EXE && m.Installation.Status == ModStatus.PUBLIC));
-                dbMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.DATABASE && m.Installation.Status == ModStatus.PUBLIC));
+                exeMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.EXE && m.Installation?.Status == ModStatus.PUBLIC));
+                dbMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.DATABASE && m.Installation?.Status == ModStatus.PUBLIC));
             }
 
             if (status_poweruser)
             {
-                exeMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.EXE && m.Installation.Status == ModStatus.POWERUSER));
-                dbMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.DATABASE && m.Installation.Status == ModStatus.POWERUSER));
+                exeMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.EXE && m.Installation?.Status == ModStatus.POWERUSER));
+                dbMods.AddRange(_modRegistry.Mods.Where(m => m.Type == ModType.DATABASE && m.Installation?.Status == ModStatus.POWERUSER));
             }
 
             // exe
-
             exeMods.Sort((a, b) => a.Name.CompareTo(b.Name));
 
             // TODO customize some behavior here
@@ -397,27 +398,11 @@ namespace AuroraLoader
             TabGameMods.Enabled = true;
 
             RefreshAuroraInstallData();
-            LoadMods();
-            UpdateLists();
+            LoadMods();            //UpdateLists();
+
             UpdateButtons();
 
             Cursor = Cursors.Default;
-        }
-
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-            //Icon = Properties.Resources.Aurora;
-            MessageBox.Show("AuroraLoader will check for updates and then launch, this might take a moment.");
-            Cursor = Cursors.WaitCursor;
-
-            RefreshAuroraInstallData();
-            LoadMods();
-            UpdateLists();
-            UpdateButtons();
-
-            Cursor = Cursors.Default;
-
-            TabMods.SelectedTab = TabGameMods;
         }
 
         private void CheckMods_CheckedChanged(object sender, EventArgs e)
@@ -442,17 +427,17 @@ namespace AuroraLoader
 
         private void CheckApproved_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateLists();
+            //UpdateLists();
         }
 
         private void CheckPublic_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateLists();
+            // UpdateLists();
         }
 
         private void CheckPower_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateLists();
+            //UpdateLists();
         }
 
         private void ButtonAuroraForums_Click(object sender, EventArgs e)
@@ -506,7 +491,7 @@ namespace AuroraLoader
                 }
 
                 LoadMods();
-                UpdateLists();
+                //UpdateLists();
                 UpdateButtons();
 
                 Cursor = Cursors.Default;
@@ -541,7 +526,7 @@ namespace AuroraLoader
         private void ButtonInstallMods_Click(object sender, EventArgs e)
         {
             // TODO split up into separate buttons for my own personal convenience
-            var form = new FormInstallMod(_configuration, _localRegistry, _remoteRegistry);
+            var form = new FormInstallMod(_configuration, _modRegistry);
             form.ShowDialog();
 
             Cursor = Cursors.WaitCursor;

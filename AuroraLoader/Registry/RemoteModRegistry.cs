@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +7,7 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class RemoteModRegistry : Registry
+    public class RemoteModRegistry : IRegistry
     {
         public IEnumerable<ModListing> ModListings;
 

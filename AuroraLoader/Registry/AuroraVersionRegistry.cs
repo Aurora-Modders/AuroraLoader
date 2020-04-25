@@ -11,7 +11,7 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class AuroraVersionRegistry : Registry
+    public class AuroraVersionRegistry : IRegistry
     {
         public IList<AuroraVersion> AuroraVersions { get; private set; }
         public AuroraVersion CurrentAuroraInstallVersion
@@ -57,7 +57,8 @@ namespace AuroraLoader.Registry
                     Log.Error($"Failed to update known Aurora versions from {mirror.RootUrl}", e);
                 }
             }
-            AuroraVersions = mirrorKnownVersions.Union(AuroraVersions ?? new List<AuroraVersion>()).ToList();
+
+            AuroraVersions = mirrorKnownVersions;
             // TODO update local cache
         }
 

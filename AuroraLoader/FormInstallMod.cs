@@ -14,15 +14,13 @@ namespace AuroraLoader
     {
         private readonly Dictionary<string, string> KnownMods = new Dictionary<string, string>();
         private readonly IConfiguration _configuration;
-        private readonly LocalModRegistry _localRegistry;
-        private readonly RemoteModRegistry _remoteRegistry;
+        private readonly ModRegistry _modRegistry;
 
-        public FormInstallMod(IConfiguration configuration, LocalModRegistry localRegistry, RemoteModRegistry remoteRegistry)
+        public FormInstallMod(IConfiguration configuration, ModRegistry modRegistry)
         {
             InitializeComponent();
             _configuration = configuration;
-            _localRegistry = localRegistry;
-            _remoteRegistry = remoteRegistry;
+            _modRegistry = modRegistry;
         }
 
         private void ButtonOk_Click(object sender, EventArgs e)
@@ -104,18 +102,19 @@ namespace AuroraLoader
         {
             ComboMods.Items.Clear();
 
-            bool localModsFound = _localRegistry.ModInstallations.Any();
-            if (localModsFound)
+            if (_modRegistry.Mods.Any(mod => !mod.Installed))
             {
-                ComboMods.Items.AddRange(_localRegistry.ModInstallations.Select(mod => mod.Name).ToArray());
+                ComboMods.Items.AddRange(_modRegistry.Mods.Where(mod => !mod.Installed).Select(mod => $"{mod.Name} {mod.Listing.LatestVersion}").ToArray());
+                ComboMods.Enabled = true;
+                ButtonOk.Enabled = true;
             }
             else
             {
-                ComboMods.Items.Add($"Mods not found");
+                ComboMods.Items.Add($"No installable mods found");
+                ComboMods.Enabled = false;
+                ButtonOk.Enabled = false;
             }
 
-            ComboMods.Enabled = localModsFound;
-            ButtonOk.Enabled = localModsFound;
             ComboMods.SelectedIndex = 0;
         }
 

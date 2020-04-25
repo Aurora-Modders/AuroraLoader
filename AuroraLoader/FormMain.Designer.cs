@@ -43,26 +43,29 @@
             this.TrackVolume = new System.Windows.Forms.TrackBar();
             this.CheckMusic = new System.Windows.Forms.CheckBox();
             this.TabGameMods = new System.Windows.Forms.TabPage();
-            this.CheckMods = new System.Windows.Forms.CheckBox();
             this.GroupMods = new System.Windows.Forms.GroupBox();
-            this.CheckApproved = new System.Windows.Forms.CheckBox();
-            this.CheckPublic = new System.Windows.Forms.CheckBox();
-            this.CheckPower = new System.Windows.Forms.CheckBox();
-            this.ComboExe = new System.Windows.Forms.ComboBox();
-            this.LabelExeMod = new System.Windows.Forms.Label();
-            this.LabelDBMods = new System.Windows.Forms.Label();
-            this.ListDBMods = new System.Windows.Forms.CheckedListBox();
-            this.ButtonConfigureExe = new System.Windows.Forms.Button();
             this.ButtonConfigureDB = new System.Windows.Forms.Button();
+            this.ButtonConfigureExe = new System.Windows.Forms.Button();
+            this.ListDBMods = new System.Windows.Forms.CheckedListBox();
+            this.LabelDBMods = new System.Windows.Forms.Label();
+            this.LabelExeMod = new System.Windows.Forms.Label();
+            this.ComboExe = new System.Windows.Forms.ComboBox();
+            this.CheckPower = new System.Windows.Forms.CheckBox();
+            this.CheckPublic = new System.Windows.Forms.CheckBox();
+            this.CheckApproved = new System.Windows.Forms.CheckBox();
+            this.CheckMods = new System.Windows.Forms.CheckBox();
             this.TabUtilityMods = new System.Windows.Forms.TabPage();
-            this.ListUtilityMods = new System.Windows.Forms.CheckedListBox();
             this.ButtonConfigureUtility = new System.Windows.Forms.Button();
+            this.ListUtilityMods = new System.Windows.Forms.CheckedListBox();
             this.TabMods = new System.Windows.Forms.TabControl();
+            this.modsTab = new System.Windows.Forms.TabPage();
+            this.allModsListView = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.TrackVolume)).BeginInit();
             this.TabGameMods.SuspendLayout();
             this.GroupMods.SuspendLayout();
             this.TabUtilityMods.SuspendLayout();
             this.TabMods.SuspendLayout();
+            this.modsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonSinglePlayer
@@ -245,19 +248,6 @@
             this.TabGameMods.TabIndex = 2;
             this.TabGameMods.Text = "Game mods";
             // 
-            // CheckMods
-            // 
-            this.CheckMods.AutoSize = true;
-            this.CheckMods.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CheckMods.Location = new System.Drawing.Point(35, 35);
-            this.CheckMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.CheckMods.Name = "CheckMods";
-            this.CheckMods.Size = new System.Drawing.Size(248, 33);
-            this.CheckMods.TabIndex = 1;
-            this.CheckMods.Text = "Enable game mods";
-            this.CheckMods.UseVisualStyleBackColor = true;
-            this.CheckMods.CheckedChanged += new System.EventHandler(this.CheckMods_CheckedChanged);
-            // 
             // GroupMods
             // 
             this.GroupMods.Controls.Add(this.ButtonConfigureDB);
@@ -280,6 +270,100 @@
             this.GroupMods.TabStop = false;
             this.GroupMods.Text = "Game mods";
             // 
+            // ButtonConfigureDB
+            // 
+            this.ButtonConfigureDB.Enabled = false;
+            this.ButtonConfigureDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonConfigureDB.Location = new System.Drawing.Point(217, 238);
+            this.ButtonConfigureDB.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ButtonConfigureDB.Name = "ButtonConfigureDB";
+            this.ButtonConfigureDB.Size = new System.Drawing.Size(458, 63);
+            this.ButtonConfigureDB.TabIndex = 16;
+            this.ButtonConfigureDB.Text = "Configure selected";
+            this.ButtonConfigureDB.UseVisualStyleBackColor = true;
+            this.ButtonConfigureDB.Click += new System.EventHandler(this.ButtonConfigureDB_Click);
+            // 
+            // ButtonConfigureExe
+            // 
+            this.ButtonConfigureExe.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonConfigureExe.Location = new System.Drawing.Point(450, 138);
+            this.ButtonConfigureExe.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ButtonConfigureExe.Name = "ButtonConfigureExe";
+            this.ButtonConfigureExe.Size = new System.Drawing.Size(238, 63);
+            this.ButtonConfigureExe.TabIndex = 15;
+            this.ButtonConfigureExe.Text = "Configure";
+            this.ButtonConfigureExe.UseVisualStyleBackColor = true;
+            this.ButtonConfigureExe.Click += new System.EventHandler(this.ButtonConfigureExe_Click);
+            // 
+            // ListDBMods
+            // 
+            this.ListDBMods.FormattingEnabled = true;
+            this.ListDBMods.Location = new System.Drawing.Point(3, 313);
+            this.ListDBMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ListDBMods.Name = "ListDBMods";
+            this.ListDBMods.Size = new System.Drawing.Size(669, 516);
+            this.ListDBMods.TabIndex = 6;
+            this.ListDBMods.SelectedIndexChanged += new System.EventHandler(this.ListDBMods_SelectedIndexChanged);
+            // 
+            // LabelDBMods
+            // 
+            this.LabelDBMods.AutoSize = true;
+            this.LabelDBMods.Location = new System.Drawing.Point(-3, 250);
+            this.LabelDBMods.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.LabelDBMods.Name = "LabelDBMods";
+            this.LabelDBMods.Size = new System.Drawing.Size(187, 29);
+            this.LabelDBMods.TabIndex = 5;
+            this.LabelDBMods.Text = "Database mods:";
+            // 
+            // LabelExeMod
+            // 
+            this.LabelExeMod.AutoSize = true;
+            this.LabelExeMod.Location = new System.Drawing.Point(3, 150);
+            this.LabelExeMod.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.LabelExeMod.Name = "LabelExeMod";
+            this.LabelExeMod.Size = new System.Drawing.Size(114, 29);
+            this.LabelExeMod.TabIndex = 4;
+            this.LabelExeMod.Text = "Exe mod:";
+            // 
+            // ComboExe
+            // 
+            this.ComboExe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ComboExe.FormattingEnabled = true;
+            this.ComboExe.Items.AddRange(new object[] {
+            "Base Game"});
+            this.ComboExe.Location = new System.Drawing.Point(138, 144);
+            this.ComboExe.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ComboExe.Name = "ComboExe";
+            this.ComboExe.Size = new System.Drawing.Size(299, 37);
+            this.ComboExe.TabIndex = 3;
+            this.ComboExe.SelectedIndexChanged += new System.EventHandler(this.ComboExe_SelectedIndexChanged);
+            // 
+            // CheckPower
+            // 
+            this.CheckPower.AutoSize = true;
+            this.CheckPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CheckPower.Location = new System.Drawing.Point(450, 67);
+            this.CheckPower.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.CheckPower.Name = "CheckPower";
+            this.CheckPower.Size = new System.Drawing.Size(222, 33);
+            this.CheckPower.TabIndex = 2;
+            this.CheckPower.Text = "Poweruser mods";
+            this.CheckPower.UseVisualStyleBackColor = true;
+            this.CheckPower.CheckedChanged += new System.EventHandler(this.CheckPower_CheckedChanged);
+            // 
+            // CheckPublic
+            // 
+            this.CheckPublic.AutoSize = true;
+            this.CheckPublic.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CheckPublic.Location = new System.Drawing.Point(252, 67);
+            this.CheckPublic.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.CheckPublic.Name = "CheckPublic";
+            this.CheckPublic.Size = new System.Drawing.Size(172, 33);
+            this.CheckPublic.TabIndex = 2;
+            this.CheckPublic.Text = "Public mods";
+            this.CheckPublic.UseVisualStyleBackColor = true;
+            this.CheckPublic.CheckedChanged += new System.EventHandler(this.CheckPublic_CheckedChanged);
+            // 
             // CheckApproved
             // 
             this.CheckApproved.AutoSize = true;
@@ -295,99 +379,18 @@
             this.CheckApproved.UseVisualStyleBackColor = true;
             this.CheckApproved.CheckedChanged += new System.EventHandler(this.CheckApproved_CheckedChanged);
             // 
-            // CheckPublic
+            // CheckMods
             // 
-            this.CheckPublic.AutoSize = true;
-            this.CheckPublic.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CheckPublic.Location = new System.Drawing.Point(252, 67);
-            this.CheckPublic.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.CheckPublic.Name = "CheckPublic";
-            this.CheckPublic.Size = new System.Drawing.Size(172, 33);
-            this.CheckPublic.TabIndex = 2;
-            this.CheckPublic.Text = "Public mods";
-            this.CheckPublic.UseVisualStyleBackColor = true;
-            this.CheckPublic.CheckedChanged += new System.EventHandler(this.CheckPublic_CheckedChanged);
-            // 
-            // CheckPower
-            // 
-            this.CheckPower.AutoSize = true;
-            this.CheckPower.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CheckPower.Location = new System.Drawing.Point(450, 67);
-            this.CheckPower.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.CheckPower.Name = "CheckPower";
-            this.CheckPower.Size = new System.Drawing.Size(222, 33);
-            this.CheckPower.TabIndex = 2;
-            this.CheckPower.Text = "Poweruser mods";
-            this.CheckPower.UseVisualStyleBackColor = true;
-            this.CheckPower.CheckedChanged += new System.EventHandler(this.CheckPower_CheckedChanged);
-            // 
-            // ComboExe
-            // 
-            this.ComboExe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ComboExe.FormattingEnabled = true;
-            this.ComboExe.Items.AddRange(new object[] {
-            "Base Game"});
-            this.ComboExe.Location = new System.Drawing.Point(138, 144);
-            this.ComboExe.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.ComboExe.Name = "ComboExe";
-            this.ComboExe.Size = new System.Drawing.Size(299, 37);
-            this.ComboExe.TabIndex = 3;
-            this.ComboExe.SelectedIndexChanged += new System.EventHandler(this.ComboExe_SelectedIndexChanged);
-            // 
-            // LabelExeMod
-            // 
-            this.LabelExeMod.AutoSize = true;
-            this.LabelExeMod.Location = new System.Drawing.Point(3, 150);
-            this.LabelExeMod.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.LabelExeMod.Name = "LabelExeMod";
-            this.LabelExeMod.Size = new System.Drawing.Size(114, 29);
-            this.LabelExeMod.TabIndex = 4;
-            this.LabelExeMod.Text = "Exe mod:";
-            // 
-            // LabelDBMods
-            // 
-            this.LabelDBMods.AutoSize = true;
-            this.LabelDBMods.Location = new System.Drawing.Point(-3, 250);
-            this.LabelDBMods.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.LabelDBMods.Name = "LabelDBMods";
-            this.LabelDBMods.Size = new System.Drawing.Size(187, 29);
-            this.LabelDBMods.TabIndex = 5;
-            this.LabelDBMods.Text = "Database mods:";
-            // 
-            // ListDBMods
-            // 
-            this.ListDBMods.FormattingEnabled = true;
-            this.ListDBMods.Location = new System.Drawing.Point(3, 313);
-            this.ListDBMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.ListDBMods.Name = "ListDBMods";
-            this.ListDBMods.Size = new System.Drawing.Size(669, 516);
-            this.ListDBMods.TabIndex = 6;
-            this.ListDBMods.SelectedIndexChanged += new System.EventHandler(this.ListDBMods_SelectedIndexChanged);
-            // 
-            // ButtonConfigureExe
-            // 
-            this.ButtonConfigureExe.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ButtonConfigureExe.Location = new System.Drawing.Point(450, 138);
-            this.ButtonConfigureExe.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.ButtonConfigureExe.Name = "ButtonConfigureExe";
-            this.ButtonConfigureExe.Size = new System.Drawing.Size(238, 63);
-            this.ButtonConfigureExe.TabIndex = 15;
-            this.ButtonConfigureExe.Text = "Configure";
-            this.ButtonConfigureExe.UseVisualStyleBackColor = true;
-            this.ButtonConfigureExe.Click += new System.EventHandler(this.ButtonConfigureExe_Click);
-            // 
-            // ButtonConfigureDB
-            // 
-            this.ButtonConfigureDB.Enabled = false;
-            this.ButtonConfigureDB.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ButtonConfigureDB.Location = new System.Drawing.Point(217, 238);
-            this.ButtonConfigureDB.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.ButtonConfigureDB.Name = "ButtonConfigureDB";
-            this.ButtonConfigureDB.Size = new System.Drawing.Size(458, 63);
-            this.ButtonConfigureDB.TabIndex = 16;
-            this.ButtonConfigureDB.Text = "Configure selected";
-            this.ButtonConfigureDB.UseVisualStyleBackColor = true;
-            this.ButtonConfigureDB.Click += new System.EventHandler(this.ButtonConfigureDB_Click);
+            this.CheckMods.AutoSize = true;
+            this.CheckMods.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.CheckMods.Location = new System.Drawing.Point(35, 35);
+            this.CheckMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.CheckMods.Name = "CheckMods";
+            this.CheckMods.Size = new System.Drawing.Size(248, 33);
+            this.CheckMods.TabIndex = 1;
+            this.CheckMods.Text = "Enable game mods";
+            this.CheckMods.UseVisualStyleBackColor = true;
+            this.CheckMods.CheckedChanged += new System.EventHandler(this.CheckMods_CheckedChanged);
             // 
             // TabUtilityMods
             // 
@@ -402,16 +405,6 @@
             this.TabUtilityMods.TabIndex = 1;
             this.TabUtilityMods.Text = "Utility mods";
             // 
-            // ListUtilityMods
-            // 
-            this.ListUtilityMods.FormattingEnabled = true;
-            this.ListUtilityMods.Location = new System.Drawing.Point(10, 121);
-            this.ListUtilityMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.ListUtilityMods.Name = "ListUtilityMods";
-            this.ListUtilityMods.Size = new System.Drawing.Size(742, 836);
-            this.ListUtilityMods.TabIndex = 17;
-            this.ListUtilityMods.SelectedIndexChanged += new System.EventHandler(this.ListUtilityMods_SelectedIndexChanged);
-            // 
             // ButtonConfigureUtility
             // 
             this.ButtonConfigureUtility.Enabled = false;
@@ -425,18 +418,47 @@
             this.ButtonConfigureUtility.UseVisualStyleBackColor = true;
             this.ButtonConfigureUtility.Click += new System.EventHandler(this.ButtonConfigureUtility_Click);
             // 
+            // ListUtilityMods
+            // 
+            this.ListUtilityMods.FormattingEnabled = true;
+            this.ListUtilityMods.Location = new System.Drawing.Point(10, 121);
+            this.ListUtilityMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ListUtilityMods.Name = "ListUtilityMods";
+            this.ListUtilityMods.Size = new System.Drawing.Size(742, 836);
+            this.ListUtilityMods.TabIndex = 17;
+            this.ListUtilityMods.SelectedIndexChanged += new System.EventHandler(this.ListUtilityMods_SelectedIndexChanged);
+            // 
             // TabMods
             // 
             this.TabMods.Controls.Add(this.TabUtilityMods);
             this.TabMods.Controls.Add(this.TabGameMods);
+            this.TabMods.Controls.Add(this.modsTab);
             this.TabMods.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TabMods.Location = new System.Drawing.Point(840, 23);
             this.TabMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.TabMods.Name = "TabMods";
-            this.TabMods.SelectedIndex = 0;
+            this.TabMods.SelectedIndex = 2;
             this.TabMods.Size = new System.Drawing.Size(778, 1052);
             this.TabMods.TabIndex = 16;
             this.TabMods.SelectedIndexChanged += new System.EventHandler(this.TabMods_SelectedIndexChanged);
+            // 
+            // modsTab
+            // 
+            this.modsTab.Controls.Add(this.allModsListView);
+            this.modsTab.Location = new System.Drawing.Point(4, 38);
+            this.modsTab.Name = "modsTab";
+            this.modsTab.Size = new System.Drawing.Size(770, 1010);
+            this.modsTab.TabIndex = 3;
+            this.modsTab.Text = "Mods";
+            // 
+            // allModsListView
+            // 
+            this.allModsListView.HideSelection = false;
+            this.allModsListView.Location = new System.Drawing.Point(0, 3);
+            this.allModsListView.Name = "allModsListView";
+            this.allModsListView.Size = new System.Drawing.Size(767, 574);
+            this.allModsListView.TabIndex = 0;
+            this.allModsListView.UseCompatibleStateImageBehavior = false;
             // 
             // FormMain
             // 
@@ -470,6 +492,7 @@
             this.GroupMods.PerformLayout();
             this.TabUtilityMods.ResumeLayout(false);
             this.TabMods.ResumeLayout(false);
+            this.modsTab.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -506,6 +529,8 @@
         private System.Windows.Forms.Button ButtonConfigureUtility;
         private System.Windows.Forms.CheckedListBox ListUtilityMods;
         private System.Windows.Forms.TabControl TabMods;
+        private System.Windows.Forms.TabPage modsTab;
+        private System.Windows.Forms.ListView allModsListView;
     }
 }
 

@@ -1,6 +1,4 @@
-﻿using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +7,7 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class ModRegistry : Registry
+    public class ModRegistry : IRegistry
     {
         public IEnumerable<Mod> Mods;
 
@@ -29,7 +27,26 @@ namespace AuroraLoader.Registry
             _localRegistry.Update();
             _remoteRegistry.Update();
 
+            var mods = new List<Mod>();
             // TODO Create Mods from union(local + remote)
+            foreach (var modInstallation in _localRegistry.ModInstallations)
+            {
+                mods.Add(new Mod(modInstallation, null));
+            }
+
+            foreach (var modListing in _remoteRegistry.ModListings)
+            {
+                var installedMod = mods.FirstOrDefault(mod => mod.Name == modListing.ModName);
+                if (installedMod != null)
+                {
+                    installedMod = new Mod(installedMod.Installation, modListing);
+                }
+                else
+                {
+                    mods.Add(new Mod(null, modListing));
+                }
+            }
+            Mods = mods;
         }
     }
 }
