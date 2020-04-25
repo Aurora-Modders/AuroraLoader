@@ -11,6 +11,36 @@ namespace AuroraLoader
 {
     class Installer
     {
+        public static void InstallClean()
+        {
+            var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
+            var url = "https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/aurora_files.ini";
+
+            using (var client = new WebClient())
+            {
+                var str = client.DownloadString(url);
+                var aurora_files = Config.FromString(str);
+
+                DownloadAuroraPieces(folder, aurora_files);
+            }
+        }
+
+        public static void CopyClean(string folder)
+        {
+            var clean = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
+            if (!Directory.Exists(clean))
+            {
+                throw new Exception("No clean install available");
+            }
+            
+            if (Directory.Exists(folder))
+            {
+                Directory.Delete(folder, true);
+            }
+
+            Copy(clean, folder);
+        }
+
         public static void UpdateAurora(GameInstallation current, Dictionary<string, string> aurora_files)
         {
             var update = SemVersion.Parse(aurora_files["Version"]);
@@ -66,6 +96,8 @@ namespace AuroraLoader
 
                 foreach (var piece in pieces)
                 {
+                    Log.Debug("Installing Aurora piece: " + piece);
+
                     if (File.Exists(zip))
                     {
                         File.Delete(zip);
@@ -88,12 +120,40 @@ namespace AuroraLoader
                         }
                     }
 
-                    ZipFile.ExtractToDirectory(zip, folder);
+                    Copy(extract_folder, folder);
                 }
             }
 
             File.Delete(zip);
             Directory.Delete(extract_folder, true);
+        }
+
+        private static void Copy(string sourceDirectory, string targetDirectory)
+        {
+            var diSource = new DirectoryInfo(sourceDirectory);
+            var diTarget = new DirectoryInfo(targetDirectory);
+
+            CopyAll(diSource, diTarget);
+        }
+
+        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            Directory.CreateDirectory(target.FullName);
+
+            // Copy each file into the new directory.
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+            }
+
+            // Copy each subdirectory using recursion.
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir =
+                    target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
         }
     }
 }
