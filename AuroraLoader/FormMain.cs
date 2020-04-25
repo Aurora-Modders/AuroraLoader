@@ -576,5 +576,10 @@ namespace AuroraLoader
                 TrackVolume.Enabled = false;
             }
         }
+
+        private void ButtonMultiPlayer_Click(object sender, EventArgs e)
+        {
+            MessageBox
+        }
     }
 }
