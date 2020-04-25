@@ -41,13 +41,15 @@ namespace AuroraLoader
                         knownVersions.Add(new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
                     }
                 }
-                catch { /* swallow */ }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to download Aurora version listing from {VersionsUrl}", e);
+                }
 
             }
             KnownAuroraVersions = knownVersions;
         }
 
-        // TODO return Mod objects
         /*
 		 * Sample mods.txt (mod directory) content:
 		 * AuroraMod=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraMod/updates.txt
@@ -59,10 +61,19 @@ namespace AuroraLoader
             var modListingAtMirror = new List<ModListing>();
             using (var client = new WebClient())
             {
-                var response = client.DownloadString(ModsUrl);
-                foreach (var kvp in Config.FromString(response))
+                try
                 {
-                    modListingAtMirror.Add(new ModListing(kvp.Key, kvp.Value));
+                    var response = client.DownloadString(ModsUrl);
+                    foreach (var kvp in Config.FromString(response))
+                    {
+
+                        modListingAtMirror.Add(new ModListing(kvp.Key, kvp.Value));
+
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to download mod listing from {ModsUrl}", e);
                 }
             }
             ModDirectory = modListingAtMirror;
