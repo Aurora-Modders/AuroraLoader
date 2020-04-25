@@ -18,15 +18,17 @@ namespace AuroraLoader
             if (current.InstalledVersion.Version.Major == update.Major)
             {
                 aurora_files.Remove("Major");
-            }
-            if (current.InstalledVersion.Version.Minor == update.Minor)
-            {
-                aurora_files.Remove("Minor");
-            }
-            if (current.InstalledVersion.Version.Patch == update.Patch)
-            {
-                aurora_files.Remove("Patch");
-                aurora_files.Remove("Rev"); // deprecated
+
+                if (current.InstalledVersion.Version.Minor == update.Minor)
+                {
+                    aurora_files.Remove("Minor");
+
+                    if (current.InstalledVersion.Version.Patch == update.Patch)
+                    {
+                        aurora_files.Remove("Patch");
+                        aurora_files.Remove("Rev"); // deprecated
+                    }
+                }
             }
 
             foreach (var piece in aurora_files.Keys.ToList())
