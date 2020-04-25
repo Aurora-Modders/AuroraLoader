@@ -1,7 +1,6 @@
 ﻿using Semver;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -11,7 +10,8 @@ namespace AuroraLoader
 {
     static class Updater
     {
-        public static Dictionary<Mod, string> GetUpdateUrls(List<Mod> mods)
+        // TODO should be subsumed by Mirror.ModDirectory / ModListing
+        public static Dictionary<Mod, string> GetUpdateUrls(IList<Mod> mods)
         {
             var updaters = new Dictionary<string, Mod>();
             

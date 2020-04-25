@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using Semver;
 
 namespace AuroraLoader
@@ -11,12 +10,14 @@ namespace AuroraLoader
     {
         public string ModName { get; }
         public string UpdateUrl { get; }
-        public IDictionary<SemVersion, string> Versions { get; private set; }
+
+        // <SemVersion, DownloadUrl>
+        public IDictionary<SemVersion, string> VersionDownloadUrls { get; private set; }
         public SemVersion LatestVersion
         {
             get
             {
-                return Versions.Keys.Max();
+                return VersionDownloadUrls.Keys.Max();
             }
         }
 
@@ -50,7 +51,7 @@ namespace AuroraLoader
                 }
 
             }
-            Versions = versions;
+            VersionDownloadUrls = versions;
         }
     }
 }

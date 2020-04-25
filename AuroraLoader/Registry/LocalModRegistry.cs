@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
 using Semver;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,8 @@ using System.Security.Cryptography;
 
 namespace AuroraLoader
 {
-    public class AuroraLoaderRegistry
+    public class LocalModRegistry
     {
-        public IList<Mirror> Mirrors { get; private set; }
         public IList<Mod> LocalMods { get; private set; }
         public IList<AuroraVersion> AuroraVersions { get; private set; }
 
@@ -24,34 +24,16 @@ namespace AuroraLoader
         }
 
         private readonly IConfiguration _configuration;
+        private readonly MirrorRegistry _mirrorRegistry;
 
-        public AuroraLoaderRegistry(IConfiguration configuration)
+        public LocalModRegistry(IConfiguration configuration, MirrorRegistry mirrorRegistry)
         {
             _configuration = configuration;
-            UpdateLocallyKnownMirrors();
-            UpdateLocalMods();
+            _mirrorRegistry = mirrorRegistry;
             UpdateKnownVersions();
         }
 
-        public void UpdateLocallyKnownMirrors()
-        {
-            var mirrors = new List<Mirror>();
-            try
-            {
-                foreach (var rootUrl in File.ReadAllLines(_configuration["aurora_mirrors_relative_filepath"]))
-                {
-                    mirrors.Add(new Mirror(_configuration, rootUrl));
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to parse mirror data from {_configuration["aurora_mirrors_relative_filepath"]}", e);
-            }
-
-            Mirrors = mirrors;
-        }
-
-        public void UpdateLocalMods()
+        public void UpdateDownloadedMods()
         {
             var mods = new List<Mod>();
             var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods");
@@ -71,30 +53,26 @@ namespace AuroraLoader
 
         public void UpdateKnownVersions()
         {
-            AuroraVersions = UpdateLocallyKnownVersions().Union(UpdateMirrorKnownVersions()).ToList();
-        }
-
-        private IList<AuroraVersion> UpdateLocallyKnownVersions()
-        {
-            var knownVersions = new List<AuroraVersion>();
+            var auroraVersions = new List<AuroraVersion>();
             try
             {
                 foreach (var kvp in Config.FromString(File.ReadAllText(_configuration["aurora_known_versions_relative_filepath"])))
                 {
-                    knownVersions.Add(new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
+                    auroraVersions.Add(new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
                 }
             }
             catch (Exception e)
             {
                 Log.Error($"Failed to parse version data from {_configuration["aurora_known_versions_relative_filepath"]}", e);
             }
-            return knownVersions;
+            AuroraVersions = auroraVersions;
         }
 
-        private IList<AuroraVersion> UpdateMirrorKnownVersions()
+        public void UpdateKnownAuroraVersionsFromMirror()
         {
+            UpdateKnownVersions();
             var mirrorKnownVersions = new List<AuroraVersion>();
-            foreach (var mirror in Mirrors)
+            foreach (var mirror in _mirrorRegistry.Mirrors)
             {
                 try
                 {
@@ -106,7 +84,7 @@ namespace AuroraLoader
                     Log.Error($"Failed to update known Aurora versions from {mirror.RootUrl}", e);
                 }
             }
-            return mirrorKnownVersions;
+            AuroraVersions = mirrorKnownVersions.Union(AuroraVersions).ToList();
         }
 
         internal string GetChecksum(byte[] bytes)

@@ -22,35 +22,37 @@ namespace AuroraLoader
 
         private Thread AuroraThread { get; set; } = null;
 
-        private readonly AuroraLoaderRegistry _registry;
+        private readonly LocalModRegistry _localRegistry;
+        private readonly RemoteModRegistry _remoteRegistry;
 
-        public FormMain(IConfiguration configuration, AuroraLoaderRegistry registry)
+        public FormMain(IConfiguration configuration, LocalModRegistry localRegistry, RemoteModRegistry remoteRegistry)
         {
             InitializeComponent();
             _configuration = configuration;
-            _registry = registry;
+            _localRegistry = localRegistry;
+            _remoteRegistry = remoteRegistry;
         }
 
         private void RefreshAuroraInstallData()
         {
-            if (_registry.CurrentAuroraInstallVersion == null)
+            if (_localRegistry.CurrentAuroraInstallVersion == null)
             {
                 LabelVersion.Text = "Aurora version: Unknown";
                 CheckMods.Enabled = false;
                 return;
             }
 
-            LabelChecksum.Text = $"Aurora checksum: {_registry.CurrentAuroraInstallVersion.Checksum}";
-            LabelVersion.Text = $"Aurora version: {_registry.CurrentAuroraInstallVersion.Version}";
+            LabelChecksum.Text = $"Aurora checksum: {_localRegistry.CurrentAuroraInstallVersion.Checksum}";
+            LabelVersion.Text = $"Aurora version: {_localRegistry.CurrentAuroraInstallVersion.Version}";
 
             ButtonUpdateAurora.Text = "Update Aurora";
             ButtonUpdateAurora.ForeColor = Color.Black;
             ButtonUpdateAurora.Enabled = false;
 
             // Let it be known that the first elvis operator was added to the project at this very spot
-            if (_registry.CurrentAuroraInstallVersion?.Version != _registry.AuroraVersions?.Max().Version)
+            if (_localRegistry.CurrentAuroraInstallVersion?.Version != _localRegistry.AuroraVersions?.Max().Version)
             {
-                ButtonUpdateAurora.Text = $"Update Aurora to {_registry.AuroraVersions.Max().Version}!";
+                ButtonUpdateAurora.Text = $"Update Aurora to {_localRegistry.AuroraVersions.Max().Version}!";
                 ButtonUpdateAurora.ForeColor = Color.Green;
                 ButtonUpdateAurora.Enabled = true;
             }
@@ -61,12 +63,12 @@ namespace AuroraLoader
             Mods.Clear();
             ModUpdates.Clear();
 
-            _registry.UpdateLocalMods();
+            _localRegistry.UpdateDownloadedMods();
             var latest = new Dictionary<string, Mod>();
 
-            foreach (var mod in _registry.LocalMods)
+            foreach (var mod in _localRegistry.LocalMods)
             {
-                if (mod.WorksForVersion(_registry.CurrentAuroraInstallVersion))
+                if (mod.WorksForVersion(_localRegistry.CurrentAuroraInstallVersion))
                 {
                     if (!latest.ContainsKey(mod.Name))
                     {
@@ -105,8 +107,8 @@ namespace AuroraLoader
 
         private void UpdateLists()
         {
-            _registry.UpdateLocalMods();
-            var utility = _registry.LocalMods.Where(m => m.Type == Mod.ModType.UTILITY || m.Type == Mod.ModType.ROOT_UTILITY).ToList();
+            _localRegistry.UpdateDownloadedMods();
+            var utility = _localRegistry.LocalMods.Where(m => m.Type == Mod.ModType.UTILITY || m.Type == Mod.ModType.ROOT_UTILITY).ToList();
 
             var status_approved = CheckApproved.Checked;
             var status_public = CheckPublic.Checked;
@@ -156,7 +158,7 @@ namespace AuroraLoader
             }
             else
             {
-                ComboExe.SelectedIndex = 0;
+                // ComboExe.SelectedIndex = 0;
                 ButtonConfigureExe.Enabled = false;
             }
 
@@ -530,7 +532,7 @@ namespace AuroraLoader
 
         private void ButtonInstallMods_Click(object sender, EventArgs e)
         {
-            var form = new FormInstallMod(_configuration, _registry);
+            var form = new FormInstallMod(_configuration, _localRegistry);
             form.ShowDialog();
 
             Cursor = Cursors.WaitCursor;

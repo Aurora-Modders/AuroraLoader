@@ -1,3 +1,4 @@
+using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
@@ -18,13 +19,16 @@ namespace AuroraLoader
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
                     .Build();
 
-            var registry = new AuroraLoaderRegistry(configuration);
-            Application.Run(new FormMain(configuration, registry));
+            var mirrorRegistry = new MirrorRegistry(configuration);
+            var localRegistry = new LocalModRegistry(configuration, mirrorRegistry);
+            var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
+            Application.Run(new FormMain(configuration, localRegistry, remoteRegistry));
         }
 
         public static void OpenBrowser(string url)

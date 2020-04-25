@@ -14,10 +14,14 @@ namespace AuroraLoader
     public partial class FormInstallMod : Form
     {
         private readonly Dictionary<string, string> KnownMods = new Dictionary<string, string>();
+        private readonly IConfiguration _configuration;
+        private readonly LocalModRegistry _localRegistry;
 
-        public FormInstallMod()
+        public FormInstallMod(IConfiguration configuration, LocalModRegistry registry)
         {
             InitializeComponent();
+            _configuration = configuration;
+            _localRegistry = registry;
         }
 
         private void ButtonOk_Click(object sender, EventArgs e)
@@ -27,11 +31,13 @@ namespace AuroraLoader
             Cursor = Cursors.WaitCursor;
 
             var update = TextUrl.Text;
-            var selected = (string)ComboMods.SelectedItem;
-            if (selected != null && !selected.Equals("Use url"))
+            var selectedModName = (string)ComboMods.SelectedItem;
+            if (selectedModName != null)
             {
-                update = KnownMods[selected];
+                update = KnownMods[selectedModName];
             }
+
+            // Call the Mod's install method in this bit
 
             Log.Debug(update);
 
@@ -61,9 +67,9 @@ namespace AuroraLoader
                     Updater.Update(url);
                     TextUrl.Text = "";
 
-                    if (KnownMods.ContainsKey(selected))
+                    if (KnownMods.ContainsKey(selectedModName))
                     {
-                        KnownMods.Remove(selected);
+                        KnownMods.Remove(selectedModName);
                         UpdateCombo();
                     }
 
@@ -90,50 +96,26 @@ namespace AuroraLoader
 
         private void FormInstallMod_Load(object sender, EventArgs e)
         {
-            var installed = Mod.GetInstalledMods().Select(m => m.Name).ToList();
-
-            try
-            {
-                using (var client = new WebClient())
-                {
-                    foreach (var mirror in Program.MIRRORS)
-                    {
-                        var mods = Config.FromString(client.DownloadString(mirror + "Mods/mods.txt"));
-                        foreach (var kvp in mods)
-                        {
-                            if (!installed.Contains(kvp.Key))
-                            {
-                                KnownMods[kvp.Key] = kvp.Value;
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception exc)
-            {
-                Log.Error("Failed to get known mods.", exc);
-            }
-
             UpdateCombo();
         }
 
         private void UpdateCombo()
         {
-            if (KnownMods.Count > 0)
+            ComboMods.Items.Clear();
+
+            bool localModsFound = _localRegistry.LocalMods.Any();
+            if (localModsFound)
             {
-                ComboMods.Items.Clear();
-                ComboMods.Items.Add("Use url");
-                ComboMods.Items.AddRange(KnownMods.Keys.ToArray());
-                ComboMods.SelectedIndex = 0;
-                ComboMods.Enabled = true;
+                ComboMods.Items.AddRange(_localRegistry.LocalMods.Select(mod => mod.Name).ToArray());
             }
             else
             {
-                ComboMods.Items.Clear();
-                ComboMods.Items.Add("Use url");
-                ComboMods.SelectedIndex = 0;
-                ComboMods.Enabled = false;
+                ComboMods.Items.Add($"Mods not found");
             }
+
+            ComboMods.Enabled = localModsFound;
+            ButtonOk.Enabled = localModsFound;
+            ComboMods.SelectedIndex = 0;
         }
 
         private void ComboMods_SelectedIndexChanged(object sender, EventArgs e)
@@ -146,6 +128,11 @@ namespace AuroraLoader
             {
                 TextUrl.Enabled = false;
             }
+        }
+
+        private void TextUrl_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

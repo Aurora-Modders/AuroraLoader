@@ -10,12 +10,12 @@ namespace AuroraLoader
     public class Mirror
     {
         public string RootUrl { get; }
-        public string VersionsUrl => Path.Combine(RootUrl, _configuration["aurora_mirrors_relative_filepath"]);
-        public string ModsUrl => Path.Combine(RootUrl, _configuration["aurora_mods_relative_filepath"]);
-
-        public IList<ModListing> ModDirectory { get; private set; }
+        public string VersionsUrl => Path.Combine(RootUrl, "aurora_versions.txt");
+        public string ModsUrl => Path.Combine(RootUrl, "Mods/mods.txt");
 
         public IList<AuroraVersion> KnownAuroraVersions { get; private set; }
+
+        public IList<ModListing> ModDirectory { get; private set; }
 
         private readonly IConfiguration _configuration;
 
@@ -23,9 +23,8 @@ namespace AuroraLoader
         {
             _configuration = configuration;
             RootUrl = rootUrl;
-            // I don't think anyone's actually doing this at the moment
-            // UpdateKnownAuroraVersions();
-            UpdateModDirectory();
+            UpdateModListings();
+            UpdateKnownAuroraVersions();
         }
 
         public void UpdateKnownAuroraVersions()
@@ -47,6 +46,7 @@ namespace AuroraLoader
                 }
 
             }
+            // TODO update the locally cached file
             KnownAuroraVersions = knownVersions;
         }
 
@@ -55,8 +55,11 @@ namespace AuroraLoader
 		 * AuroraMod=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraMod/updates.txt
 		 * AuroraElectrons=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraElectrons/updates.txt
 		 * A4xCalc=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt
+		 * 
+		 * TODO handle JSON
+		 * See https://github.com/Aurora-Modders/AuroraMods/blob/master/mods.json for an example
 		 */
-        public void UpdateModDirectory()
+        public void UpdateModListings()
         {
             var modListingAtMirror = new List<ModListing>();
             using (var client = new WebClient())
