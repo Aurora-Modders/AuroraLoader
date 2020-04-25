@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using NAudio.Wave;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Transactions;
 using System.Windows.Forms;
 
 namespace AuroraLoader
@@ -34,26 +36,24 @@ namespace AuroraLoader
             var exe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Configuration["executable_location"]);
             if (!File.Exists(exe))
             {
-                var dialog = MessageBox.Show("Aurora not installed. Install?", "Install Aurora", MessageBoxButtons.YesNo);
+                var dialog = MessageBox.Show("Aurora not installed. Download and install? This might take a while.", "Install Aurora", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.No)
                 {
                     Application.Exit();
+                    return;
                 }
 
                 var installation = new GameInstallation(new GameVersion("0.0.0", ""), exe);
-                
-                using (var client = new WebClient())
-                {
-                    var thread = new Thread(() =>
-                    {
-                        var aurora_files = Config.FromString(client.DownloadString(Installer.GetLatestUrl()));
-                        Installer.DownloadAuroraPieces(Path.GetDirectoryName(exe), aurora_files);
-                    });
-                    thread.Start();
 
-                    var progress = new FormProgress(thread);
-                    progress.ShowDialog();
-                }
+                var thread = new Thread(() =>
+                {
+                    var aurora_files = Installer.GetLatestAuroraFiles();
+                    Installer.DownloadAuroraPieces(Path.GetDirectoryName(exe), aurora_files);
+                });
+                thread.Start();
+
+                var progress = new FormProgress(thread) { Text = "Installing Aurora" };
+                progress.ShowDialog();
             }
             var checksum = Program.GetChecksum(File.ReadAllBytes(exe));
             var known_versions = GameVersion.GetKnownGameVersions();
@@ -69,21 +69,18 @@ namespace AuroraLoader
                 CheckMods.Enabled = false;
             }
 
-            ButtonUpdateAurora.Text = "Update Aurora";
             ButtonUpdateAurora.ForeColor = Color.Black;
+            ButtonUpdateAurora.Text = "Update Aurora";
             ButtonUpdateAurora.Enabled = false;
 
-            if (known_versions.Count > 0)
-            {
-                known_versions.Sort();
-                var highest = known_versions[known_versions.Count - 1];
+            var aurora_files = Installer.GetLatestAuroraFiles();
+            var update = SemVersion.Parse(aurora_files["Version"]);
 
-                if (highest.CompareTo(AuroraVersion) == 1)
-                {
-                    ButtonUpdateAurora.Text = "Update Aurora: " + highest;
-                    ButtonUpdateAurora.ForeColor = Color.Green;
-                    ButtonUpdateAurora.Enabled = true;
-                }
+            if (update.CompareByPrecedence(GameInstallation.InstalledVersion.Version) == 1)
+            {
+                ButtonUpdateAurora.ForeColor = Color.Green;
+                ButtonUpdateAurora.Text = "Update Aurora: " + update;
+                ButtonUpdateAurora.Enabled = true;
             }
         }
 
@@ -431,6 +428,11 @@ namespace AuroraLoader
             Cursor = Cursors.WaitCursor;
 
             LoadGame();
+            if (GameInstallation == null)
+            {
+                return;
+            }
+
             LoadMods();
             UpdateLists();
             UpdateButtons();
@@ -439,6 +441,7 @@ namespace AuroraLoader
 
             TabThemeMods.Enabled = false;
             TabMods.SelectedTab = TabGameMods;
+            TrackVolume.Value = 5;
         }
 
         private void CheckMods_CheckedChanged(object sender, EventArgs e)
@@ -488,7 +491,15 @@ namespace AuroraLoader
 
         private void ButtonAuroraUpdates_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://aurora2.pentarch.org/index.php?board=276.0");
+            Cursor = Cursors.WaitCursor;
+
+            Installer.UpdateAurora(GameInstallation, Installer.GetLatestAuroraFiles());
+
+            
+
+            Cursor = Cursors.Default;
+
+            LoadGame();
         }
 
         private void ButtonModsSubreddit_Click(object sender, EventArgs e)
@@ -592,7 +603,6 @@ namespace AuroraLoader
         {
             if (CheckMusic.Checked)
             {
-                TrackVolume.Value = 5;
                 TrackVolume.Enabled = true;
             }
             else
@@ -609,6 +619,18 @@ namespace AuroraLoader
         private void ButtonInstallAurora_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (AuroraThread != null && AuroraThread.IsAlive)
+            {
+                var dialog = MessageBox.Show("Game not ended yet, exit?", "Exit", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }
