@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Semver;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -10,17 +11,19 @@ namespace AuroraLoader
 {
     class Installer
     {
-        public static void UpdateAurora(GameInstallation current, GameVersion update, Dictionary<string, string> aurora_files)
+        public static void UpdateAurora(GameInstallation current, Dictionary<string, string> aurora_files)
         {
-            if (current.InstalledVersion.Version.Major == update.Version.Major)
+            var update = SemVersion.Parse(aurora_files["Version"]);
+
+            if (current.InstalledVersion.Version.Major == update.Major)
             {
                 aurora_files.Remove("Major");
             }
-            if (current.InstalledVersion.Version.Minor == update.Version.Minor)
+            if (current.InstalledVersion.Version.Minor == update.Minor)
             {
                 aurora_files.Remove("Minor");
             }
-            if (current.InstalledVersion.Version.Patch == update.Version.Patch)
+            if (current.InstalledVersion.Version.Patch == update.Patch)
             {
                 aurora_files.Remove("Patch");
                 aurora_files.Remove("Rev"); // deprecated
@@ -43,6 +46,8 @@ namespace AuroraLoader
 
         public static void DownloadAuroraPieces(string folder, Dictionary<string, string> aurora_files)
         {
+            aurora_files.Remove("Version");
+
             // TODO retain folder structure
             var zip = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             var extract_folder = Path.Combine(Path.GetTempPath(), "aurora_installs");
@@ -68,16 +73,10 @@ namespace AuroraLoader
                     client.DownloadFile(aurora_files[piece], zip);
                     ZipFile.ExtractToDirectory(zip, extract_folder);
 
-                    var dest_folder = Path.Combine(folder, piece);
-                    if (piece.Equals("Major") || piece.Equals("Minor") || piece.Equals("Patch") || piece.Equals("Rev"))
-                    {
-                        dest_folder = folder;
-                    }
-
                     // need to delete exe and db before overwriting
                     foreach (var file in Directory.EnumerateFiles(extract_folder))
                     {
-                        var dest = Path.Combine(dest_folder, Path.GetFileName(file));
+                        var dest = Path.Combine(folder, Path.GetFileName(file));
 
                         if (File.Exists(dest))
                         {
@@ -85,7 +84,7 @@ namespace AuroraLoader
                         }
                     }
 
-                    ZipFile.ExtractToDirectory(zip, dest_folder);
+                    ZipFile.ExtractToDirectory(zip, folder);
                 }
             }
 
