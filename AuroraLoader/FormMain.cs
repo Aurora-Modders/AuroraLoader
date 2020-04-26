@@ -54,11 +54,11 @@ namespace AuroraLoader
             Cursor = Cursors.Default;
             CheckEnableGameMods.Enabled = true;
             ComboSelectLaunchExe.Enabled = false;
-            ListGameMods.Enabled = false;
+            ListDatabaseMods.Enabled = false;
             CheckApproved.Enabled = false;
             CheckPower.Enabled = false;
             CheckPublic.Enabled = false;
-            TabMods.SelectedTab = TabGameMods;
+            TabMods.SelectedTab = TabApplyMods;
         }
 
         private void InstallAurora(string executablePath)
@@ -158,7 +158,7 @@ namespace AuroraLoader
                     ButtonModBugs.ForeColor = Color.OrangeRed;
 
                     ComboSelectLaunchExe.Enabled = true;
-                    ListGameMods.Enabled = true;
+                    ListDatabaseMods.Enabled = true;
                     CheckApproved.Enabled = true;
                     CheckPower.Enabled = true;
                     CheckPublic.Enabled = true;
@@ -179,7 +179,7 @@ namespace AuroraLoader
 
                 CheckEnableGameMods.Enabled = true;
                 ComboSelectLaunchExe.Enabled = false;
-                ListGameMods.Enabled = false;
+                ListDatabaseMods.Enabled = false;
                 CheckApproved.Enabled = false;
                 CheckPower.Enabled = false;
                 CheckPublic.Enabled = false;
@@ -245,8 +245,8 @@ namespace AuroraLoader
         /// </summary>
         private void UpdateGameModsListView()
         {
-            ListGameMods.Items.Clear();
-            ListGameMods.Items.AddRange(_modRegistry.Mods.Where(
+            ListDatabaseMods.Items.Clear();
+            ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
                 mod => mod.Installed
                 && GetAllowedModStatuses().Contains(mod.Installation.Status)
                 && mod.Type == ModType.DATABASE).Select(mod => mod.Name).ToArray());
@@ -375,7 +375,7 @@ namespace AuroraLoader
             ButtonUpdateAurora.Enabled = false;
 
             var mods = _modRegistry.Mods.Where(mod =>
-            (ListGameMods.CheckedItems != null && ListGameMods.CheckedItems.Contains(mod.Name))
+            (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
             || (ListUtilities.CheckedItems != null && ListUtilities.CheckedItems.Contains(mod.Name))).ToList();
 
             Mod executableMod;
