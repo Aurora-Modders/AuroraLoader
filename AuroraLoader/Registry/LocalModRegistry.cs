@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using AuroraLoader.Mods;
-using System.Text.Json;
+using System.Linq;
 
 namespace AuroraLoader.Registry
 {
@@ -42,7 +42,20 @@ namespace AuroraLoader.Registry
             {
                 try
                 {
-                    mods.Add(ModConfigurationReader.ModConfigurationFromIni(file));
+                    var newMod = ModConfigurationReader.ModConfigurationFromIni(file);
+                    if (mods.Any(mod => mod.Name == newMod.Name))
+                    {
+                        var existingMod = mods.Single(mod => mod.Name == newMod.Name);
+                        if (newMod.Version.CompareTo(existingMod.Version) > 0)
+                        {
+                            mods.Remove(existingMod);
+                            mods.Add(newMod);
+                        }
+                    }
+                    else
+                    {
+                        mods.Add(newMod);
+                    }
                 }
                 catch (Exception e)
                 {

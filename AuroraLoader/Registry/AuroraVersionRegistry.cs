@@ -1,6 +1,5 @@
 ﻿using AuroraLoader.Mods;
 using Microsoft.Extensions.Configuration;
-using Semver;
 using System;
 using System.Collections.Generic;
 using System.IO;

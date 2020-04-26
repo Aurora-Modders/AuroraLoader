@@ -1,8 +1,6 @@
 ﻿using AuroraLoader.Mods;
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
-using NAudio.Wave;
-using Semver;
 using System;
 using System.Collections.Generic;
 using System.Data;
