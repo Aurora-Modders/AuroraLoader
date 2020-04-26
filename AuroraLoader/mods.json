@@ -10,5 +10,11 @@
     "Type": "RootUtility",
     "Description": "Some description",
     "Updates": "https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraElectrons/updates.txt"
+  },
+  {
+      "Name": "A4xCalc",
+      "Type": "Utility",
+      "Description": "Some description",
+      "Updates": "A4xCalc=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt"
   }
 ]
