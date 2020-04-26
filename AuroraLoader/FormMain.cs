@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Transactions;
 using System.Windows.Forms;
@@ -63,7 +63,6 @@ namespace AuroraLoader
             }
 
             var installation = new GameInstallation(new AuroraVersion("0.0.0", ""), executablePath);
-
             var thread = new Thread(() =>
             {
                 var aurora_files = Installer.GetLatestAuroraFiles();
@@ -84,7 +83,6 @@ namespace AuroraLoader
             if (_auroraVersionRegistry.CurrentAuroraVersion == null)
             {
                 LabelVersion.Text = "Aurora version: Unknown";
-                CheckEnableGameMods.Enabled = false;
             }
             else
             {
@@ -147,8 +145,6 @@ namespace AuroraLoader
 
         private void CheckEnableGameMods_CheckChanged(object sender, EventArgs e)
         {
-            ButtonSinglePlayer.Enabled = true;
-
             if (CheckEnableGameMods.Checked)
             {
                 var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
@@ -163,8 +159,10 @@ namespace AuroraLoader
                     ComboSelectLaunchExe.Enabled = true;
                     ListGameMods.Enabled = true;
                     ButtonInstallOrUpdate.Enabled = true;
-
-                    TabGameMods.Enabled = true;
+                }
+                else
+                {
+                    CheckEnableGameMods.Checked = false;
                 }
             }
             if (!CheckEnableGameMods.Checked)
@@ -178,8 +176,6 @@ namespace AuroraLoader
                 ComboSelectLaunchExe.Enabled = false;
                 ListGameMods.Enabled = false;
                 ButtonInstallOrUpdate.Enabled = false;
-
-                TabGameMods.Enabled = false;
             }
         }
 
