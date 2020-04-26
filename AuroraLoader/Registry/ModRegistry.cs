@@ -62,14 +62,14 @@ namespace AuroraLoader.Registry
                 throw new Exception($"{mod.Name} is already up to date!");
             }
 
-            Log.Debug($"Preparing caches in {_localRegistry.ModDirectory}");
+            Log.Debug($"Preparing caches in {_localRegistry.CacheDirectory}");
             var zip = Path.Combine(_localRegistry.ModDirectory, "update.current");
             if (File.Exists(zip))
             {
                 File.Delete(zip);
             }
 
-            var extract_folder = Path.Combine(_localRegistry.ModDirectory, "Extract");
+            var extract_folder = Path.Combine(_localRegistry.CacheDirectory, "Extract");
             if (Directory.Exists(extract_folder))
             {
                 Directory.Delete(extract_folder, true);

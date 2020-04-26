@@ -3,18 +3,19 @@ using System;
 
 namespace AuroraLoader
 {
-    public class AuroraInstallation : IComparable<AuroraInstallation>
+    // TODO needs work to DWISOTT
+    public class AuroraVersion : IComparable<AuroraVersion>
     {
         public SemVersion Version { get; }
         public string Checksum { get; }
 
-        public AuroraInstallation(SemVersion version, string checksum)
+        public AuroraVersion(SemVersion version, string checksum)
         {
             Version = version;
             Checksum = checksum;
         }
 
-        public int CompareTo(AuroraInstallation other)
+        public int CompareTo(AuroraVersion other)
         {
             return Version.CompareByPrecedence(other.Version);
         }

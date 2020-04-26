@@ -82,15 +82,15 @@ namespace AuroraLoader
         {
             _auroraVersionRegistry.Update();
             _auroraVersionRegistry.Update();
-            LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraInstallVersion.Checksum}";
-            LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraInstallVersion.Version}";
+            LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
+            LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
 
             ButtonUpdateAurora.Text = "Update Aurora";
             ButtonUpdateAurora.ForeColor = Color.Black;
             ButtonUpdateAurora.Enabled = false;
 
             // Let it be known that the first elvis operator was added to the project at this very spot
-            if (_auroraVersionRegistry.CurrentAuroraInstallVersion?.Version?.Equals(_auroraVersionRegistry.AuroraVersions?.Max().Version) ?? false)
+            if (_auroraVersionRegistry.CurrentAuroraVersion?.Version?.Equals(_auroraVersionRegistry.AuroraVersions?.Max().Version) ?? false)
             {
                 ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}!";
                 ButtonUpdateAurora.ForeColor = Color.Green;
@@ -189,7 +189,7 @@ namespace AuroraLoader
             }
 
             // utility
-            var utilityMods = _modRegistry.Mods.Where(m => m.Type == ModType.UTILITY || m.Type == ModType.ROOT_UTILITY).ToList();
+            var utilityMods = _modRegistry.Mods.Where(m => m.Type == ModType.UTILITY || m.Type == ModType.ROOTUTILITY).ToList();
             if (utilityMods.Any())
             {
                 utilityMods.Sort((a, b) => a.Name.CompareTo(b.Name));
@@ -217,7 +217,7 @@ namespace AuroraLoader
 
         private void UpdateButtons()
         {
-            if (!(ListUtilityMods.SelectedItem is ModInstallation utility) || utility.ModInternalConfigFile == null)
+            if (!(ListUtilityMods.SelectedItem is ModConfiguration utility) || utility.ModInternalConfigFile == null)
             {
                 ButtonConfigureUtility.Enabled = false;
             }
@@ -226,7 +226,7 @@ namespace AuroraLoader
                 ButtonConfigureUtility.Enabled = true;
             }
 
-            if (!(ComboExe.SelectedItem is ModInstallation exe) || exe.ModInternalConfigFile == null)
+            if (!(ComboExe.SelectedItem is ModConfiguration exe) || exe.ModInternalConfigFile == null)
             {
                 ButtonConfigureExe.Enabled = false;
             }
@@ -235,7 +235,7 @@ namespace AuroraLoader
                 ButtonConfigureExe.Enabled = true;
             }
 
-            if (!(ListDBMods.SelectedItem is ModInstallation db) || db.ModInternalConfigFile == null)
+            if (!(ListDBMods.SelectedItem is ModConfiguration db) || db.ModInternalConfigFile == null)
             {
                 ButtonConfigureDB.Enabled = false;
             }
@@ -262,7 +262,7 @@ namespace AuroraLoader
             }
         }
 
-        private void ConfigureMod(ModInstallation mod)
+        private void ConfigureMod(ModConfiguration mod)
         {
             var info = new ProcessStartInfo()
             {
@@ -495,13 +495,13 @@ namespace AuroraLoader
 
         private void ButtonConfigureExe_Click(object sender, EventArgs e)
         {
-            var selected = ComboExe.SelectedItem as ModInstallation;
+            var selected = ComboExe.SelectedItem as ModConfiguration;
             ConfigureMod(selected);
         }
 
         private void ButtonConfigureDB_Click(object sender, EventArgs e)
         {
-            var selected = ListDBMods.SelectedItem as ModInstallation;
+            var selected = ListDBMods.SelectedItem as ModConfiguration;
             ConfigureMod(selected);
         }
 
@@ -536,7 +536,7 @@ namespace AuroraLoader
 
         private void ButtonConfigureUtility_Click(object sender, EventArgs e)
         {
-            var selected = ListUtilityMods.SelectedItem as ModInstallation;
+            var selected = ListUtilityMods.SelectedItem as ModConfiguration;
             ConfigureMod(selected);
         }
 

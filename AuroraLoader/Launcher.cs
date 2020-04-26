@@ -16,7 +16,7 @@ namespace AuroraLoader
                 throw new Exception("Use the other parameter");
             }
 
-            foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOT_UTILITY))
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOTUTILITY))
             {
                 Log.Debug("Root Utility: " + mod.Name);
                 CopyToRoot(mod);

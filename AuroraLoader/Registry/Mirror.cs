@@ -5,16 +5,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using AuroraLoader.Mods;
+using System.Linq;
+using System.Text.Json;
 
 namespace AuroraLoader.Registry
 {
+    /// <summary>
+    /// a mirror is defined by the presence of the following: mods.json, aurora_versions.ini, aurora_files.ini
+    /// </summary>
     public class Mirror
     {
         public string RootUrl { get; }
-        public string VersionsUrl => Path.Combine(RootUrl, "aurora_versions.txt");
-        public string ModsUrl => Path.Combine(RootUrl, "Mods/mods.txt");
+        public string VersionsUrl => Path.Combine(RootUrl, "aurora_versions.ini");
 
-        public IList<AuroraInstallation> KnownAuroraVersions { get; private set; }
+        public string OldModsUrl => Path.Combine(RootUrl, "Mods/mods.txt");
+        public string ModsUrl => Path.Combine(RootUrl, "mods.json");
+        // TODO currently unused
+        public string AuroraFilesUrl => Path.Combine(RootUrl, "aurora_files.ini");
+
+        public IList<AuroraVersion> KnownAuroraVersions { get; private set; }
 
         public IList<ModListing> ModListings { get; private set; }
 
@@ -30,16 +39,12 @@ namespace AuroraLoader.Registry
 
         public void UpdateKnownAuroraVersions()
         {
-            var knownVersions = new List<AuroraInstallation>();
             using (var client = new WebClient())
             {
                 try
                 {
                     var response = client.DownloadString(VersionsUrl);
-                    foreach (var kvp in ModConfigurationReader.FromString(response))
-                    {
-                        knownVersions.Add(new AuroraInstallation(SemVersion.Parse(kvp.Key), kvp.Value));
-                    }
+                    KnownAuroraVersions = ModConfigurationReader.AuroraVersionsFromString(response).ToList();
                 }
                 catch (Exception e)
                 {
@@ -48,7 +53,6 @@ namespace AuroraLoader.Registry
 
             }
             // TODO update the locally cached file
-            KnownAuroraVersions = knownVersions;
         }
 
         /*
@@ -57,8 +61,7 @@ namespace AuroraLoader.Registry
 		 * AuroraElectrons=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraElectrons/updates.txt
 		 * A4xCalc=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt
 		 * 
-		 * TODO handle JSON
-		 * See https://github.com/Aurora-Modders/AuroraMods/blob/master/mods.json for an example
+		 * See https://github.com/Aurora-Modders/AuroraMods/blob/master/mods.json for a JSON example
 		 */
         public void UpdateModListings()
         {
@@ -68,16 +71,29 @@ namespace AuroraLoader.Registry
                 try
                 {
                     var response = client.DownloadString(ModsUrl);
-                    foreach (var kvp in ModConfigurationReader.FromString(response))
-                    {
-
-                        modListingAtMirror.Add(new ModListing(kvp.Key, kvp.Value));
-
-                    }
+                    modListingAtMirror = JsonSerializer.Deserialize<List<ModListing>>(response);
                 }
                 catch (Exception e)
                 {
                     Log.Error($"Failed to download mod listing from {ModsUrl}", e);
+                }
+
+                if (modListingAtMirror == null)
+                {
+                    // Try looking for the older mods.txt format
+                    try
+                    {
+                        var response = client.DownloadString(OldModsUrl);
+
+                        foreach (var kvp in ModConfigurationReader.FromKeyValueString(response))
+                        {
+                            modListingAtMirror.Add(new ModListing(kvp.Key, kvp.Value));
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"Not enough MSP to implement repairs at {ModsUrl}", e);
+                    }
                 }
             }
             ModListings = modListingAtMirror;

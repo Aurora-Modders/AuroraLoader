@@ -19,19 +19,22 @@ namespace AuroraLoader.Registry
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Mirrors are only defined locally, for now
+        /// </summary>
         public void Update()
         {
             var mirrors = new List<Mirror>();
             try
             {
-                foreach (var rootUrl in File.ReadAllLines(_configuration["aurora_mirrors_relative_filepath"]))
+                foreach (var rootUrl in File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mirrors.ini")))
                 {
                     mirrors.Add(new Mirror(_configuration, rootUrl));
                 }
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to parse mirror data from {_configuration["aurora_mirrors_relative_filepath"]}", e);
+                Log.Error($"Failed to parse mirror data from {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe")}", e);
             }
 
             Mirrors = mirrors;

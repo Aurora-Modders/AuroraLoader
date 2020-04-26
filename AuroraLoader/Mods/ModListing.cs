@@ -10,8 +10,6 @@ namespace AuroraLoader.Mods
     {
         public string ModName { get; }
 
-        public ModType Type { get; private set; }
-
         public string UpdateUrl { get; }
 
         // <SemVersion, DownloadUrl>
@@ -51,7 +49,7 @@ namespace AuroraLoader.Mods
                 try
                 {
                     var response = client.DownloadString(UpdateUrl);
-                    foreach (var update in ModConfigurationReader.FromString(response))
+                    foreach (var update in ModConfigurationReader.FromKeyValueString(response))
                     {
                         versions[SemVersion.Parse(update.Key)] = update.Value;
                     }

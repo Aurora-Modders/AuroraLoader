@@ -10,8 +10,6 @@ namespace AuroraLoader
 {
     static class Program
     {
-        public static string[] MIRRORS => File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", "mirrors.txt"));
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>

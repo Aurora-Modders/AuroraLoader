@@ -14,12 +14,13 @@ namespace AuroraLoader.Registry
     /// </summary>
     public class AuroraVersionRegistry : IRegistry
     {
-        public IList<AuroraInstallation> AuroraVersions { get; private set; }
-        public AuroraInstallation CurrentAuroraInstallVersion
+        public IList<AuroraVersion> AuroraVersions { get; private set; }
+
+        public AuroraVersion CurrentAuroraVersion
         {
             get
             {
-                var checksum = GetChecksum(File.ReadAllBytes(_configuration["executable_location"]));
+                var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe")));
                 return AuroraVersions.Single(v => v.Checksum.Equals(checksum));
             }
         }
@@ -45,7 +46,7 @@ namespace AuroraLoader.Registry
 
         internal void UpdateKnownAuroraVersionsFromMirror()
         {
-            var mirrorKnownVersions = new List<AuroraInstallation>();
+            var mirrorKnownVersions = new List<AuroraVersion>();
             foreach (var mirror in _mirrorRegistry.Mirrors)
             {
                 try
@@ -65,19 +66,16 @@ namespace AuroraLoader.Registry
 
         internal void UpdateKnownVersionsFromCache()
         {
-            var auroraVersions = new List<AuroraInstallation>();
             try
             {
-                foreach (var kvp in ModConfigurationReader.FromString(File.ReadAllText(_configuration["aurora_known_versions_relative_filepath"])))
-                {
-                    auroraVersions.Add(new AuroraInstallation(SemVersion.Parse(kvp.Key), kvp.Value));
-                }
+                var rawFileContents = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora_versions.ini"));
+                AuroraVersions = ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList();
             }
             catch (Exception e)
             {
                 Log.Error($"Failed to parse version data from {_configuration["aurora_known_versions_relative_filepath"]}", e);
             }
-            AuroraVersions = auroraVersions;
+
         }
 
         internal string GetChecksum(byte[] bytes)
