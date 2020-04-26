@@ -31,6 +31,7 @@ namespace AuroraLoader
             var localRegistry = new LocalModRegistry(configuration);
             var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
             var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
+            modRegistry.Update();
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
 

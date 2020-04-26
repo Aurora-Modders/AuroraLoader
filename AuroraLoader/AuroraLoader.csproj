@@ -24,12 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="FormInstallMod.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="FormInstallMod.Designer.cs">
-      <DependentUpon>FormInstallMod.cs</DependentUpon>
-    </Compile>
     <Compile Update="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -44,9 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="FormInstallMod.resx">
-      <DependentUpon>FormInstallMod.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Update="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

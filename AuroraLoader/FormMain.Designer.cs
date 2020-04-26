@@ -35,7 +35,7 @@
             this.ButtonAuroraBugs = new System.Windows.Forms.Button();
             this.ButtonUpdateAurora = new System.Windows.Forms.Button();
             this.ButtonModSubreddit = new System.Windows.Forms.Button();
-            this.ButtonInstallMods = new System.Windows.Forms.Button();
+            this.ButtonInstallOrUpdate = new System.Windows.Forms.Button();
             this.ButtonMultiPlayer = new System.Windows.Forms.Button();
             this.ButtonInstallAurora = new System.Windows.Forms.Button();
             this.ButtonModBugs = new System.Windows.Forms.Button();
@@ -55,14 +55,14 @@
             this.ButtonConfigureUtility = new System.Windows.Forms.Button();
             this.ListUtilityMods = new System.Windows.Forms.CheckedListBox();
             this.TabMods = new System.Windows.Forms.TabControl();
-            this.modsTab = new System.Windows.Forms.TabPage();
-            this.allModsListView = new System.Windows.Forms.ListView();
+            this.TabManageMods = new System.Windows.Forms.TabPage();
+            this.ListManageMods = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.TrackVolume)).BeginInit();
             this.TabGameMods.SuspendLayout();
             this.GroupMods.SuspendLayout();
             this.TabUtilities.SuspendLayout();
             this.TabMods.SuspendLayout();
-            this.modsTab.SuspendLayout();
+            this.TabManageMods.SuspendLayout();
             this.SuspendLayout();
             // 
             // ButtonSinglePlayer
@@ -148,17 +148,17 @@
             this.ButtonModSubreddit.UseVisualStyleBackColor = true;
             this.ButtonModSubreddit.Click += new System.EventHandler(this.ButtonModsSubreddit_Click);
             // 
-            // ButtonInstallMods
+            // ButtonInstallOrUpdate
             // 
-            this.ButtonInstallMods.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ButtonInstallMods.Location = new System.Drawing.Point(403, 506);
-            this.ButtonInstallMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.ButtonInstallMods.Name = "ButtonInstallMods";
-            this.ButtonInstallMods.Size = new System.Drawing.Size(373, 88);
-            this.ButtonInstallMods.TabIndex = 15;
-            this.ButtonInstallMods.Text = "Install mods";
-            this.ButtonInstallMods.UseVisualStyleBackColor = true;
-            this.ButtonInstallMods.Click += new System.EventHandler(this.ButtonInstallMods_Click);
+            this.ButtonInstallOrUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonInstallOrUpdate.Location = new System.Drawing.Point(5, 586);
+            this.ButtonInstallOrUpdate.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ButtonInstallOrUpdate.Name = "ButtonInstallOrUpdate";
+            this.ButtonInstallOrUpdate.Size = new System.Drawing.Size(373, 88);
+            this.ButtonInstallOrUpdate.TabIndex = 15;
+            this.ButtonInstallOrUpdate.Text = "Install";
+            this.ButtonInstallOrUpdate.UseVisualStyleBackColor = true;
+            this.ButtonInstallOrUpdate.Click += new System.EventHandler(this.ButtonInstallOrUpdateMods_Click);
             // 
             // ButtonMultiPlayer
             // 
@@ -224,7 +224,6 @@
             // 
             this.TabGameMods.BackColor = System.Drawing.SystemColors.Control;
             this.TabGameMods.Controls.Add(this.GroupMods);
-            this.TabGameMods.Controls.Add(this.CheckEnableGameMods);
             this.TabGameMods.Location = new System.Drawing.Point(4, 38);
             this.TabGameMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.TabGameMods.Name = "TabGameMods";
@@ -342,7 +341,7 @@
             // 
             this.CheckEnableGameMods.AutoSize = true;
             this.CheckEnableGameMods.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CheckEnableGameMods.Location = new System.Drawing.Point(35, 35);
+            this.CheckEnableGameMods.Location = new System.Drawing.Point(479, 537);
             this.CheckEnableGameMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.CheckEnableGameMods.Name = "CheckEnableGameMods";
             this.CheckEnableGameMods.Size = new System.Drawing.Size(248, 33);
@@ -391,7 +390,7 @@
             // 
             this.TabMods.Controls.Add(this.TabUtilities);
             this.TabMods.Controls.Add(this.TabGameMods);
-            this.TabMods.Controls.Add(this.modsTab);
+            this.TabMods.Controls.Add(this.TabManageMods);
             this.TabMods.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.TabMods.Location = new System.Drawing.Point(840, 23);
             this.TabMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
@@ -401,34 +400,37 @@
             this.TabMods.TabIndex = 16;
             this.TabMods.SelectedIndexChanged += new System.EventHandler(this.TabMods_SelectedIndexChanged);
             // 
-            // modsTab
+            // TabManageMods
             // 
-            this.modsTab.Controls.Add(this.allModsListView);
-            this.modsTab.Location = new System.Drawing.Point(4, 38);
-            this.modsTab.Name = "modsTab";
-            this.modsTab.Size = new System.Drawing.Size(770, 1010);
-            this.modsTab.TabIndex = 3;
-            this.modsTab.Text = "Mods";
+            this.TabManageMods.AutoScroll = true;
+            this.TabManageMods.Controls.Add(this.ButtonInstallOrUpdate);
+            this.TabManageMods.Controls.Add(this.ListManageMods);
+            this.TabManageMods.Location = new System.Drawing.Point(4, 38);
+            this.TabManageMods.Name = "TabManageMods";
+            this.TabManageMods.Size = new System.Drawing.Size(770, 1010);
+            this.TabManageMods.TabIndex = 3;
+            this.TabManageMods.Text = "Manage Mods";
             // 
-            // allModsListView
+            // ListManageMods
             // 
-            this.allModsListView.HideSelection = false;
-            this.allModsListView.Location = new System.Drawing.Point(0, 3);
-            this.allModsListView.Name = "allModsListView";
-            this.allModsListView.Size = new System.Drawing.Size(767, 574);
-            this.allModsListView.TabIndex = 0;
-            this.allModsListView.UseCompatibleStateImageBehavior = false;
+            this.ListManageMods.HideSelection = false;
+            this.ListManageMods.Location = new System.Drawing.Point(0, 3);
+            this.ListManageMods.Name = "ListManageMods";
+            this.ListManageMods.Size = new System.Drawing.Size(767, 574);
+            this.ListManageMods.TabIndex = 0;
+            this.ListManageMods.UseCompatibleStateImageBehavior = false;
+            this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1635, 1088);
+            this.Controls.Add(this.CheckEnableGameMods);
             this.Controls.Add(this.CheckMusic);
             this.Controls.Add(this.TrackVolume);
             this.Controls.Add(this.ButtonModBugs);
             this.Controls.Add(this.ButtonInstallAurora);
-            this.Controls.Add(this.ButtonInstallMods);
             this.Controls.Add(this.ButtonMultiPlayer);
             this.Controls.Add(this.TabMods);
             this.Controls.Add(this.ButtonModSubreddit);
@@ -445,12 +447,11 @@
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.TrackVolume)).EndInit();
             this.TabGameMods.ResumeLayout(false);
-            this.TabGameMods.PerformLayout();
             this.GroupMods.ResumeLayout(false);
             this.GroupMods.PerformLayout();
             this.TabUtilities.ResumeLayout(false);
             this.TabMods.ResumeLayout(false);
-            this.modsTab.ResumeLayout(false);
+            this.TabManageMods.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -464,7 +465,7 @@
         private System.Windows.Forms.Button ButtonAuroraBugs;
         private System.Windows.Forms.Button ButtonUpdateAurora;
         private System.Windows.Forms.Button ButtonModSubreddit;
-        private System.Windows.Forms.Button ButtonInstallMods;
+        private System.Windows.Forms.Button ButtonInstallOrUpdate;
         private System.Windows.Forms.Button ButtonMultiPlayer;
         private System.Windows.Forms.Button ButtonInstallAurora;
         private System.Windows.Forms.Button ButtonModBugs;
@@ -484,8 +485,8 @@
         private System.Windows.Forms.Button ButtonConfigureUtility;
         private System.Windows.Forms.CheckedListBox ListUtilityMods;
         private System.Windows.Forms.TabControl TabMods;
-        private System.Windows.Forms.TabPage modsTab;
-        private System.Windows.Forms.ListView allModsListView;
+        private System.Windows.Forms.TabPage TabManageMods;
+        private System.Windows.Forms.ListView ListManageMods;
     }
 }
 

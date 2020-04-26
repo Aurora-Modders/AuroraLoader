@@ -114,7 +114,7 @@ namespace AuroraLoader.Registry
             }
 
             // Update mod in registry
-            _localRegistry.Update();
+            Update();
         }
     }
 }
