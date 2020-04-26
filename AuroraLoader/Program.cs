@@ -23,7 +23,7 @@ namespace AuroraLoader
             // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true)
                     .Build();
 
             var mirrorRegistry = new MirrorRegistry(configuration);
