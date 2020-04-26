@@ -289,18 +289,17 @@ namespace AuroraLoader
 
             foreach (var mod in _modRegistry.Mods)
             {
-                if (mod.Name == "AuroraMod")
+                if (mod.Name != "AuroraLoader")
                 {
-                    continue;
+                    var li = new ListViewItem(new string[] {
+                        mod.Name,
+                        mod.Type.ToString(),
+                        mod.Installation?.TargetAuroraVersion.ToString(),
+                        mod.Installation?.Version.ToString(),
+                        mod.Listing?.LatestVersion.ToString() ?? "Not found"
+                    });
+                    ListManageMods.Items.Add(li);
                 }
-                var li = new ListViewItem(new string[] {
-                    mod.Name,
-                    mod.Type.ToString(),
-                    mod.Installation?.TargetAuroraVersion.ToString(),
-                    mod.Installation?.Version.ToString(),
-                    mod.Listing?.LatestVersion.ToString() ?? "Not found"
-                });
-                ListManageMods.Items.Add(li);
             }
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
