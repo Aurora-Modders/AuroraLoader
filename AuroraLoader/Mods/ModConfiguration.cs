@@ -10,7 +10,7 @@ namespace AuroraLoader.Mods
 
         public SemVersion Version { get; internal set; } = null;
 
-        public SemVersion TargetAuroraVersion { get; internal set; }
+        public ModCompabitilityVersion TargetAuroraVersion { get; internal set; }
         public string ExecuteCommand { get; internal set; } = null;
         public string ModInternalConfigFile { get; internal set; } = null;
         public string Updates { get; internal set; } = null;
@@ -24,7 +24,7 @@ namespace AuroraLoader.Mods
         public bool WorksForVersion(AuroraVersion version)
         {
             // TODO Needs to understand wildcarded versions
-            return TargetAuroraVersion == version.Version;
+            return TargetAuroraVersion.WorksForVersion(version.Version);
         }
 
         public override string ToString()

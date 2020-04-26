@@ -40,7 +40,7 @@ namespace AuroraLoader.Mods
             }
             if (settings.ContainsKey("AuroraVersion"))
             {
-                mod.TargetAuroraVersion = SemVersion.Parse(settings["AuroraVersion"], false);
+                mod.TargetAuroraVersion = new ModCompabitilityVersion(settings["AuroraVersion"]);
             }
 
             // Optional at least some of the time
