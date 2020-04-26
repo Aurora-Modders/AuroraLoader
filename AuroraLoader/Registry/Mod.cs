@@ -2,14 +2,17 @@
 {
     public class Mod
     {
-
-        public ModType Type => Listing?.Type ?? Installation.Type;
         public string Name => Listing?.ModName ?? Installation.Name;
+        public ModType Type => Listing?.Type ?? Installation.Type;
+        public bool Installed => Installation != null;
+        public bool CanBeUpdated => Listing != null && Installed && Listing.LatestVersion.CompareByPrecedence(Installation.Version) > 0;
 
         public ModInstallation Installation { get; }
         public ModListing Listing { get; }
 
-        public bool Installed => Installation != null;
+        // TODO this is nasty but I'm lazy
+        public string InstallText => $"Install {Name} {Listing?.LatestVersion} ({Type})";
+        public string UpdateText => $"Update {Name} {Installation?.Version} ({Type}) to {Listing?.LatestVersion}";
 
         public Mod(ModInstallation modInstallation, ModListing modListing)
         {

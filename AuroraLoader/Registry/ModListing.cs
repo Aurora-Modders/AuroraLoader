@@ -24,6 +24,14 @@ namespace AuroraLoader.Registry
             }
         }
 
+        public string LatestVersionUrl
+        {
+            get
+            {
+                return VersionDownloadUrls[LatestVersion];
+            }
+        }
+
         /*
 		 * Sample updates.txt content:
 		 * 1.8.0-5=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraMod/AuroraMod-1.8.0-5.zip

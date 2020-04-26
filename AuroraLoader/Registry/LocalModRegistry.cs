@@ -12,11 +12,22 @@ namespace AuroraLoader.Registry
     {
         public IList<ModInstallation> ModInstallations { get; private set; }
 
+        public string ModDirectory => Path.Combine(Path.GetTempPath(), "Mods");
+
         private readonly IConfiguration _configuration;
 
         public LocalModRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
+            EnsureModDirectoryExists();
+        }
+
+        private void EnsureModDirectoryExists()
+        {
+            if (!Directory.Exists(ModDirectory))
+            {
+                Directory.CreateDirectory(ModDirectory);
+            }
         }
 
         public void Update()

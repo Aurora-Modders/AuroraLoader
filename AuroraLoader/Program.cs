@@ -1,7 +1,9 @@
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace AuroraLoader
@@ -30,7 +32,39 @@ namespace AuroraLoader
             var localRegistry = new LocalModRegistry(configuration);
             var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
             var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
-            Application.Run(new FormMain(configuration, localRegistry, remoteRegistry, auroraVersionRegistry, modRegistry));
+
+            // TODO Not sure whether this should run here or during FormMain_Load
+            modRegistry.Update();
+            Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
+        }
+
+        public static void OpenBrowser(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public static void OpenBrowser(string url)

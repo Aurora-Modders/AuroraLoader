@@ -17,23 +17,17 @@ namespace AuroraLoader
 {
     public partial class FormMain : Form
     {
-        private readonly List<ModInstallation> Mods = new List<ModInstallation>();
-        private readonly Dictionary<ModInstallation, string> ModUpdates = new Dictionary<ModInstallation, string>();
         private readonly IConfiguration _configuration;
 
         private Thread AuroraThread { get; set; } = null;
 
-        private readonly LocalModRegistry _localRegistry;
-        private readonly RemoteModRegistry _remoteRegistry;
         private readonly AuroraVersionRegistry _auroraVersionRegistry;
         private readonly ModRegistry _modRegistry;
 
-        public FormMain(IConfiguration configuration, LocalModRegistry localRegistry, RemoteModRegistry remoteRegistry, AuroraVersionRegistry auroraVersionRegistry, ModRegistry modRegistry)
+        public FormMain(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry, ModRegistry modRegistry)
         {
             InitializeComponent();
             _configuration = configuration;
-            _localRegistry = localRegistry;
-            _remoteRegistry = remoteRegistry;
             _auroraVersionRegistry = auroraVersionRegistry;
             _modRegistry = modRegistry;
         }
@@ -442,62 +436,52 @@ namespace AuroraLoader
 
         private void ButtonAuroraForums_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://aurora2.pentarch.org/index.php?action=forum#c14");
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?action=forum#c14");
         }
 
         private void ButtonAuroraBugs_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://aurora2.pentarch.org/index.php?board=273.0");
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
         }
 
         private void ButtonAuroraUpdates_Click(object sender, EventArgs e)
         {
-            Process.Start(@"http://aurora2.pentarch.org/index.php?board=276.0");
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
         }
 
         private void ButtonModsSubreddit_Click(object sender, EventArgs e)
         {
-            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
         }
 
         private void ButtonUpdateMods_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             Log.Debug("Start updating");
-
-            var urls = ModUpdates;
-            if (urls.Count == 0)
+            var count = _modRegistry.Mods.Where(mod => mod.CanBeUpdated).Count();
+            foreach (var mod in _modRegistry.Mods.Where(mod => mod.CanBeUpdated))
             {
-                Cursor = Cursors.Default;
-                MessageBox.Show("All mods are up to date");
-            }
-            else
-            {
-                foreach (var kvp in urls)
+                Log.Debug($"Updating {mod.Name} from {mod.Listing.LatestVersionUrl}");
+                try
                 {
-                    Log.Debug("Updating: " + kvp.Key.Name + " at " + kvp.Value);
-                    try
-                    {
-                        Updater.Update(kvp.Value);
-                    }
-                    catch (Exception exc)
-                    {
-                        Log.Error("Failed to update mod: " + kvp.Key.Name, exc);
-
-                        Cursor = Cursors.Default;
-                        MessageBox.Show("Failed to update " + kvp.Key.Name);
-                        Cursor = Cursors.WaitCursor;
-                    }
+                    _modRegistry.InstallOrUpdate(mod);
                 }
+                catch (Exception exc)
+                {
+                    Log.Error($"Failed to update {mod.Name} from {mod.Listing.LatestVersionUrl}", exc);
 
-                LoadMods();
-                //UpdateLists();
-                UpdateButtons();
-
-                Cursor = Cursors.Default;
-                MessageBox.Show("Updated " + urls.Count + " mods.");
+                    Cursor = Cursors.Default;
+                    MessageBox.Show($"Failed to update {mod.Name} from {mod.Listing.LatestVersionUrl}");
+                    Cursor = Cursors.WaitCursor;
+                }
             }
 
+            LoadMods();
+            //UpdateLists();
+            UpdateButtons();
+
+            Cursor = Cursors.Default;
+            MessageBox.Show($"Updated {count} mods.");
             Log.Debug("Stop updating");
         }
 
