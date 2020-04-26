@@ -320,11 +320,30 @@ namespace AuroraLoader
         private void ButtonConfigureMod_Click(object sender, EventArgs e)
         {
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
+
+            var pieces = mod.Installation.ModInternalConfigFile.Split(' ');
+            var exe = pieces[0];
+            var args = "";
+            if (pieces.Length > 1)
+            {
+                for (int i = 1; i < pieces.Length; i++)
+                {
+                    args += " " + pieces[i];
+                }
+
+                args = args.Substring(1);
+            }
+
+            Log.Debug("Running: " + mod.Installation.ModInternalConfigFile);
             var info = new ProcessStartInfo()
             {
-                FileName = Path.Combine(mod.Installation.ModFolder, mod.Installation.ModInternalConfigFile),
-                UseShellExecute = true
+                WorkingDirectory = mod.Installation.ModFolder,
+                FileName = exe,
+                Arguments = args,
+                UseShellExecute = true,
+                CreateNoWindow = true
             };
+
             Process.Start(info);
         }
 
