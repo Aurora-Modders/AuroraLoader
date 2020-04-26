@@ -223,6 +223,7 @@
             // TabGameMods
             // 
             this.TabGameMods.BackColor = System.Drawing.SystemColors.Control;
+            this.TabGameMods.Controls.Add(this.CheckEnableGameMods);
             this.TabGameMods.Controls.Add(this.GroupMods);
             this.TabGameMods.Location = new System.Drawing.Point(4, 38);
             this.TabGameMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
@@ -341,7 +342,7 @@
             // 
             this.CheckEnableGameMods.AutoSize = true;
             this.CheckEnableGameMods.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.CheckEnableGameMods.Location = new System.Drawing.Point(479, 537);
+            this.CheckEnableGameMods.Location = new System.Drawing.Point(38, 31);
             this.CheckEnableGameMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.CheckEnableGameMods.Name = "CheckEnableGameMods";
             this.CheckEnableGameMods.Size = new System.Drawing.Size(248, 33);
@@ -426,7 +427,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1635, 1088);
-            this.Controls.Add(this.CheckEnableGameMods);
             this.Controls.Add(this.CheckMusic);
             this.Controls.Add(this.TrackVolume);
             this.Controls.Add(this.ButtonModBugs);
@@ -447,6 +447,7 @@
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.TrackVolume)).EndInit();
             this.TabGameMods.ResumeLayout(false);
+            this.TabGameMods.PerformLayout();
             this.GroupMods.ResumeLayout(false);
             this.GroupMods.PerformLayout();
             this.TabUtilities.ResumeLayout(false);

@@ -165,7 +165,6 @@ namespace AuroraLoader
                     ListGameMods.Enabled = true;
                     ButtonInstallOrUpdate.Enabled = true;
 
-                    TabManageMods.Enabled = true;
                     TabGameMods.Enabled = true;
                 }
             }
@@ -181,7 +180,6 @@ namespace AuroraLoader
                 ListGameMods.Enabled = false;
                 ButtonInstallOrUpdate.Enabled = false;
 
-                TabManageMods.Enabled = false;
                 TabGameMods.Enabled = false;
             }
         }
