@@ -45,6 +45,9 @@ namespace AuroraLoader
             CheckEnableGameMods.Checked = false;
             RefreshAuroraInstallData();
             UpdateUtilitiesListView();
+            UpdateLaunchExeCombo();
+            UpdateGameModsListView();
+            UpdateManageModsListView();
 
             Cursor = Cursors.Default;
             TabMods.SelectedTab = TabUtilities;
@@ -164,10 +167,6 @@ namespace AuroraLoader
 
                     TabManageMods.Enabled = true;
                     TabGameMods.Enabled = true;
-
-                    UpdateLaunchExeCombo();
-                    UpdateGameModsListView();
-                    UpdateManageModsListView();
                 }
             }
             if (!CheckEnableGameMods.Checked)
@@ -335,6 +334,8 @@ namespace AuroraLoader
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
             _modRegistry.InstallOrUpdate(mod);
             UpdateManageModsListView();
+            UpdateGameModsListView();
+            UpdateUtilitiesListView();
             Cursor = Cursors.Default;
         }
 
