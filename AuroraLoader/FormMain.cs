@@ -2,6 +2,7 @@
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
 using NAudio.Wave;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -38,7 +39,12 @@ namespace AuroraLoader
             //Icon = Properties.Resources.Aurora;
             MessageBox.Show("AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
-
+            var executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe");
+            if (!File.Exists(executablePath))
+            {
+                InstallAurora(executablePath);
+            }
+            RefreshAuroraInstallData();
             _modRegistry.Update();
             SetGameModsEnabled();
             RefreshAuroraInstallData();
@@ -49,19 +55,44 @@ namespace AuroraLoader
             TabMods.SelectedTab = modsTab;
         }
 
+        private void InstallAurora(string executablePath)
+        {
+            var dialog = MessageBox.Show("Aurora not installed. Download and install? This might take a while.", "Install Aurora", MessageBoxButtons.YesNo);
+            if (dialog == DialogResult.No)
+            {
+                Application.Exit();
+                return;
+            }
+
+            var installation = new GameInstallation(new AuroraVersion("0.0.0", ""), executablePath);
+
+            var thread = new Thread(() =>
+            {
+                var aurora_files = Installer.GetLatestAuroraFiles();
+                Installer.DownloadAuroraPieces(Path.GetDirectoryName(executablePath), aurora_files);
+            });
+            thread.Start();
+
+            var progress = new FormProgress(thread) { Text = "Installing Aurora" };
+            progress.ShowDialog();
+        }
+
         /// <summary>
         /// Sets current install's version and checksum, and whether the update button is enabled
         /// </summary>
         private void RefreshAuroraInstallData()
         {
             _auroraVersionRegistry.Update();
-            _auroraVersionRegistry.Update();
-            LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
-            LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
-
-            ButtonUpdateAurora.Text = "Update Aurora";
-            ButtonUpdateAurora.ForeColor = Color.Black;
-            ButtonUpdateAurora.Enabled = false;
+            if (_auroraVersionRegistry.CurrentAuroraVersion == null)
+            {
+                LabelVersion.Text = "Aurora version: Unknown";
+                CheckEnableGameMods.Enabled = false;
+            }
+            else
+            {
+                LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
+                LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
+            }
 
             // Let it be known that the first elvis operator was added to the project at this very spot
             if (_auroraVersionRegistry.CurrentAuroraVersion?.Version?.Equals(_auroraVersionRegistry.AuroraVersions?.Max().Version) ?? false)
@@ -69,6 +100,12 @@ namespace AuroraLoader
                 ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}!";
                 ButtonUpdateAurora.ForeColor = Color.Green;
                 ButtonUpdateAurora.Enabled = true;
+            }
+            else
+            {
+                ButtonUpdateAurora.Text = "Update Aurora";
+                ButtonUpdateAurora.ForeColor = Color.Black;
+                ButtonUpdateAurora.Enabled = false;
             }
         }
 

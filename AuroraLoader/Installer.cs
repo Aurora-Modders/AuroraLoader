@@ -13,22 +13,16 @@ namespace AuroraLoader
 {
     class Installer
     {
-        public static string GetLatestUrl()
+        public static Dictionary<string, string> GetLatestAuroraFiles()
         {
-            return "https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/aurora_files.ini";
-        }
-
-        private static void InstallClean()
-        {
-            var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
-            var url = GetLatestUrl();
+            // TODO mirrors
+            var url = "https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/aurora_files.ini";
 
             using (var client = new WebClient())
             {
                 var str = client.DownloadString(url);
-                var aurora_files = ModConfigurationReader.FromKeyValueString(str);
 
-                DownloadAuroraPieces(folder, aurora_files);
+                return ModConfigurationReader.FromKeyValueString(str);
             }
         }
 
@@ -38,7 +32,9 @@ namespace AuroraLoader
             if (!Directory.Exists(clean))
             {
                 MessageBox.Show("A clean install will be downloaded.");
-                InstallClean();
+
+                var aurora_files = GetLatestAuroraFiles();
+                DownloadAuroraPieces(clean, aurora_files);
             }
 
             if (Directory.Exists(folder))
