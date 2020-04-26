@@ -5,12 +5,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace AuroraLoader
 {
     static class Program
     {
+        public static readonly string AuroraLoaderExecutableDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -20,11 +22,25 @@ namespace AuroraLoader
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            if (!File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "aurora.exe")))
+            {
+                var dialog = MessageBox.Show("Aurora not installed. Download and install? This might take a while.", "Install Aurora", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    InstallAurora();
+                }
+                else
+                {
+                    Application.Exit();
+                    return;
+                }
+            }
+
             // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
-                    .Build();
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
 
             var mirrorRegistry = new MirrorRegistry(configuration);
             var auroraVersionRegistry = new AuroraVersionRegistry(configuration, mirrorRegistry);
@@ -33,6 +49,20 @@ namespace AuroraLoader
             var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
             modRegistry.Update();
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
+        }
+
+        private static void InstallAurora()
+        {
+            var installation = new GameInstallation(new AuroraVersion("0.0.0", ""), Program.AuroraLoaderExecutableDirectory);
+            var thread = new Thread(() =>
+            {
+                var aurora_files = Installer.GetLatestAuroraFiles();
+                Installer.DownloadAuroraPieces(Program.AuroraLoaderExecutableDirectory, aurora_files);
+            });
+            thread.Start();
+
+            var progress = new FormProgress(thread) { Text = "Installing Aurora" };
+            progress.ShowDialog();
         }
 
         public static string GetChecksum(byte[] bytes)

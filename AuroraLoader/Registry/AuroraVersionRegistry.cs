@@ -19,8 +19,16 @@ namespace AuroraLoader.Registry
         {
             get
             {
-                var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe")));
-                return AuroraVersions.Single(v => v.Checksum.Equals(checksum));
+                try
+                {
+                    var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora.exe")));
+                    return AuroraVersions.Single(v => v.Checksum.Equals(checksum));
+                }
+                catch
+                {
+                    return null;
+                }
+
             }
         }
 
