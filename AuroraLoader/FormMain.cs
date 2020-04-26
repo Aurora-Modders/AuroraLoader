@@ -208,6 +208,7 @@ namespace AuroraLoader
         private void UpdateLaunchExeCombo()
         {
             ComboSelectLaunchExe.Items.Clear();
+            ComboSelectLaunchExe.Items.Add("Base game");
 
             foreach (var mod in _modRegistry.Mods.Where(
                 mod => mod.Installed
@@ -227,8 +228,15 @@ namespace AuroraLoader
         /// </summary>
         private void ComboSelectLaunchExe_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
-            ButtonConfigureExe.Enabled = selectedMod.Configurable;
+            if ((string)ComboSelectLaunchExe.SelectedItem != "Base game")
+            {
+                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
+                ButtonConfigureExe.Enabled = selectedMod.Configurable;
+            }
+            else
+            {
+                ButtonConfigureExe.Enabled = false;
+            }
         }
 
         /// <summary>
@@ -363,7 +371,7 @@ namespace AuroraLoader
             || (ListUtilityMods.CheckedItems != null && ListUtilityMods.CheckedItems.Contains(mod.Name))).ToList();
 
             Mod executableMod;
-            if (ComboSelectLaunchExe.SelectedItem != null)
+            if (ComboSelectLaunchExe.SelectedItem != null && (string)ComboSelectLaunchExe.SelectedItem != "Base game")
             {
                 executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
             }
