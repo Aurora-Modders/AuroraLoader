@@ -54,18 +54,25 @@ namespace AuroraLoader
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
         {
-            //Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
-            var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
-            var thread = new Thread(() =>
+            try
             {
-                var aurora_files = Installer.GetLatestAuroraFiles();
-                Installer.UpdateAurora(installation, aurora_files);
-            });
-            thread.Start();
+                var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
+                var thread = new Thread(() =>
+                {
+                    var aurora_files = Installer.GetLatestAuroraFiles();
+                    Installer.UpdateAurora(installation, aurora_files);
+                });
+                thread.Start();
 
-            var progress = new FormProgress(thread) { Text = "Updating Aurora" };
-            progress.ShowDialog();
-            RefreshAuroraInstallData();
+                var progress = new FormProgress(thread) { Text = "Updating Aurora" };
+                progress.ShowDialog();
+                RefreshAuroraInstallData();
+            }
+            catch (Exception ecp)
+            {
+                Log.Error("Failed to update Aurora", ecp);
+                Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
+            }
         }
 
         /// <summary>
@@ -477,6 +484,16 @@ namespace AuroraLoader
         private void ButtonModBugs_Click(object sender, EventArgs e)
         {
             Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+        }
+
+        private void ButtonReadme_Click(object sender, EventArgs e)
+        {
+            var info = new ProcessStartInfo()
+            {
+                FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "README.md"),
+                UseShellExecute = true
+            };
+            Process.Start(info);
         }
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)

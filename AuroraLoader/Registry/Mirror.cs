@@ -60,7 +60,7 @@ namespace AuroraLoader.Registry
 		 * AuroraElectrons=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraElectrons/updates.txt
 		 * A4xCalc=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt
 		 * 
-		 * See https://github.com/Aurora-Modders/AuroraMods/blob/master/mods.json for a JSON example
+		 * See https://github.com/Aurora-Modders/AuroraRegistry/blob/master/mods.json for a JSON example
 		 */
         public void UpdateModListings()
         {
