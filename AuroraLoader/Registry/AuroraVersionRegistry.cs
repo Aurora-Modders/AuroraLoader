@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AuroraLoader.Mods;
+using Microsoft.Extensions.Configuration;
 using Semver;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace AuroraLoader.Registry
     /// </summary>
     public class AuroraVersionRegistry : IRegistry
     {
-        public IList<AuroraVersion> AuroraVersions { get; private set; }
-        public AuroraVersion CurrentAuroraInstallVersion
+        public IList<AuroraInstallation> AuroraVersions { get; private set; }
+        public AuroraInstallation CurrentAuroraInstallVersion
         {
             get
             {
@@ -44,7 +45,7 @@ namespace AuroraLoader.Registry
 
         internal void UpdateKnownAuroraVersionsFromMirror()
         {
-            var mirrorKnownVersions = new List<AuroraVersion>();
+            var mirrorKnownVersions = new List<AuroraInstallation>();
             foreach (var mirror in _mirrorRegistry.Mirrors)
             {
                 try
@@ -64,12 +65,12 @@ namespace AuroraLoader.Registry
 
         internal void UpdateKnownVersionsFromCache()
         {
-            var auroraVersions = new List<AuroraVersion>();
+            var auroraVersions = new List<AuroraInstallation>();
             try
             {
-                foreach (var kvp in Config.FromString(File.ReadAllText(_configuration["aurora_known_versions_relative_filepath"])))
+                foreach (var kvp in ModConfigurationReader.FromString(File.ReadAllText(_configuration["aurora_known_versions_relative_filepath"])))
                 {
-                    auroraVersions.Add(new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
+                    auroraVersions.Add(new AuroraInstallation(SemVersion.Parse(kvp.Key), kvp.Value));
                 }
             }
             catch (Exception e)

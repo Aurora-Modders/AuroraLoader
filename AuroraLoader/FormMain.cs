@@ -1,4 +1,5 @@
-﻿using AuroraLoader.Registry;
+﻿using AuroraLoader.Mods;
+using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
 using NAudio.Wave;
 using System;
@@ -292,25 +293,26 @@ namespace AuroraLoader
             TabUtilityMods.Enabled = false;
             TabGameMods.Enabled = false;
 
-            var others = new List<ModInstallation>();
-            // TODO ugh...
-            var exe = "";
-            if (CheckMods.Checked)
-            {
-                exe = ComboExe.SelectedItem?.ToString();
 
-                for (int i = 0; i < ListDBMods.CheckedItems.Count; i++)
-                {
-                    others.Add(ListDBMods.CheckedItems[i] as ModInstallation);
-                }
-            }
+            // TODO 
 
-            for (int i = 0; i < ListUtilityMods.CheckedItems.Count; i++)
-            {
-                others.Add(ListUtilityMods.CheckedItems[i] as ModInstallation);
-            }
+            var mods = new List<Mod>();
+            //if (CheckMods.Checked)
+            //{
+            //    exe = ComboExe.SelectedItem?.ToString();
 
-            var process = Launcher.Launch(null, others);
+            //    for (int i = 0; i < ListDBMods.CheckedItems.Count; i++)
+            //    {
+            //        mods.Add(ListDBMods.CheckedItems[i] as ModInstallation);
+            //    }
+            //}
+
+            //for (int i = 0; i < ListUtilityMods.CheckedItems.Count; i++)
+            //{
+            //    mods.Add(ListUtilityMods.CheckedItems[i] as ModInstallation);
+            //}
+
+            var process = Launcher.Launch(mods);
 
             AuroraThread = new Thread(() => RunGame(process))
             {
@@ -392,7 +394,8 @@ namespace AuroraLoader
             TabGameMods.Enabled = true;
 
             RefreshAuroraInstallData();
-            LoadMods();            //UpdateLists();
+            LoadMods();
+            //UpdateLists();
 
             UpdateButtons();
 

@@ -1,4 +1,4 @@
-﻿namespace AuroraLoader.Registry
+﻿namespace AuroraLoader.Mods
 {
     public class Mod
     {

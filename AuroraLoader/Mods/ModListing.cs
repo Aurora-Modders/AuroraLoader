@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using Semver;
 
-namespace AuroraLoader.Registry
+namespace AuroraLoader.Mods
 {
     public class ModListing
     {
@@ -51,7 +51,7 @@ namespace AuroraLoader.Registry
                 try
                 {
                     var response = client.DownloadString(UpdateUrl);
-                    foreach (var update in Config.FromString(response))
+                    foreach (var update in ModConfigurationReader.FromString(response))
                     {
                         versions[SemVersion.Parse(update.Key)] = update.Value;
                     }

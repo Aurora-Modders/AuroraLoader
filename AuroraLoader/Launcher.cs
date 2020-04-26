@@ -3,63 +3,50 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using AuroraLoader.Registry;
+using AuroraLoader.Mods;
 
 namespace AuroraLoader
 {
     static class Launcher
     {
-        public static Process Launch(ModInstallation exe, List<ModInstallation> others)
+        public static Process Launch(IList<Mod> mods, Mod executableMod = null)
         {
-            // TODO change signature to string executablePath and put this logic elsewhere
-            foreach (var mod in others)
+            if (mods.Any(mod => mod.Type == ModType.EXE))
             {
-                if (mod.Type == ModType.ROOT_UTILITY)
-                {
-                    Log.Debug("Root Utility: " + mod.Name);
-                    CopyToRoot(mod);
-                    Run(AppDomain.CurrentDomain.BaseDirectory, mod.ExecuteCommand);
-                }
-                else if (mod.Type == ModType.UTILITY)
-                {
-                    Log.Debug("Utility: " + mod.Name);
-                    Run(Path.GetDirectoryName(mod.ModFolder), mod.ExecuteCommand);
-                }
-                else if (mod.Type == ModType.DATABASE)
-                {
-                    Log.Debug("Database: " + mod.Name);
-                    throw new Exception("Database mods not supported yet: " + mod.Name);
-                }
-                else
-                {
-                    throw new Exception("Invalid mod: " + mod.Name);
-                }
+                throw new Exception("Use the other parameter");
             }
 
-            var process = Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOT_UTILITY))
+            {
+                Log.Debug("Root Utility: " + mod.Name);
+                CopyToRoot(mod);
+                Run(AppDomain.CurrentDomain.BaseDirectory, mod.Installation.ExecuteCommand);
+            }
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.UTILITY))
+            {
+                Log.Debug("Utility: " + mod.Name);
+                Run(Path.GetDirectoryName(mod.Installation.ModFolder), mod.Installation.ExecuteCommand);
+            }
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
+            {
+                Log.Debug("Database: " + mod.Name);
+                throw new Exception("Database mods not supported yet: " + mod.Name);
+            }
 
-            return process;
-
-            //if (exe.Name.Equals("Base Game"))
-            //{
-            //    Log.Debug("Exe: " + exe.Name);
-            //    var process = Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
-
-            //    return process;
-            //}
-            //else
-            //{
-            //    Log.Debug("Exe: " + exe.Name);
-            //    CopyToRoot(exe);
-            //    var process = Run(AppDomain.CurrentDomain.BaseDirectory, exe.Exe);
-
-            //    return process;
-            //}
+            if (executableMod != null)
+            {
+                CopyToRoot(executableMod);
+                return Run(AppDomain.CurrentDomain.BaseDirectory, executableMod.Installation.ExecuteCommand);
+            }
+            else
+            {
+                return Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
+            }
         }
 
-        private static void CopyToRoot(ModInstallation mod)
+        private static void CopyToRoot(Mod mod)
         {
-            var dir = Path.GetDirectoryName(mod.ModFolder);
+            var dir = Path.GetDirectoryName(mod.Installation.ModFolder);
             var out_dir = AppDomain.CurrentDomain.BaseDirectory;
             foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
             {

@@ -3,18 +3,18 @@ using System;
 
 namespace AuroraLoader
 {
-    public class AuroraVersion : IComparable<AuroraVersion>
+    public class AuroraInstallation : IComparable<AuroraInstallation>
     {
         public SemVersion Version { get; }
         public string Checksum { get; }
 
-        public AuroraVersion(SemVersion version, string checksum)
+        public AuroraInstallation(SemVersion version, string checksum)
         {
             Version = version;
             Checksum = checksum;
         }
 
-        public int CompareTo(AuroraVersion other)
+        public int CompareTo(AuroraInstallation other)
         {
             return Version.CompareByPrecedence(other.Version);
         }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using AuroraLoader.Mods;
 
 namespace AuroraLoader.Registry
 {
@@ -13,7 +14,7 @@ namespace AuroraLoader.Registry
         public string VersionsUrl => Path.Combine(RootUrl, "aurora_versions.txt");
         public string ModsUrl => Path.Combine(RootUrl, "Mods/mods.txt");
 
-        public IList<AuroraVersion> KnownAuroraVersions { get; private set; }
+        public IList<AuroraInstallation> KnownAuroraVersions { get; private set; }
 
         public IList<ModListing> ModListings { get; private set; }
 
@@ -29,15 +30,15 @@ namespace AuroraLoader.Registry
 
         public void UpdateKnownAuroraVersions()
         {
-            var knownVersions = new List<AuroraVersion>();
+            var knownVersions = new List<AuroraInstallation>();
             using (var client = new WebClient())
             {
                 try
                 {
                     var response = client.DownloadString(VersionsUrl);
-                    foreach (var kvp in Config.FromString(response))
+                    foreach (var kvp in ModConfigurationReader.FromString(response))
                     {
-                        knownVersions.Add(new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
+                        knownVersions.Add(new AuroraInstallation(SemVersion.Parse(kvp.Key), kvp.Value));
                     }
                 }
                 catch (Exception e)
@@ -67,7 +68,7 @@ namespace AuroraLoader.Registry
                 try
                 {
                     var response = client.DownloadString(ModsUrl);
-                    foreach (var kvp in Config.FromString(response))
+                    foreach (var kvp in ModConfigurationReader.FromString(response))
                     {
 
                         modListingAtMirror.Add(new ModListing(kvp.Key, kvp.Value));

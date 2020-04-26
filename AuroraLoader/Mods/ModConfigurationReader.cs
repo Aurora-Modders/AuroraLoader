@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace AuroraLoader
+namespace AuroraLoader.Mods
 {
-    public static class Config
+    public static class ModConfigurationReader
     {
         public static Dictionary<string, string> FromString(string str)
         {

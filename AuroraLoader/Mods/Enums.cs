@@ -1,4 +1,4 @@
-﻿namespace AuroraLoader.Registry
+﻿namespace AuroraLoader.Mods
 {
     public enum ModType { EXE, DATABASE, UTILITY, ROOT_UTILITY }
 

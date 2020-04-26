@@ -1,7 +1,7 @@
 ﻿using Semver;
 using System;
 
-namespace AuroraLoader.Registry
+namespace AuroraLoader.Mods
 {
     public class ModInstallation
     {
@@ -22,7 +22,7 @@ namespace AuroraLoader.Registry
             this.ModFolder = ModFolder;
         }
 
-        public bool WorksForVersion(AuroraVersion version)
+        public bool WorksForVersion(AuroraInstallation version)
         {
             // TODO Needs to understand wildcarded versions
             return TargetAuroraVersion == version.Version;
@@ -36,7 +36,7 @@ namespace AuroraLoader.Registry
         public static ModInstallation Parse(string ModFolder)
         {
             var mod = new ModInstallation(ModFolder);
-            var settings = Config.FromString(ModFolder);
+            var settings = ModConfigurationReader.FromString(ModFolder);
 
             // Required
             mod.Name = settings["name"] ?? "";

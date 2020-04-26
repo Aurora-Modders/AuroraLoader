@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using AuroraLoader.Mods;
 
 namespace AuroraLoader.Registry
 {
@@ -14,7 +15,7 @@ namespace AuroraLoader.Registry
     public class ModRegistry : IRegistry
     {
         // TODO ensure that the list is unique
-        public IEnumerable<Mod> Mods;
+        public IEnumerable<Mod> Mods { get; private set; }
 
         private readonly IConfiguration _configuration;
         private readonly LocalModRegistry _localRegistry;
