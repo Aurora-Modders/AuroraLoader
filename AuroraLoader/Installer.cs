@@ -1,11 +1,10 @@
-﻿using Semver;
-using System;
+﻿using AuroraLoader.Mods;
+using Semver;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Windows.Forms;
 
 namespace AuroraLoader
@@ -21,13 +20,13 @@ namespace AuroraLoader
             {
                 var str = client.DownloadString(url);
 
-                return Config.FromString(str);
+                return ModConfigurationReader.FromKeyValueString(str);
             }
         }
 
         public static void CopyClean(string folder)
         {
-            var clean = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
+            var clean = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Clean");
             if (!Directory.Exists(clean))
             {
                 MessageBox.Show("A clean install will be downloaded.");
@@ -35,7 +34,7 @@ namespace AuroraLoader
                 var aurora_files = GetLatestAuroraFiles();
                 DownloadAuroraPieces(clean, aurora_files);
             }
-            
+
             if (Directory.Exists(folder))
             {
                 Directory.Delete(folder, true);
@@ -74,8 +73,7 @@ namespace AuroraLoader
 
             if (aurora_files.Count > 0)
             {
-                var folder = Path.GetDirectoryName(current.ExecutableLocation);
-                DownloadAuroraPieces(folder, aurora_files);
+                DownloadAuroraPieces(current.InstallationPath, aurora_files);
             }
         }
 
