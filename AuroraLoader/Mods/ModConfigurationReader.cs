@@ -29,7 +29,7 @@ namespace AuroraLoader.Mods
                 TargetAuroraVersion = SemVersion.Parse(settings["AuroraVersion"], false),
 
                 // Optional at least some of the time
-                ExecuteCommand = settings.ContainsKey("Exe") ? settings["Exe"] : null,
+                ExecuteCommand = settings.ContainsKey("Exe") ? settings["Exe"] : settings.ContainsKey("Executable") ? settings["Executable"] : null,
                 Updates = settings.ContainsKey("Updates") ? settings["Updates"] : null,
                 ModInternalConfigFile = settings.ContainsKey("Config") ? settings["Config"] : null
             };

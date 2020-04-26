@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace AuroraLoader
@@ -33,33 +34,13 @@ namespace AuroraLoader
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
 
-        public static void OpenBrowser(string url)
+        public static string GetChecksum(byte[] bytes)
         {
-            try
-            {
-                Process.Start(url);
-            }
-            catch
-            {
-                // hack because of this: https://github.com/dotnet/corefx/issues/10361
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    Process.Start("xdg-open", url);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", url);
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            using var sha = SHA256.Create();
+            var hash = sha.ComputeHash(bytes);
+            var str = Convert.ToBase64String(hash);
+
+            return str.Replace("/", "").Replace("+", "").Replace("=", "").Substring(0, 6);
         }
 
         public static void OpenBrowser(string url)

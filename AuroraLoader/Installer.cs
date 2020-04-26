@@ -1,4 +1,5 @@
-﻿using Semver;
+﻿using AuroraLoader.Mods;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,16 +13,22 @@ namespace AuroraLoader
 {
     class Installer
     {
-        public static Dictionary<string, string> GetLatestAuroraFiles()
+        public static string GetLatestUrl()
         {
-            // TODO mirrors
-            var url = "https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/aurora_files.ini";
+            return "https://raw.githubusercontent.com/Aurora-Modders/AuroraRegistry/master/aurora_files.ini";
+        }
+
+        private static void InstallClean()
+        {
+            var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
+            var url = GetLatestUrl();
 
             using (var client = new WebClient())
             {
                 var str = client.DownloadString(url);
+                var aurora_files = ModConfigurationReader.FromKeyValueString(str);
 
-                return Config.FromString(str);
+                DownloadAuroraPieces(folder, aurora_files);
             }
         }
 
@@ -31,11 +38,9 @@ namespace AuroraLoader
             if (!Directory.Exists(clean))
             {
                 MessageBox.Show("A clean install will be downloaded.");
-
-                var aurora_files = GetLatestAuroraFiles();
-                DownloadAuroraPieces(clean, aurora_files);
+                InstallClean();
             }
-            
+
             if (Directory.Exists(folder))
             {
                 Directory.Delete(folder, true);

@@ -41,11 +41,9 @@ namespace AuroraLoader
 
             _modRegistry.Update();
             SetGameModsEnabled();
-            UpdateManageModsListView();
             RefreshAuroraInstallData();
-            UpdateLaunchExeCombo();
-            UpdateGameModsListView();
             UpdateUtilitiesListView();
+            UpdateManageModsListView();
 
             Cursor = Cursors.Default;
             TabMods.SelectedTab = modsTab;
@@ -95,15 +93,20 @@ namespace AuroraLoader
         /// <param name="e"></param>
         private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
-            ButtonConfigureUtility.Enabled = selectedMod.Configurable;
+            if (ListUtilityMods.SelectedItem != null)
+            {
+                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
+                ButtonConfigureUtility.Enabled = selectedMod.Configurable;
+            }
         }
 
         private void ButtonConfigureUtility_Click(object sender, EventArgs e)
         {
-
-            var selected = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
-            ConfigureMod(selected);
+            if (ListUtilityMods.SelectedItem != null)
+            {
+                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
+                ConfigureMod(selectedMod);
+            }
         }
 
         /* Game mods tab */
@@ -131,6 +134,9 @@ namespace AuroraLoader
                     ComboSelectLaunchExe.Enabled = true;
                     ListGameMods.Enabled = true;
                     ButtonInstallMods.Enabled = true;
+
+                    UpdateLaunchExeCombo();
+                    UpdateGameModsListView();
                 }
             }
             if (!CheckEnableGameMods.Checked)
@@ -145,8 +151,6 @@ namespace AuroraLoader
                 ListGameMods.Enabled = false;
                 ButtonInstallMods.Enabled = false;
             }
-
-            UpdateGameModsListView();
         }
 
         private IList<ModStatus> GetAllowedModStatuses()
@@ -285,15 +289,19 @@ namespace AuroraLoader
             TabUtilities.Enabled = false;
             TabGameMods.Enabled = false;
 
-            var mods = _modRegistry.Mods.Where(mod => ListGameMods.CheckedItems.Contains(mod.Name)).ToList();
+            var mods = _modRegistry.Mods.Where(mod =>
+            (ListGameMods.CheckedItems != null && ListGameMods.CheckedItems.Contains(mod.Name))
+            || (ListUtilityMods.CheckedItems != null && ListUtilityMods.CheckedItems.Contains(mod.Name))).ToList();
 
-            // TODO not sure how a utility would work in terms of launching the game
-            //for (int i = 0; i < ListUtilityMods.CheckedItems.Count; i++)
-            //{
-            //    mods.Add(ListUtilityMods.CheckedItems[i] as ModInstallation);
-            //}
-
-            var executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
+            Mod executableMod;
+            if (ComboSelectLaunchExe.SelectedItem != null)
+            {
+                executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
+            }
+            else
+            {
+                executableMod = null;
+            }
             var process = Launcher.Launch(mods, executableMod);
 
             AuroraThread = new Thread(() => RunGame(process))
