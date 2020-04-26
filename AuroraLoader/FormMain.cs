@@ -285,26 +285,16 @@ namespace AuroraLoader
             TabUtilities.Enabled = false;
             TabGameMods.Enabled = false;
 
+            var mods = _modRegistry.Mods.Where(mod => ListGameMods.CheckedItems.Contains(mod.Name)).ToList();
 
-            // TODO 
-
-            var mods = new List<Mod>();
-            //if (CheckMods.Checked)
-            //{
-            //    exe = ComboExe.SelectedItem?.ToString();
-
-            //    for (int i = 0; i < ListDBMods.CheckedItems.Count; i++)
-            //    {
-            //        mods.Add(ListDBMods.CheckedItems[i] as ModInstallation);
-            //    }
-            //}
-
+            // TODO not sure how a utility would work in terms of launching the game
             //for (int i = 0; i < ListUtilityMods.CheckedItems.Count; i++)
             //{
             //    mods.Add(ListUtilityMods.CheckedItems[i] as ModInstallation);
             //}
 
-            var process = Launcher.Launch(mods);
+            var executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
+            var process = Launcher.Launch(mods, executableMod);
 
             AuroraThread = new Thread(() => RunGame(process))
             {
@@ -378,13 +368,13 @@ namespace AuroraLoader
         private void EndGame()
         {
             MessageBox.Show("Game ended.");
-            Cursor = Cursors.WaitCursor;
-
-            SetGameModsEnabled();
+            ButtonSinglePlayer.Enabled = true;
+            ButtonMultiPlayer.Enabled = true;
             RefreshAuroraInstallData();
-            _modRegistry.Update();
+            ButtonInstallMods.Enabled = true;
 
-            Cursor = Cursors.Default;
+            TabUtilities.Enabled = true;
+            TabGameMods.Enabled = true;
         }
 
         private void ButtonSinglePlayer_Click(object sender, EventArgs e)
