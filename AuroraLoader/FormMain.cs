@@ -313,7 +313,16 @@ namespace AuroraLoader
 
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            _modRegistry.InstallOrUpdate(mod);
+            if (mod.Name == "AuroraLoader")
+            {
+                MessageBox.Show($"Installing AuroraLoader {mod.Installation.Version}. Open {Path.Combine(Program.AuroraLoaderExecutableDirectory, $"{mod.Name}.{mod.Installation.Version}.exe")} when this window closes.");
+                _modRegistry.UpdateAuroraLoader(mod);
+                Close();
+            }
+            else
+            {
+                _modRegistry.InstallOrUpdate(mod);
+            }
             UpdateManageModsListView();
             UpdateGameModsListView();
             UpdateUtilitiesListView();

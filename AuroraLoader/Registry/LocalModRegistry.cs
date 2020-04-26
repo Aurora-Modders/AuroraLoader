@@ -81,5 +81,10 @@ namespace AuroraLoader.Registry
             //}
             ModInstallations = mods;
         }
+
+        internal object Single(Func<object, bool> p)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
