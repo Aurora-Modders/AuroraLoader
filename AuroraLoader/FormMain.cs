@@ -550,12 +550,19 @@ namespace AuroraLoader
 
         private void ButtonReadme_Click(object sender, EventArgs e)
         {
-            var info = new ProcessStartInfo()
+            try
             {
-                FileName = Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"),
-                UseShellExecute = true
-            };
-            Process.Start(info);
+                var info = new ProcessStartInfo()
+                {
+                    FileName = Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"),
+                    UseShellExecute = true
+                };
+                Process.Start(info);
+            }
+            catch (Exception exc)
+            {
+                Log.Error($"Couldn't load readme from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md")}", exc);
+            }
         }
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)
