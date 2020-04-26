@@ -104,7 +104,7 @@ namespace AuroraLoader
                 }
             }
 
-            
+
         }
 
         /* Utilities tab */
@@ -318,8 +318,17 @@ namespace AuroraLoader
             if (mod.Name == "AuroraLoader")
             {
                 MessageBox.Show($"Installing AuroraLoader {mod.Installation.Version}. Open {Path.Combine(Program.AuroraLoaderExecutableDirectory, $"{mod.Name}.{mod.Installation.Version}.exe")} when this window closes.");
-                _modRegistry.UpdateAuroraLoader(mod);
-                Close();
+                try
+                {
+                    _modRegistry.UpdateAuroraLoader(mod);
+                    Close();
+                }
+                catch (Exception exc)
+                {
+                    Log.Error("Failed to update AuroraLoader", exc);
+                    MessageBox.Show("Update failed.");
+                }
+
             }
             else
             {
