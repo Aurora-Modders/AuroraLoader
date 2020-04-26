@@ -552,7 +552,7 @@ namespace AuroraLoader
         {
             var info = new ProcessStartInfo()
             {
-                FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "README.md"),
+                FileName = Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"),
                 UseShellExecute = true
             };
             Process.Start(info);
