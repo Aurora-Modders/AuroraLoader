@@ -82,20 +82,22 @@ namespace AuroraLoader
             {
                 LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
                 LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
+
+                if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
+                {
+                    ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}!";
+                    ButtonUpdateAurora.ForeColor = Color.Green;
+                    ButtonUpdateAurora.Enabled = true;
+                }
+                else
+                {
+                    ButtonUpdateAurora.Text = "Up to date!";
+                    ButtonUpdateAurora.ForeColor = Color.Black;
+                    ButtonUpdateAurora.Enabled = false;
+                }
             }
 
-            if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
-            {
-                ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}!";
-                ButtonUpdateAurora.ForeColor = Color.Green;
-                ButtonUpdateAurora.Enabled = true;
-            }
-            else
-            {
-                ButtonUpdateAurora.Text = "Up to date!";
-                ButtonUpdateAurora.ForeColor = Color.Black;
-                ButtonUpdateAurora.Enabled = false;
-            }
+            
         }
 
         /* Utilities tab */
