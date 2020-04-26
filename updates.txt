@@ -1,2 +1,4 @@
 ﻿0.20.0=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.20.0/AuroraLoader.0.20.0.zip
-0.20.2=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.20.2/AuroraLoader.0.20.2.zip
+0.20.2=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.20.0/AuroraLoader.0.20.2.zip
+0.21.0-rc=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.21.0-rc/AuroraLoader.0.21.0.zip
+0.21.1-rc=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.21.1-rc/AuroraLoader.0.21.1.zip
