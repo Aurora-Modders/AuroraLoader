@@ -19,7 +19,7 @@ namespace AuroraLoader.Mods
             }
             var settings = FromKeyValueString(File.ReadAllText(modIniPath));
 
-            var mod = new ModConfiguration(modIniPath)
+            var mod = new ModConfiguration(Path.GetDirectoryName(modIniPath))
             {
                 // Required
                 Name = settings["Name"] ?? "",

@@ -256,7 +256,7 @@
             // ButtonConfigureExe
             // 
             this.ButtonConfigureExe.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ButtonConfigureExe.Location = new System.Drawing.Point(447, 796);
+            this.ButtonConfigureExe.Location = new System.Drawing.Point(447, 119);
             this.ButtonConfigureExe.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.ButtonConfigureExe.Name = "ButtonConfigureExe";
             this.ButtonConfigureExe.Size = new System.Drawing.Size(238, 66);
@@ -273,7 +273,6 @@
             this.ListGameMods.Name = "ListGameMods";
             this.ListGameMods.Size = new System.Drawing.Size(669, 580);
             this.ListGameMods.TabIndex = 6;
-            this.ListGameMods.SelectedIndexChanged += new System.EventHandler(this.ListDBMods_SelectedIndexChanged);
             // 
             // LabelExeMod
             // 
@@ -296,7 +295,7 @@
             this.ComboSelectLaunchExe.Name = "ComboSelectLaunchExe";
             this.ComboSelectLaunchExe.Size = new System.Drawing.Size(299, 37);
             this.ComboSelectLaunchExe.TabIndex = 3;
-            this.ComboSelectLaunchExe.SelectedIndexChanged += new System.EventHandler(this.ComboExe_SelectedIndexChanged);
+            this.ComboSelectLaunchExe.SelectedIndexChanged += new System.EventHandler(this.ComboSelectLaunchExe_SelectedIndexChanged);
             // 
             // CheckPower
             // 
@@ -397,7 +396,7 @@
             this.TabMods.Location = new System.Drawing.Point(840, 23);
             this.TabMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.TabMods.Name = "TabMods";
-            this.TabMods.SelectedIndex = 0;
+            this.TabMods.SelectedIndex = 1;
             this.TabMods.Size = new System.Drawing.Size(778, 1052);
             this.TabMods.TabIndex = 16;
             this.TabMods.SelectedIndexChanged += new System.EventHandler(this.TabMods_SelectedIndexChanged);

@@ -7,6 +7,8 @@
         public bool Installed => Installation != null;
         public bool CanBeUpdated => Listing != null && Installed && Listing.LatestVersion.CompareByPrecedence(Installation.Version) > 0;
 
+        public bool Configurable => Installation?.ModInternalConfigFile != null;
+
         public ModConfiguration Installation { get; }
         public ModListing Listing { get; }
 
