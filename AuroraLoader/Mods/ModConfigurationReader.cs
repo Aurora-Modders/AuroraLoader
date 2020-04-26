@@ -19,21 +19,41 @@ namespace AuroraLoader.Mods
             }
             var settings = FromKeyValueString(File.ReadAllText(modIniPath));
 
-            var mod = new ModConfiguration(Path.GetDirectoryName(modIniPath))
+            var mod = new ModConfiguration(Path.GetDirectoryName(modIniPath));
+
+            // Required
+            if (settings.ContainsKey("Name"))
             {
-                // Required
-                Name = settings["Name"] ?? "",
-                Type = Enum.Parse<ModType>(settings["Type"], true),
-                Status = Enum.Parse<ModStatus>(settings["Status"], true),
-                Version = SemVersion.Parse(settings["Version"], false),
-                TargetAuroraVersion = SemVersion.Parse(settings["AuroraVersion"], false),
+                mod.Name = settings["Name"];
+            }
+            if (settings.ContainsKey("Type"))
+            {
+                mod.Type = Enum.Parse<ModType>(settings["Type"], true);
+            }
+            if (settings.ContainsKey("Status"))
+            {
+                mod.Status = Enum.Parse<ModStatus>(settings["Status"], true);
+            }
+            if (settings.ContainsKey("Version"))
+            {
+                mod.Version = SemVersion.Parse(settings["Version"], false);
+            }
+            if (settings.ContainsKey("AuroraVersion"))
+            {
+                mod.TargetAuroraVersion = SemVersion.Parse(settings["AuroraVersion"], false);
+            }
 
-                // Optional at least some of the time
-                ExecuteCommand = settings.ContainsKey("Exe") ? settings["Exe"] : settings.ContainsKey("Executable") ? settings["Executable"] : null,
-                Updates = settings.ContainsKey("Updates") ? settings["Updates"] : null,
-                ModInternalConfigFile = settings.ContainsKey("Config") ? settings["Config"] : null
-            };
-
+            // Optional at least some of the time
+            if (settings.ContainsKey("Executable"))
+            {
+                mod.ExecuteCommand = settings["Executable"];
+            }
+            else if (settings.ContainsKey("Exe"))
+            {
+                mod.ExecuteCommand = settings["Exe"];
+            }
+            mod.Updates = settings.ContainsKey("Updates") ? settings["Updates"] : null;
+            mod.ModInternalConfigFile = settings.ContainsKey("Config") ? settings["Config"] : null;
 
             ValidateModConfiguration(mod);
 

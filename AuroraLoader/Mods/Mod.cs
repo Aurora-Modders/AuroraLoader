@@ -3,7 +3,7 @@
     public class Mod
     {
         public string Name => Listing?.ModName ?? Installation.Name;
-        public ModType Type => Installation?.Type ?? ModType.EXE;
+        public ModType Type => Listing?.Type ?? Installation?.Type ?? ModType.EXE;
         public bool Installed => Installation != null;
         public bool CanBeUpdated => Listing != null && Installed && Listing.LatestVersion.CompareByPrecedence(Installation.Version) > 0;
 

@@ -2,18 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.Json.Serialization;
 using Semver;
 
 namespace AuroraLoader.Mods
 {
     public class ModListing
     {
-        public string ModName { get; }
+        [JsonPropertyName("Name")]
+        public string ModName { get; set; }
 
-        public string UpdateUrl { get; }
+        [JsonPropertyName("Type")]
+        public ModType Type { get; set; }
+
+        [JsonPropertyName("Description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("Updates")]
+        public string UpdateUrl { get; set; }
 
         // <SemVersion, DownloadUrl>
-        public IDictionary<SemVersion, string> VersionDownloadUrls { get; private set; }
+        private IDictionary<SemVersion, string> VersionDownloadUrls = new Dictionary<SemVersion, string>();
+
+        [JsonIgnore]
         public SemVersion LatestVersion
         {
             get
@@ -22,6 +33,7 @@ namespace AuroraLoader.Mods
             }
         }
 
+        [JsonIgnore]
         public string LatestVersionUrl
         {
             get
@@ -39,6 +51,12 @@ namespace AuroraLoader.Mods
             ModName = modName;
             UpdateUrl = updateUrl;
             UpdateModListing();
+        }
+
+        // Needed for deserializing from JSON
+        internal ModListing()
+        {
+
         }
 
         public void UpdateModListing()

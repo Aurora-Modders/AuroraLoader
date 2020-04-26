@@ -71,7 +71,12 @@ namespace AuroraLoader.Registry
                 try
                 {
                     var response = client.DownloadString(ModsUrl);
+
                     modListingAtMirror = JsonSerializer.Deserialize<List<ModListing>>(response);
+                    foreach (var mod in modListingAtMirror)
+                    {
+                        mod.UpdateModListing();
+                    }
                 }
                 catch (Exception e)
                 {
