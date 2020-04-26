@@ -39,6 +39,8 @@ namespace AuroraLoader.Registry
         public void Update()
         {
             var mods = new List<ModConfiguration>();
+            // Load the mod configuration for AuroraLoader itself
+            mods.Add(ModConfigurationReader.ModConfigurationFromIni(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini")));
             foreach (var file in Directory.EnumerateFiles(ModDirectory, "mod.ini", SearchOption.AllDirectories))
             {
                 try
