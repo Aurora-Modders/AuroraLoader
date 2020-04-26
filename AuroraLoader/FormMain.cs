@@ -5,10 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Transactions;
 using System.Windows.Forms;
@@ -42,7 +44,7 @@ namespace AuroraLoader
             {
                 InstallAurora(executablePath);
             }
-            CheckEnableGameMods.Checked = false;
+
             RefreshAuroraInstallData();
             UpdateUtilitiesListView();
             UpdateLaunchExeCombo();
@@ -50,7 +52,13 @@ namespace AuroraLoader
             UpdateManageModsListView();
 
             Cursor = Cursors.Default;
-            TabMods.SelectedTab = TabUtilities;
+            CheckEnableGameMods.Enabled = true;
+            ComboSelectLaunchExe.Enabled = false;
+            ListDatabaseMods.Enabled = false;
+            CheckApproved.Enabled = false;
+            CheckPower.Enabled = false;
+            CheckPublic.Enabled = false;
+            TabMods.SelectedTab = TabApplyMods;
         }
 
         private void InstallAurora(string executablePath)
@@ -128,34 +136,11 @@ namespace AuroraLoader
         /// </summary>
         private void UpdateUtilitiesListView()
         {
-            ListUtilityMods.Items.Clear();
-            ListUtilityMods.Items.AddRange(_modRegistry.Mods.Where(
+            ListUtilities.Items.Clear();
+            ListUtilities.Items.AddRange(_modRegistry.Mods.Where(
                 m => m.Installed
                 && (m.Type == ModType.UTILITY || m.Type == ModType.ROOTUTILITY))
                 .Select(mod => mod.Name).ToArray());
-        }
-
-        /// <summary>
-        /// Enables or disables the Configure button based on whether the mod's author provided a ModInternalConfigFile
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListUtilityMods.SelectedItem != null)
-            {
-                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
-                ButtonConfigureUtility.Enabled = selectedMod.Configurable;
-            }
-        }
-
-        private void ButtonConfigureUtility_Click(object sender, EventArgs e)
-        {
-            if (ListUtilityMods.SelectedItem != null)
-            {
-                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
-                ConfigureMod(selectedMod);
-            }
         }
 
         /* Game mods tab */
@@ -167,15 +152,16 @@ namespace AuroraLoader
                 var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
                 if (result == DialogResult.OK)
                 {
-                    GroupMods.Enabled = true;
                     ButtonAuroraBugs.Enabled = false;
                     ButtonAuroraBugs.ForeColor = Color.Black;
                     ButtonModBugs.Enabled = true;
                     ButtonModBugs.ForeColor = Color.OrangeRed;
 
                     ComboSelectLaunchExe.Enabled = true;
-                    ListGameMods.Enabled = true;
-                    ButtonInstallOrUpdate.Enabled = true;
+                    ListDatabaseMods.Enabled = true;
+                    CheckApproved.Enabled = true;
+                    CheckPower.Enabled = true;
+                    CheckPublic.Enabled = true;
                 }
                 else
                 {
@@ -184,15 +170,19 @@ namespace AuroraLoader
             }
             if (!CheckEnableGameMods.Checked)
             {
-                GroupMods.Enabled = false;
                 ButtonAuroraBugs.Enabled = true;
                 ButtonAuroraBugs.ForeColor = Color.OrangeRed;
                 ButtonModBugs.Enabled = false;
                 ButtonModBugs.ForeColor = Color.Black;
 
+                ComboSelectLaunchExe.SelectedItem = ComboSelectLaunchExe.Items[0];
+
+                CheckEnableGameMods.Enabled = true;
                 ComboSelectLaunchExe.Enabled = false;
-                ListGameMods.Enabled = false;
-                ButtonInstallOrUpdate.Enabled = false;
+                ListDatabaseMods.Enabled = false;
+                CheckApproved.Enabled = false;
+                CheckPower.Enabled = false;
+                CheckPublic.Enabled = false;
             }
         }
 
@@ -243,31 +233,10 @@ namespace AuroraLoader
             if ((string)ComboSelectLaunchExe.SelectedItem != "Base game")
             {
                 var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
-                ButtonConfigureExe.Enabled = selectedMod.Configurable;
             }
             else
             {
-                ButtonConfigureExe.Enabled = false;
             }
-        }
-
-        /// <summary>
-        /// Open selected mod's ModInternalConfigFile (defined in mod configuration)
-        /// </summary>
-        private void ButtonConfigureExe_Click(object sender, EventArgs e)
-        {
-            var selected = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
-            ConfigureMod(selected);
-        }
-
-        private void ConfigureMod(Mod mod)
-        {
-            var info = new ProcessStartInfo()
-            {
-                FileName = Path.Combine(mod.Installation.ModFolder, mod.Installation.ModInternalConfigFile),
-                UseShellExecute = true
-            };
-            Process.Start(info);
         }
 
         /// <summary>
@@ -276,8 +245,8 @@ namespace AuroraLoader
         /// </summary>
         private void UpdateGameModsListView()
         {
-            ListGameMods.Items.Clear();
-            ListGameMods.Items.AddRange(_modRegistry.Mods.Where(
+            ListDatabaseMods.Items.Clear();
+            ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
                 mod => mod.Installed
                 && GetAllowedModStatuses().Contains(mod.Installation.Status)
                 && mod.Type == ModType.DATABASE).Select(mod => mod.Name).ToArray());
@@ -294,9 +263,8 @@ namespace AuroraLoader
             ListManageMods.Clear();
             ListManageMods.AllowColumnReorder = true;
             ListManageMods.FullRowSelect = true;
-            ListManageMods.Dock = DockStyle.Fill;
+            ListManageMods.Dock = DockStyle.Top;
             ListManageMods.View = View.Details;
-            ListManageMods.MultiSelect = false;
             ListManageMods.Columns.Add("Name");
             ListManageMods.Columns.Add("Type");
             ListManageMods.Columns.Add("Aurora Version");
@@ -320,19 +288,37 @@ namespace AuroraLoader
             ButtonInstallOrUpdate.Enabled = false;
             ListManageMods.EndUpdate();
             ListManageMods.Focus();
+            if (ListManageMods.Items.Count > 0)
+            {
+                ListManageMods.Items[0].Selected = true;
+            }
+            else
+            {
+                ButtonConfigureMod.Enabled = false;
+            }
         }
 
         private void ListManageMods_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ButtonInstallOrUpdate.Enabled = false;
+            ButtonConfigureMod.Enabled = false;
+
             if (ListManageMods.SelectedItems.Count > 0)
             {
                 var selected = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-                if (selected.Installed && selected.CanBeUpdated)
+                if (selected.Installed)
                 {
                     ButtonInstallOrUpdate.Text = "Update";
-                    ButtonInstallOrUpdate.Enabled = true;
+                    if (selected.CanBeUpdated)
+                    {
+                        ButtonInstallOrUpdate.Enabled = true;
+                    }
+                    if (selected.Installation.ModInternalConfigFile != null)
+                    {
+                        ButtonConfigureMod.Enabled = true;
+                    }
                 }
-                else if (!selected.Installed)
+                else
                 {
                     ButtonInstallOrUpdate.Text = "Install";
                     ButtonInstallOrUpdate.Enabled = true;
@@ -343,6 +329,7 @@ namespace AuroraLoader
                 ButtonInstallOrUpdate.Text = "Update";
                 ButtonInstallOrUpdate.Enabled = false;
             }
+
         }
 
         private void ButtonInstallOrUpdateMods_Click(object sender, EventArgs e)
@@ -354,9 +341,23 @@ namespace AuroraLoader
             UpdateManageModsListView();
             UpdateGameModsListView();
             UpdateUtilitiesListView();
+            UpdateLaunchExeCombo();
             Cursor = Cursors.Default;
         }
 
+        /// <summary>
+        /// Open selected mod's ModInternalConfigFile (defined in mod configuration)
+        /// </summary>
+        private void ButtonConfigureMod_Click(object sender, EventArgs e)
+        {
+            var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
+            var info = new ProcessStartInfo()
+            {
+                FileName = Path.Combine(mod.Installation.ModFolder, mod.Installation.ModInternalConfigFile),
+                UseShellExecute = true
+            };
+            Process.Start(info);
+        }
 
         private void StartGame()
         {
@@ -373,14 +374,10 @@ namespace AuroraLoader
             ButtonMultiPlayer.Enabled = false;
             ButtonInstallAurora.Enabled = false;
             ButtonUpdateAurora.Enabled = false;
-            ButtonInstallOrUpdate.Enabled = false;
-
-            TabUtilities.Enabled = false;
-            TabGameMods.Enabled = false;
 
             var mods = _modRegistry.Mods.Where(mod =>
-            (ListGameMods.CheckedItems != null && ListGameMods.CheckedItems.Contains(mod.Name))
-            || (ListUtilityMods.CheckedItems != null && ListUtilityMods.CheckedItems.Contains(mod.Name))).ToList();
+            (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
+            || (ListUtilities.CheckedItems != null && ListUtilities.CheckedItems.Contains(mod.Name))).ToList();
 
             Mod executableMod;
             if (ComboSelectLaunchExe.SelectedItem != null && (string)ComboSelectLaunchExe.SelectedItem != "Base game")
@@ -468,9 +465,6 @@ namespace AuroraLoader
             ButtonSinglePlayer.Enabled = true;
             RefreshAuroraInstallData();
             ButtonInstallOrUpdate.Enabled = true;
-
-            TabUtilities.Enabled = true;
-            TabGameMods.Enabled = true;
         }
 
         private void ButtonSinglePlayer_Click(object sender, EventArgs e)
@@ -530,6 +524,11 @@ namespace AuroraLoader
         }
 
         private void TabMods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ListUtilities_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
