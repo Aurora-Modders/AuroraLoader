@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -135,29 +136,6 @@ namespace AuroraLoader
                 .Select(mod => mod.Name).ToArray());
         }
 
-        /// <summary>
-        /// Enables or disables the Configure button based on whether the mod's author provided a ModInternalConfigFile
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ListUtilityMods.SelectedItem != null)
-            {
-                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
-                ButtonConfigureUtility.Enabled = selectedMod.Configurable;
-            }
-        }
-
-        private void ButtonConfigureUtility_Click(object sender, EventArgs e)
-        {
-            if (ListUtilityMods.SelectedItem != null)
-            {
-                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ListUtilityMods.SelectedItem);
-                ConfigureMod(selectedMod);
-            }
-        }
-
         /* Game mods tab */
 
         private void CheckEnableGameMods_CheckChanged(object sender, EventArgs e)
@@ -243,31 +221,10 @@ namespace AuroraLoader
             if ((string)ComboSelectLaunchExe.SelectedItem != "Base game")
             {
                 var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
-                ButtonConfigureExe.Enabled = selectedMod.Configurable;
             }
             else
             {
-                ButtonConfigureExe.Enabled = false;
             }
-        }
-
-        /// <summary>
-        /// Open selected mod's ModInternalConfigFile (defined in mod configuration)
-        /// </summary>
-        private void ButtonConfigureExe_Click(object sender, EventArgs e)
-        {
-            var selected = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
-            ConfigureMod(selected);
-        }
-
-        private void ConfigureMod(Mod mod)
-        {
-            var info = new ProcessStartInfo()
-            {
-                FileName = Path.Combine(mod.Installation.ModFolder, mod.Installation.ModInternalConfigFile),
-                UseShellExecute = true
-            };
-            Process.Start(info);
         }
 
         /// <summary>
@@ -294,9 +251,8 @@ namespace AuroraLoader
             ListManageMods.Clear();
             ListManageMods.AllowColumnReorder = true;
             ListManageMods.FullRowSelect = true;
-            ListManageMods.Dock = DockStyle.Fill;
+            ListManageMods.Dock = DockStyle.Top;
             ListManageMods.View = View.Details;
-            ListManageMods.MultiSelect = false;
             ListManageMods.Columns.Add("Name");
             ListManageMods.Columns.Add("Type");
             ListManageMods.Columns.Add("Aurora Version");
@@ -320,6 +276,14 @@ namespace AuroraLoader
             ButtonInstallOrUpdate.Enabled = false;
             ListManageMods.EndUpdate();
             ListManageMods.Focus();
+            if (ListManageMods.Items.Count > 0)
+            {
+                ListManageMods.Items[0].Selected = true;
+            }
+            else
+            {
+                ButtonConfigureMod.Enabled = false;
+            }
         }
 
         private void ListManageMods_SelectedIndexChanged(object sender, EventArgs e)
@@ -337,12 +301,22 @@ namespace AuroraLoader
                     ButtonInstallOrUpdate.Text = "Install";
                     ButtonInstallOrUpdate.Enabled = true;
                 }
+
+                if (selected.Installed && selected.Installation.ModInternalConfigFile != null)
+                {
+                    ButtonConfigureMod.Enabled = true;
+                }
+                else
+                {
+                    ButtonConfigureMod.Enabled = false;
+                }
             }
             else
             {
                 ButtonInstallOrUpdate.Text = "Update";
                 ButtonInstallOrUpdate.Enabled = false;
             }
+
         }
 
         private void ButtonInstallOrUpdateMods_Click(object sender, EventArgs e)
@@ -358,6 +332,19 @@ namespace AuroraLoader
             Cursor = Cursors.Default;
         }
 
+        /// <summary>
+        /// Open selected mod's ModInternalConfigFile (defined in mod configuration)
+        /// </summary>
+        private void ButtonConfigureMod_Click(object sender, EventArgs e)
+        {
+            var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
+            var info = new ProcessStartInfo()
+            {
+                FileName = Path.Combine(mod.Installation.ModFolder, mod.Installation.ModInternalConfigFile),
+                UseShellExecute = true
+            };
+            Process.Start(info);
+        }
 
         private void StartGame()
         {
