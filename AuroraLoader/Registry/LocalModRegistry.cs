@@ -41,7 +41,7 @@ namespace AuroraLoader.Registry
         {
             var mods = new List<ModConfiguration>();
             // Load the mod configuration for AuroraLoader itself
-            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini")))
+            if (File.Exists(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini")))
             {
                 var auroraLoader = ModConfigurationReader.ModConfigurationFromIni(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini"));
                 var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString());
@@ -49,7 +49,7 @@ namespace AuroraLoader.Registry
                 {
                     Directory.CreateDirectory(auroraLoaderModDirectory);
                 }
-                File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);
+                File.Move(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);
                 File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoaderModDirectory, "AuroraLoader.Exe"), true);
             }
 
