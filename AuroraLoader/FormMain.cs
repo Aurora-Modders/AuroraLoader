@@ -230,7 +230,8 @@ namespace AuroraLoader
             foreach (var mod in _modRegistry.Mods.Where(
                 mod => mod.Installed
                 && GetAllowedModStatuses().Contains(mod.Installation.Status)
-                && mod.Type == ModType.EXE))
+                && mod.Type == ModType.EXE
+                && mod.Name != "AuroraLoader"))
             {
                 ComboSelectLaunchExe.Items.Add(mod.Name);
             }
