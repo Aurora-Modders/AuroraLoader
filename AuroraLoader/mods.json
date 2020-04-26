@@ -2,19 +2,19 @@
   {
     "Name": "AuroraMod",
     "Type": "Exe",
-    "Description": "Some description",
+    "Description": "Replaces aurora.exe and provides custom themes, window resizing and persistence, autosave, and other QoL features",
     "Updates": "https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraMod/updates.txt"
   },
   {
     "Name": "AuroraElectrons",
     "Type": "RootUtility",
-    "Description": "Some description",
+    "Description": "A slick modern app for sorting and visualizing mining and production. Also includes an engine optimizer.",
     "Updates": "https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraElectrons/updates.txt"
   },
   {
       "Name": "A4xCalc",
       "Type": "Utility",
-      "Description": "Some description",
+      "Description": "A feature-rich calculator for optimizing missile and ship builds",
       "Updates": "https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt"
   }
 ]
