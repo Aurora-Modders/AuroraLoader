@@ -13,7 +13,7 @@ namespace AuroraLoader.Registry
     /// </summary>
     public class AuroraVersionRegistry : IRegistry
     {
-        public IList<AuroraVersion> AuroraVersions { get; private set; }
+        public IList<AuroraVersion> AuroraVersions { get; private set; } = new List<AuroraVersion>();
 
         public AuroraVersion CurrentAuroraVersion
         {
@@ -36,22 +36,25 @@ namespace AuroraLoader.Registry
         public void Update()
         {
             _mirrorRegistry.Update();
+            UpdateKnownVersionsFromCache();
             UpdateKnownAuroraVersionsFromMirror();
-            if (!AuroraVersions.Any())
-            {
-                UpdateKnownVersionsFromCache();
-            }
         }
 
         internal void UpdateKnownAuroraVersionsFromMirror()
         {
-            var mirrorKnownVersions = new List<AuroraVersion>();
+            var mirrorKnownVersions = new List<AuroraVersion>(AuroraVersions);
             foreach (var mirror in _mirrorRegistry.Mirrors)
             {
                 try
                 {
                     mirror.UpdateKnownAuroraVersions();
-                    mirrorKnownVersions = mirrorKnownVersions.Union(mirror.KnownAuroraVersions).ToList();
+                    foreach (var version in mirror.KnownAuroraVersions)
+                    {
+                        if (!mirrorKnownVersions.Any(existing => version.Checksum == existing.Checksum))
+                        {
+                            mirrorKnownVersions.Add(version);
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
@@ -59,7 +62,7 @@ namespace AuroraLoader.Registry
                 }
             }
 
-            AuroraVersions = mirrorKnownVersions;
+            AuroraVersions = mirrorKnownVersions.Union(AuroraVersions).ToList();
             // TODO update local cache
         }
 
@@ -74,7 +77,6 @@ namespace AuroraLoader.Registry
             {
                 Log.Error($"Failed to parse version data from {_configuration["aurora_known_versions_relative_filepath"]}", e);
             }
-
         }
 
         internal string GetChecksum(byte[] bytes)

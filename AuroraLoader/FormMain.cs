@@ -74,6 +74,23 @@ namespace AuroraLoader
             progress.ShowDialog();
         }
 
+        private void ButtonUpdateAurora_Click(object sender, EventArgs e)
+        {
+            //Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
+            var executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe");
+            var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, executablePath);
+            var thread = new Thread(() =>
+            {
+                var aurora_files = Installer.GetLatestAuroraFiles();
+                Installer.UpdateAurora(installation, aurora_files);
+            });
+            thread.Start();
+
+            var progress = new FormProgress(thread) { Text = "Updating Aurora" };
+            progress.ShowDialog();
+            RefreshAuroraInstallData();
+        }
+
         /// <summary>
         /// Sets current install's version and checksum, and whether the update button is enabled
         /// </summary>
@@ -488,11 +505,6 @@ namespace AuroraLoader
         private void ButtonAuroraBugs_Click(object sender, EventArgs e)
         {
             Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
-        }
-
-        private void ButtonAuroraUpdates_Click(object sender, EventArgs e)
-        {
-            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
         }
 
         private void ButtonModsSubreddit_Click(object sender, EventArgs e)

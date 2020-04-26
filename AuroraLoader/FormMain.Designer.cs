@@ -134,7 +134,7 @@
             this.ButtonUpdateAurora.TabIndex = 12;
             this.ButtonUpdateAurora.Text = "Update Aurora";
             this.ButtonUpdateAurora.UseVisualStyleBackColor = true;
-            this.ButtonUpdateAurora.Click += new System.EventHandler(this.ButtonAuroraUpdates_Click);
+            this.ButtonUpdateAurora.Click += new System.EventHandler(this.ButtonUpdateAurora_Click);
             // 
             // ButtonModSubreddit
             // 
