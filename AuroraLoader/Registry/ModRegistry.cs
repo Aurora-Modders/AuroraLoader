@@ -34,22 +34,29 @@ namespace AuroraLoader.Registry
             _remoteRegistry.Update();
 
             var mods = new List<Mod>();
+            var installedMods = new List<ModConfiguration>();
             foreach (var modInstallation in _localRegistry.ModInstallations)
             {
-                mods.Add(new Mod(modInstallation, null));
+                installedMods.Add(modInstallation);
             }
 
             foreach (var modListing in _remoteRegistry.ModListings)
             {
-                var installedMod = mods.FirstOrDefault(mod => mod.Name == modListing.ModName);
+                var installedMod = installedMods.FirstOrDefault(mod => mod.Name == modListing.ModName);
                 if (installedMod != null)
                 {
-                    installedMod = new Mod(installedMod.Installation, modListing);
+                    mods.Add(new Mod(installedMod, modListing));
+                    installedMods.Remove(installedMod);
                 }
                 else
                 {
                     mods.Add(new Mod(null, modListing));
                 }
+            }
+            // Handle mods we couldn't find a listing for in the registry
+            foreach (var installedMod in installedMods)
+            {
+                mods.Add(new Mod(installedMod, null));
             }
             Mods = mods;
         }
