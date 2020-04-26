@@ -3,7 +3,6 @@ using System;
 
 namespace AuroraLoader
 {
-    // TODO needs work to DWISOTT
     public class AuroraVersion : IComparable<AuroraVersion>
     {
         public SemVersion Version { get; }
