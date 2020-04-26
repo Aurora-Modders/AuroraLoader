@@ -55,11 +55,19 @@ namespace AuroraLoader.Registry
                 }
             }
 
-            // Specially load in AuroraLoader itself
-            var auroraLoaderModInstallation = _localRegistry.ModInstallations.Single(i => i.Name == "AuroraLoader");
-            var auroraLoaderModListing = new ModListing(auroraLoaderModInstallation.Name, auroraLoaderModInstallation.Updates);
-            mods.Add(new Mod(auroraLoaderModInstallation, auroraLoaderModListing));
-            installedMods.Remove(auroraLoaderModInstallation);
+            try
+            {
+                // Specially load in AuroraLoader itself
+                var auroraLoaderModInstallation = _localRegistry.ModInstallations.Single(i => i.Name == "AuroraLoader");
+                var auroraLoaderModListing = new ModListing(auroraLoaderModInstallation.Name, auroraLoaderModInstallation.Updates);
+                mods.Add(new Mod(auroraLoaderModInstallation, auroraLoaderModListing));
+                installedMods.Remove(auroraLoaderModInstallation);
+            }
+            catch (Exception exc)
+            {
+                Log.Error($"Failed while loading AuroraLoader installation", exc);
+            }
+
 
             // Handle mods we couldn't find a listing for in the registry
             foreach (var installedMod in installedMods)
