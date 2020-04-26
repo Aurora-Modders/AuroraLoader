@@ -466,7 +466,6 @@ namespace AuroraLoader
         {
             MessageBox.Show("Game ended.");
             ButtonSinglePlayer.Enabled = true;
-            ButtonMultiPlayer.Enabled = true;
             RefreshAuroraInstallData();
             ButtonInstallOrUpdate.Enabled = true;
 
