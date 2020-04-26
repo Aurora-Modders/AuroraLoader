@@ -92,8 +92,7 @@ namespace AuroraLoader
                 LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
             }
 
-            // Let it be known that the first elvis operator was added to the project at this very spot
-            if (_auroraVersionRegistry.CurrentAuroraVersion?.Version?.Equals(_auroraVersionRegistry.AuroraVersions?.Max().Version) ?? false)
+            if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
             {
                 ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}!";
                 ButtonUpdateAurora.ForeColor = Color.Green;
@@ -101,7 +100,7 @@ namespace AuroraLoader
             }
             else
             {
-                ButtonUpdateAurora.Text = "Update Aurora";
+                ButtonUpdateAurora.Text = "Up to date!";
                 ButtonUpdateAurora.ForeColor = Color.Black;
                 ButtonUpdateAurora.Enabled = false;
             }
