@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -19,7 +20,7 @@ namespace AuroraLoader.Registry
         {
             get
             {
-                var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe")));
+                var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "aurora.exe")));
                 return AuroraVersions.Single(v => v.Checksum.Equals(checksum));
             }
         }
@@ -70,7 +71,7 @@ namespace AuroraLoader.Registry
         {
             try
             {
-                var rawFileContents = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora_versions.ini"));
+                var rawFileContents = File.ReadAllText(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "aurora_versions.ini"));
                 AuroraVersions = ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList();
             }
             catch (Exception e)

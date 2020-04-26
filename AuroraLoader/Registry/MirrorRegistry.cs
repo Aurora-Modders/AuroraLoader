@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 
@@ -27,14 +28,14 @@ namespace AuroraLoader.Registry
             var mirrors = new List<Mirror>();
             try
             {
-                foreach (var rootUrl in File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mirrors.ini")))
+                foreach (var rootUrl in File.ReadAllLines(Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "mirrors.ini")))
                 {
                     mirrors.Add(new Mirror(_configuration, rootUrl));
                 }
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to parse mirror data from {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe")}", e);
+                Log.Error($"Failed to parse mirror data from {Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "aurora.exe")}", e);
             }
 
             Mirrors = mirrors;

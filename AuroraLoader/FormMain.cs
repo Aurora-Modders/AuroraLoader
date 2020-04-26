@@ -39,7 +39,7 @@ namespace AuroraLoader
             //Icon = Properties.Resources.Aurora;
             MessageBox.Show("AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
-            var executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe");
+            var executablePath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "aurora.exe");
             if (!File.Exists(executablePath))
             {
                 InstallAurora(executablePath);
@@ -85,7 +85,7 @@ namespace AuroraLoader
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
         {
             //Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
-            var executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe");
+            var executablePath = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "aurora.exe");
             var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, executablePath);
             var thread = new Thread(() =>
             {
@@ -401,7 +401,7 @@ namespace AuroraLoader
         private void RunGame(Process process)
         {
             var songs = new List<Song>();
-            var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Music");
+            var folder = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Music");
             if (Directory.Exists(folder))
             {
                 foreach (var mp3 in Directory.EnumerateFiles(folder, "*.mp3", SearchOption.AllDirectories))

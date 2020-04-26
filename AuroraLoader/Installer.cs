@@ -2,6 +2,7 @@
 using Semver;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace AuroraLoader
 
         public static void CopyClean(string folder)
         {
-            var clean = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Clean");
+            var clean = Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Clean");
             if (!Directory.Exists(clean))
             {
                 MessageBox.Show("A clean install will be downloaded.");

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using AuroraLoader.Mods;
 using System.Linq;
+using System.Diagnostics;
 
 namespace AuroraLoader.Registry
 {
@@ -14,7 +15,7 @@ namespace AuroraLoader.Registry
     {
         public IList<ModConfiguration> ModInstallations { get; private set; }
 
-        public string ModDirectory => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods");
+        public string ModDirectory => Path.Combine(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), "Mods");
         public string CacheDirectory => Path.Combine(Path.GetTempPath(), "auroraloader_cache");
 
         private readonly IConfiguration _configuration;
