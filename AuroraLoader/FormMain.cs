@@ -294,7 +294,7 @@ namespace AuroraLoader
                     var li = new ListViewItem(new string[] {
                         mod.Name,
                         mod.Type.ToString(),
-                        mod.Installation?.TargetAuroraVersion.ToString(),
+                        mod.Installation?.TargetAuroraVersion.ToString() == "1" ? "Any" : mod.Installation?.TargetAuroraVersion.ToString(),
                         mod.Installation?.Version.ToString(),
                         mod.Listing?.LatestVersion.ToString() ?? "Not found"
                     });
