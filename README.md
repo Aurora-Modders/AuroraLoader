@@ -2,7 +2,7 @@
 
 # Requirements
 
-None, not even Aurora. You may need to update your installed version of .NET Core.
+None, not even Aurora. If you get error messages related to missing a .NET Core runtime, try [downloading and installing this](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer). If that doesn't solve the problem for you, try using the self-contained version of the release.
 
 # Usage
 
