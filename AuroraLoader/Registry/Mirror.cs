@@ -81,24 +81,6 @@ namespace AuroraLoader.Registry
                 {
                     Log.Error($"Failed to download mod listing from {ModsUrl}", e);
                 }
-
-                //if (modListingAtMirror == null)
-                //{
-                //    // Try looking for the older mods.txt format
-                //    try
-                //    {
-                //        var response = client.DownloadString(OldModsUrl);
-
-                //        foreach (var kvp in ModConfigurationReader.FromKeyValueString(response))
-                //        {
-                //            modListingAtMirror.Add(new ModListing(kvp.Key, kvp.Value));
-                //        }
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        Log.Error($"Not enough MSP to implement repairs at {ModsUrl}", e);
-                //    }
-                //}
             }
 
             modListingAtMirror.RemoveAll(l => l.LatestVersion == null);
