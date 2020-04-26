@@ -15,6 +15,6 @@
       "Name": "A4xCalc",
       "Type": "Utility",
       "Description": "Some description",
-      "Updates": "A4xCalc=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt"
+      "Updates": "https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt"
   }
 ]

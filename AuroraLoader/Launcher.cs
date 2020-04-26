@@ -25,7 +25,7 @@ namespace AuroraLoader
             foreach (var mod in mods.Where(mod => mod.Type == ModType.UTILITY))
             {
                 Log.Debug("Utility: " + mod.Name);
-                Run(Path.GetDirectoryName(mod.Installation.ModFolder), mod.Installation.ExecuteCommand);
+                Run(mod.Installation.ModFolder, mod.Installation.ExecuteCommand);
             }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
             {
