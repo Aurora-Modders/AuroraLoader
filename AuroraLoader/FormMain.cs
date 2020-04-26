@@ -54,18 +54,42 @@ namespace AuroraLoader
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
         {
-            //Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
-            var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
-            var thread = new Thread(() =>
+            try
             {
-                var aurora_files = Installer.GetLatestAuroraFiles();
-                Installer.UpdateAurora(installation, aurora_files);
-            });
-            thread.Start();
+                var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
+                var thread = new Thread(() =>
+                {
+                    var aurora_files = Installer.GetLatestAuroraFiles();
+                    Installer.UpdateAurora(installation, aurora_files);
+                });
+                thread.Start();
 
-            var progress = new FormProgress(thread) { Text = "Updating Aurora" };
-            progress.ShowDialog();
-            RefreshAuroraInstallData();
+                var progress = new FormProgress(thread) { Text = "Updating Aurora" };
+                progress.ShowDialog();
+                RefreshAuroraInstallData();
+            }
+            catch (Exception ecp)
+            {
+                Log.Error("Failed to update Aurora", ecp);
+                Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
+            }
+        }
+
+        private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e)
+        {
+            var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
+            MessageBox.Show($"Installing AuroraLoader {auroraLoaderMod.Listing.LatestVersion}. Open {Path.Combine(Program.AuroraLoaderExecutableDirectory, $"{auroraLoaderMod.Name}.{auroraLoaderMod.Listing.LatestVersion}.exe")} when this window closes.");
+            try
+            {
+                _modRegistry.UpdateAuroraLoader(auroraLoaderMod);
+                Application.Exit();
+                return;
+            }
+            catch (Exception exc)
+            {
+                Log.Error("Failed to update AuroraLoader", exc);
+                MessageBox.Show("Update failed.");
+            }
         }
 
         /// <summary>
@@ -82,22 +106,42 @@ namespace AuroraLoader
             {
                 LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
                 LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
+                LabelAuroraLoaderVersion.Text = $"AuroraLoader Version: {_modRegistry.Mods.Single(m => m.Name == "AuroraLoader").Installation.Version}";
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
                 {
-                    ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}!";
+                    ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
                     ButtonUpdateAurora.ForeColor = Color.Green;
                     ButtonUpdateAurora.Enabled = true;
                 }
                 else
                 {
-                    ButtonUpdateAurora.Text = "Up to date!";
+                    ButtonUpdateAurora.Text = "Aurora is up to date";
                     ButtonUpdateAurora.ForeColor = Color.Black;
                     ButtonUpdateAurora.Enabled = false;
                 }
             }
 
-            
+            try
+            {
+                var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
+                if (auroraLoaderMod.CanBeUpdated)
+                {
+                    ButtonUpdateAuroraLoader.Text = $"Update AuroraLoader to {auroraLoaderMod.Listing.LatestVersion}";
+                    ButtonUpdateAuroraLoader.ForeColor = Color.Green;
+                    ButtonUpdateAuroraLoader.Enabled = true;
+                }
+                else
+                {
+                    ButtonUpdateAuroraLoader.Text = "AuroraLoader is up to date";
+                    ButtonUpdateAuroraLoader.ForeColor = Color.Black;
+                    ButtonUpdateAuroraLoader.Enabled = false;
+                }
+            }
+            catch (Exception exc)
+            {
+                Log.Error("Unable to check AuroraLoader updates", exc);
+            }
         }
 
         /* Utilities tab */
@@ -245,14 +289,17 @@ namespace AuroraLoader
 
             foreach (var mod in _modRegistry.Mods)
             {
-                var li = new ListViewItem(new string[] {
-                    mod.Name,
-                    mod.Type.ToString(),
-                    mod.Installation?.TargetAuroraVersion.ToString(),
-                    mod.Installation?.Version.ToString(),
-                    mod.Listing?.LatestVersion.ToString() ?? "Not found"
-                });
-                ListManageMods.Items.Add(li);
+                if (mod.Name != "AuroraLoader")
+                {
+                    var li = new ListViewItem(new string[] {
+                        mod.Name,
+                        mod.Type.ToString(),
+                        mod.Installation?.TargetAuroraVersion.ToString(),
+                        mod.Installation?.Version.ToString(),
+                        mod.Listing?.LatestVersion.ToString() ?? "Not found"
+                    });
+                    ListManageMods.Items.Add(li);
+                }
             }
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -498,6 +545,16 @@ namespace AuroraLoader
         private void ButtonModBugs_Click(object sender, EventArgs e)
         {
             Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+        }
+
+        private void ButtonReadme_Click(object sender, EventArgs e)
+        {
+            var info = new ProcessStartInfo()
+            {
+                FileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "README.md"),
+                UseShellExecute = true
+            };
+            Process.Start(info);
         }
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)

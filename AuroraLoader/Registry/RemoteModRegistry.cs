@@ -24,7 +24,29 @@ namespace AuroraLoader.Registry
         public void Update()
         {
             _mirrorRegistry.Update();
-            ModListings = _mirrorRegistry.Mirrors.Select(mirror => mirror.ModListings).SelectMany(mods => mods);
+            var modListings = new List<ModListing>();
+            foreach (var mirror in _mirrorRegistry.Mirrors)
+            {
+                foreach (var mirrorListing in mirror.ModListings)
+                {
+                    // If we already have a listing for this mod from another mirror
+                    if (modListings.Any(l => l.ModName == mirrorListing.ModName))
+                    {
+                        // Update it if this mirror has a more recent version
+                        var match = modListings.Single(l => l.ModName == mirrorListing.ModName);
+                        if (modListings.Single(l => l.ModName == mirrorListing.ModName).LatestVersion.CompareTo(mirrorListing.LatestVersion) < 0)
+                        {
+                            match = new ModListing(match.ModName, mirrorListing.LatestVersionUrl);
+                        }
+                    }
+                    else
+                    {
+                        // Add the listing
+                        modListings.Add(mirrorListing);
+                    }
+                }
+            }
+            ModListings = modListings;
         }
     }
 }
