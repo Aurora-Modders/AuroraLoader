@@ -20,7 +20,7 @@ namespace AuroraLoader
             {
                 Log.Debug("Root Utility: " + mod.Name);
                 CopyToRoot(mod);
-                Run(AppDomain.CurrentDomain.BaseDirectory, mod.Installation.ExecuteCommand);
+                Run(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), mod.Installation.ExecuteCommand);
             }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.UTILITY))
             {
@@ -36,21 +36,20 @@ namespace AuroraLoader
             if (executableMod != null)
             {
                 CopyToRoot(executableMod);
-                return Run(AppDomain.CurrentDomain.BaseDirectory, executableMod.Installation.ExecuteCommand);
+                return Run(Program.AuroraLoaderExecutableDirectory, executableMod.Installation.ExecuteCommand);
             }
             else
             {
-                return Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
+                return Run(Program.AuroraLoaderExecutableDirectory, "Aurora.exe");
             }
         }
 
         private static void CopyToRoot(Mod mod)
         {
             var dir = Path.GetDirectoryName(mod.Installation.ModFolder);
-            var out_dir = AppDomain.CurrentDomain.BaseDirectory;
             foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
             {
-                File.Copy(file, Path.Combine(out_dir, Path.GetFileName(file)), true);
+                File.Copy(file, Path.Combine(Program.AuroraLoaderExecutableDirectory, Path.GetFileName(file)), true);
             }
         }
 

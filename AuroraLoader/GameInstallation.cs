@@ -3,12 +3,12 @@
     public class GameInstallation
     {
         public readonly AuroraVersion InstalledVersion;
-        public readonly string ExecutableLocation;
+        public readonly string InstallationPath;
 
-        public GameInstallation(AuroraVersion version, string executable)
+        public GameInstallation(AuroraVersion version, string installationPath)
         {
             InstalledVersion = version;
-            ExecutableLocation = executable;
+            InstallationPath = installationPath;
 
         }
     }

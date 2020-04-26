@@ -34,7 +34,7 @@ namespace AuroraLoader.Registry
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to parse mirror data from {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe")}", e);
+                Log.Error($"Failed to parse mirror data from {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mirrors.ini")}", e);
             }
 
             Mirrors = mirrors;

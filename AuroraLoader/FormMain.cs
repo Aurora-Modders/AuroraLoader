@@ -5,14 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.DirectoryServices.ActiveDirectory;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Transactions;
 using System.Windows.Forms;
 
 namespace AuroraLoader
@@ -39,11 +35,6 @@ namespace AuroraLoader
             //Icon = Properties.Resources.Aurora;
             MessageBox.Show("AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
-            var executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe");
-            if (!File.Exists(executablePath))
-            {
-                InstallAurora(executablePath);
-            }
 
             RefreshAuroraInstallData();
             UpdateUtilitiesListView();
@@ -61,32 +52,10 @@ namespace AuroraLoader
             TabMods.SelectedTab = TabApplyMods;
         }
 
-        private void InstallAurora(string executablePath)
-        {
-            var dialog = MessageBox.Show("Aurora not installed. Download and install? This might take a while.", "Install Aurora", MessageBoxButtons.YesNo);
-            if (dialog == DialogResult.No)
-            {
-                Application.Exit();
-                return;
-            }
-
-            var installation = new GameInstallation(new AuroraVersion("0.0.0", ""), executablePath);
-            var thread = new Thread(() =>
-            {
-                var aurora_files = Installer.GetLatestAuroraFiles();
-                Installer.DownloadAuroraPieces(Path.GetDirectoryName(executablePath), aurora_files);
-            });
-            thread.Start();
-
-            var progress = new FormProgress(thread) { Text = "Installing Aurora" };
-            progress.ShowDialog();
-        }
-
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
         {
             //Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=276.0");
-            var executablePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora.exe");
-            var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, executablePath);
+            var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
             var thread = new Thread(() =>
             {
                 var aurora_files = Installer.GetLatestAuroraFiles();
