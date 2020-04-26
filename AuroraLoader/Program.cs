@@ -1,20 +1,16 @@
+using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Semver;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace AuroraLoader
 {
     static class Program
     {
-        public static string[] MIRRORS => File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Mods", "mirrors.txt"));
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,11 +20,19 @@ namespace AuroraLoader
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
                     .Build();
-            Application.Run(new FormMain(configuration));
+
+            var mirrorRegistry = new MirrorRegistry(configuration);
+            var auroraVersionRegistry = new AuroraVersionRegistry(configuration, mirrorRegistry);
+            var localRegistry = new LocalModRegistry(configuration);
+            var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
+            var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
+            modRegistry.Update();
+            Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
 
         public static string GetChecksum(byte[] bytes)

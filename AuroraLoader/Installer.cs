@@ -1,4 +1,5 @@
-﻿using Semver;
+﻿using AuroraLoader.Mods;
+using Semver;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +22,7 @@ namespace AuroraLoader
             {
                 var str = client.DownloadString(url);
 
-                return Config.FromString(str);
+                return ModConfigurationReader.FromKeyValueString(str);
             }
         }
 
@@ -35,7 +36,7 @@ namespace AuroraLoader
                 var aurora_files = GetLatestAuroraFiles();
                 DownloadAuroraPieces(clean, aurora_files);
             }
-            
+
             if (Directory.Exists(folder))
             {
                 Directory.Delete(folder, true);

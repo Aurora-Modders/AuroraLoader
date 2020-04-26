@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AuroraLoader
 {
+    // TODO cutover to log4net (etc) rather than rewriting the wheel here
     static class Log
     {
         public static void Debug(string message)

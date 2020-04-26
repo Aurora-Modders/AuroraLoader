@@ -3,58 +3,55 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using AuroraLoader.Mods;
 
 namespace AuroraLoader
 {
     static class Launcher
     {
-        public static Process Launch(Mod exe, List<Mod> others, string folder)
+        public static Process Launch(IList<Mod> mods, Mod executableMod = null)
         {
-            foreach (var mod in others)
+            if (mods.Any(mod => mod.Type == ModType.EXE))
             {
-                if (mod.Type == Mod.ModType.ROOT_UTILITY)
-                {
-                    Log.Debug("Root Utility: " + mod.Name);
-                    CopyToFolder(mod, folder);
-                    Run(AppDomain.CurrentDomain.BaseDirectory, mod.Exe);
-                }
-                else if (mod.Type == Mod.ModType.UTILITY)
-                {
-                    Log.Debug("Utility: " + mod.Name);
-                    Run(Path.GetDirectoryName(mod.DefFile), mod.Exe);
-                }
-                else if (mod.Type == Mod.ModType.DATABASE)
-                {
-                    Log.Debug("Database: " + mod.Name);
-                    throw new Exception("Database mods not supported yet: " + mod.Name);
-                }
-                else
-                {
-                    throw new Exception("Invalid mod: " + mod.Name);
-                }
+                throw new Exception("Use the other parameter");
             }
 
-            if (exe.Name.Equals("Base Game"))
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOTUTILITY))
             {
-                Log.Debug("Exe: " + exe.Name);
-                var process = Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
+                Log.Debug("Root Utility: " + mod.Name);
+                CopyToRoot(mod);
+                Run(AppDomain.CurrentDomain.BaseDirectory, mod.Installation.ExecuteCommand);
+            }
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.UTILITY))
+            {
+                Log.Debug("Utility: " + mod.Name);
+                Run(Path.GetDirectoryName(mod.Installation.ModFolder), mod.Installation.ExecuteCommand);
+            }
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
+            {
+                Log.Debug("Database: " + mod.Name);
+                throw new Exception("Database mods not supported yet: " + mod.Name);
+            }
 
-                return process;
+            if (executableMod != null)
+            {
+                CopyToRoot(executableMod);
+                return Run(AppDomain.CurrentDomain.BaseDirectory, executableMod.Installation.ExecuteCommand);
             }
             else
             {
-                Log.Debug("Exe: " + exe.Name);
-                CopyToFolder(exe, folder);
-                var process = Run(AppDomain.CurrentDomain.BaseDirectory, exe.Exe);
-
-                return process;
+                return Run(AppDomain.CurrentDomain.BaseDirectory, "Aurora.exe");
             }
         }
 
-        private static void CopyToFolder(Mod mod, string folder)
+        private static void CopyToRoot(Mod mod)
         {
-            var dir = Path.GetDirectoryName(mod.DefFile);
-            Program.CopyDirectory(dir, folder);
+            var dir = Path.GetDirectoryName(mod.Installation.ModFolder);
+            var out_dir = AppDomain.CurrentDomain.BaseDirectory;
+            foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
+            {
+                File.Copy(file, Path.Combine(out_dir, Path.GetFileName(file)), true);
+            }
         }
 
         private static Process Run(string folder, string command)
@@ -78,13 +75,13 @@ namespace AuroraLoader
             var info = new ProcessStartInfo()
             {
                 WorkingDirectory = folder,
-                FileName = exe, 
+                FileName = exe,
                 Arguments = args,
                 UseShellExecute = true,
                 CreateNoWindow = true
             };
             //info.EnvironmentVariables["PATH"] = java + ";" + Environment.GetEnvironmentVariable("PATH");
-            
+
             var process = Process.Start(info);
             return process;
         }
