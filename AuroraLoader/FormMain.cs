@@ -75,6 +75,23 @@ namespace AuroraLoader
             }
         }
 
+        private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e)
+        {
+            var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
+            MessageBox.Show($"Installing AuroraLoader {auroraLoaderMod.Listing.LatestVersion}. Open {Path.Combine(Program.AuroraLoaderExecutableDirectory, $"{auroraLoaderMod.Name}.{auroraLoaderMod.Listing.LatestVersion}.exe")} when this window closes.");
+            try
+            {
+                _modRegistry.UpdateAuroraLoader(auroraLoaderMod);
+                Application.Exit();
+                return;
+            }
+            catch (Exception exc)
+            {
+                Log.Error("Failed to update AuroraLoader", exc);
+                MessageBox.Show("Update failed.");
+            }
+        }
+
         /// <summary>
         /// Sets current install's version and checksum, and whether the update button is enabled
         /// </summary>
@@ -89,22 +106,42 @@ namespace AuroraLoader
             {
                 LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
                 LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
+                LabelAuroraLoaderVersion.Text = $"AuroraLoader Version: {_modRegistry.Mods.Single(m => m.Name == "AuroraLoader").Installation.Version}";
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
                 {
-                    ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}!";
+                    ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
                     ButtonUpdateAurora.ForeColor = Color.Green;
                     ButtonUpdateAurora.Enabled = true;
                 }
                 else
                 {
-                    ButtonUpdateAurora.Text = "Up to date!";
+                    ButtonUpdateAurora.Text = "Aurora is up to date";
                     ButtonUpdateAurora.ForeColor = Color.Black;
                     ButtonUpdateAurora.Enabled = false;
                 }
             }
 
-
+            try
+            {
+                var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
+                if (auroraLoaderMod.CanBeUpdated)
+                {
+                    ButtonUpdateAuroraLoader.Text = $"Update AuroraLoader to {auroraLoaderMod.Listing.LatestVersion}";
+                    ButtonUpdateAuroraLoader.ForeColor = Color.Green;
+                    ButtonUpdateAuroraLoader.Enabled = true;
+                }
+                else
+                {
+                    ButtonUpdateAuroraLoader.Text = "AuroraLoader is up to date";
+                    ButtonUpdateAuroraLoader.ForeColor = Color.Black;
+                    ButtonUpdateAuroraLoader.Enabled = false;
+                }
+            }
+            catch (Exception exc)
+            {
+                Log.Error("Unable to check AuroraLoader updates", exc);
+            }
         }
 
         /* Utilities tab */
@@ -252,6 +289,10 @@ namespace AuroraLoader
 
             foreach (var mod in _modRegistry.Mods)
             {
+                if (mod.Name == "AuroraMod")
+                {
+                    continue;
+                }
                 var li = new ListViewItem(new string[] {
                     mod.Name,
                     mod.Type.ToString(),
@@ -315,25 +356,7 @@ namespace AuroraLoader
 
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            if (mod.Name == "AuroraLoader")
-            {
-                MessageBox.Show($"Installing AuroraLoader {mod.Installation.Version}. Open {Path.Combine(Program.AuroraLoaderExecutableDirectory, $"{mod.Name}.{mod.Installation.Version}.exe")} when this window closes.");
-                try
-                {
-                    _modRegistry.UpdateAuroraLoader(mod);
-                    Close();
-                }
-                catch (Exception exc)
-                {
-                    Log.Error("Failed to update AuroraLoader", exc);
-                    MessageBox.Show("Update failed.");
-                }
-
-            }
-            else
-            {
-                _modRegistry.InstallOrUpdate(mod);
-            }
+            _modRegistry.InstallOrUpdate(mod);
             UpdateManageModsListView();
             UpdateGameModsListView();
             UpdateUtilitiesListView();

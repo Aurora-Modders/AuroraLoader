@@ -5,6 +5,7 @@ using System.IO;
 using AuroraLoader.Mods;
 using System.Linq;
 using System.Diagnostics;
+using System.Xml;
 
 namespace AuroraLoader.Registry
 {
@@ -40,7 +41,19 @@ namespace AuroraLoader.Registry
         {
             var mods = new List<ModConfiguration>();
             // Load the mod configuration for AuroraLoader itself
-            mods.Add(ModConfigurationReader.ModConfigurationFromIni(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini")));
+            if (File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini")))
+            {
+                var auroraLoader = ModConfigurationReader.ModConfigurationFromIni(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini"));
+                var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString());
+                if (!Directory.Exists(Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString())))
+                {
+                    Directory.CreateDirectory(auroraLoaderModDirectory);
+                }
+                File.Move(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);
+                File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoaderModDirectory, "AuroraLoader.Exe"), true);
+            }
+
+
             foreach (var file in Directory.EnumerateFiles(ModDirectory, "mod.ini", SearchOption.AllDirectories))
             {
                 try
