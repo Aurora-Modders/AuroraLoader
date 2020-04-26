@@ -2,7 +2,7 @@
 
 # Requirements
 
-None, not even Aurora
+None, not even Aurora. You may need to update your installed version of .NET Core.
 
 # Usage
 
