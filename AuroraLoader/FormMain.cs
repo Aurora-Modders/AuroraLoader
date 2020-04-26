@@ -354,6 +354,7 @@ namespace AuroraLoader
             UpdateManageModsListView();
             UpdateGameModsListView();
             UpdateUtilitiesListView();
+            UpdateLaunchExeCombo();
             Cursor = Cursors.Default;
         }
 
