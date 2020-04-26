@@ -1,1 +1,0 @@
-﻿0.20.0=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.20.0/AuroraLoader.0.20.0.zip
