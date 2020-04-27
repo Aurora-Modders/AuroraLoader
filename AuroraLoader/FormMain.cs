@@ -239,8 +239,8 @@ namespace AuroraLoader
                 mod => mod.Installed
                 && GetAllowedModStatuses().Contains(mod.Installation.Status)
                 && mod.Type == ModType.EXE
-                && mod.Name != "AuroraLoader")
-                && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
+                && mod.Name != "AuroraLoader"
+                && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion)))
             {
                 ComboSelectLaunchExe.Items.Add(mod.Name);
             }
