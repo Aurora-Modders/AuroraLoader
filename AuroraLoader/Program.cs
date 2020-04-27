@@ -12,7 +12,7 @@ namespace AuroraLoader
 {
     static class Program
     {
-        public static readonly string AuroraLoaderExecutableDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+        public static readonly string AuroraLoaderExecutableDirectory = AppDomain.CurrentDomain.BaseDirectory;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
