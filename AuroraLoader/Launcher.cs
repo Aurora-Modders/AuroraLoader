@@ -164,6 +164,7 @@ namespace AuroraLoader
                 var sql = "SELECT * FROM sqlite_master WHERE name ='A_THIS_SAVE_IS_MODDED' and type='table';";
                 var command = new SQLiteCommand(sql, connection);
                 var reader = command.ExecuteReader();
+
                 if (!reader.Read())
                 {
                     reader.Close();
