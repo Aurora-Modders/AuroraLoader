@@ -111,6 +111,7 @@ namespace AuroraLoader
                 Log.Error($"Failed to run {command}", e);
                 return null;
             }
+
         }
 
         private static void InstallDbMod(Mod mod, GameInstallation installation)
