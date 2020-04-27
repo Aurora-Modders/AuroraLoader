@@ -7,6 +7,6 @@
         /// Their update method should call the Update() method of any of their own dependencies
         /// Registry constructors should not call Update().
         /// </summary>
-        void Update();
+        void Update(AuroraVersion version);
     }
 }
