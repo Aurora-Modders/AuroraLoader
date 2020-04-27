@@ -37,7 +37,7 @@ namespace AuroraLoader.Registry
 
         // Mods installed locally are identified by their mod.ini or mod.json file
         // This is known as their 'mod configuration' file.
-        public void Update()
+        public void Update(AuroraVersion version)
         {
             var mods = new List<ModConfiguration>();
             // Load the mod configuration for AuroraLoader itself
@@ -61,16 +61,29 @@ namespace AuroraLoader.Registry
                     if (mods.Any(mod => mod.Name == newMod.Name))
                     {
                         var existingMod = mods.Single(mod => mod.Name == newMod.Name);
-                        if (newMod.Version.CompareTo(existingMod.Version) > 0)
+                        if (newMod.Version.CompareByPrecedence(existingMod.HighestInstalledVersion) > 0)
                         {
-                            mods.Remove(existingMod);
+                            existingMod.HighestInstalledVersion = newMod.Version;
+                        }
+                    }
+
+                    if (newMod.WorksForVersion(version))
+                    {
+                        if (mods.Any(mod => mod.Name == newMod.Name))
+                        {
+                            var existingMod = mods.Single(mod => mod.Name == newMod.Name);
+                            if (newMod.Version.CompareTo(existingMod.Version) > 0)
+                            {
+                                mods.Remove(existingMod);
+                                mods.Add(newMod);
+                            }
+                        }
+                        else
+                        {
                             mods.Add(newMod);
                         }
                     }
-                    else
-                    {
-                        mods.Add(newMod);
-                    }
+                    
                 }
                 catch (Exception e)
                 {

@@ -10,6 +10,8 @@ namespace AuroraLoader.Mods
 
         public SemVersion Version { get; internal set; } = null;
 
+        public SemVersion HighestInstalledVersion { get; internal set; } = null;
+
         public ModCompabitilityVersion TargetAuroraVersion { get; internal set; }
         public string ExecuteCommand { get; internal set; } = null;
         public string ModInternalConfigFile { get; internal set; } = null;
