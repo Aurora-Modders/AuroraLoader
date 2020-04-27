@@ -78,10 +78,14 @@ namespace AuroraLoader
         private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e)
         {
             var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
-            MessageBox.Show($"Installing AuroraLoader {auroraLoaderMod.Listing.LatestVersion}. Open {Path.Combine(Program.AuroraLoaderExecutableDirectory, $"{auroraLoaderMod.Name}.{auroraLoaderMod.Listing.LatestVersion}.exe")} when this window closes.");
+            MessageBox.Show($"Installing AuroraLoader {auroraLoaderMod.Listing.LatestVersion}");
             try
             {
-                _modRegistry.UpdateAuroraLoader(auroraLoaderMod);
+                var thread = new Thread(() => _modRegistry.UpdateAuroraLoader(auroraLoaderMod));
+                thread.Start();
+                var progress = new FormProgress(thread);
+                progress.ShowDialog();
+                Process.Start("update_loader.bat");
                 Application.Exit();
                 return;
             }

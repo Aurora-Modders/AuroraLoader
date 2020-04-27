@@ -6,6 +6,8 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using AuroraLoader.Mods;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace AuroraLoader.Registry
 {
@@ -85,7 +87,7 @@ namespace AuroraLoader.Registry
             }
 
             InstallOrUpdate(mod);
-            File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, $"{mod.Name}.{mod.Listing.LatestVersion}.exe"), true);
+            File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
         }
 
         // TODO I would prefer to handle caching withing LocalModRegistry
