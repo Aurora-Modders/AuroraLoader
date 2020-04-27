@@ -60,7 +60,7 @@ namespace AuroraLoader.Registry
 		 * AuroraElectrons=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/AuroraElectrons/updates.txt
 		 * A4xCalc=https://raw.githubusercontent.com/Aurora-Modders/AuroraMods/master/Mods/A4xCalc/updates.txt
 		 * 
-		 * See https://github.com/Aurora-Modders/AuroraMods/blob/master/mods.json for a JSON example
+		 * See https://github.com/Aurora-Modders/AuroraRegistry/blob/master/mods.json for a JSON example
 		 */
         public void UpdateModListings()
         {
@@ -81,25 +81,10 @@ namespace AuroraLoader.Registry
                 {
                     Log.Error($"Failed to download mod listing from {ModsUrl}", e);
                 }
-
-                if (modListingAtMirror == null)
-                {
-                    // Try looking for the older mods.txt format
-                    try
-                    {
-                        var response = client.DownloadString(OldModsUrl);
-
-                        foreach (var kvp in ModConfigurationReader.FromKeyValueString(response))
-                        {
-                            modListingAtMirror.Add(new ModListing(kvp.Key, kvp.Value));
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error($"Not enough MSP to implement repairs at {ModsUrl}", e);
-                    }
-                }
             }
+
+            modListingAtMirror.RemoveAll(l => l.LatestVersion == null);
+
             ModListings = modListingAtMirror;
         }
     }

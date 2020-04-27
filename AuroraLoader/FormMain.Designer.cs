@@ -44,6 +44,7 @@
             this.TabApplyMods = new System.Windows.Forms.TabPage();
             this.ListUtilities = new System.Windows.Forms.CheckedListBox();
             this.GroupMods = new System.Windows.Forms.GroupBox();
+            this.LabelDatabaseMods = new System.Windows.Forms.Label();
             this.LabelUtilities = new System.Windows.Forms.Label();
             this.CheckEnableGameMods = new System.Windows.Forms.CheckBox();
             this.ListDatabaseMods = new System.Windows.Forms.CheckedListBox();
@@ -56,7 +57,9 @@
             this.TabManageMods = new System.Windows.Forms.TabPage();
             this.ButtonConfigureMod = new System.Windows.Forms.Button();
             this.ListManageMods = new System.Windows.Forms.ListView();
-            this.LabelDatabaseMods = new System.Windows.Forms.Label();
+            this.ButtonUpdateAuroraLoader = new System.Windows.Forms.Button();
+            this.ButtonReadme = new System.Windows.Forms.Button();
+            this.LabelAuroraLoaderVersion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.TrackVolume)).BeginInit();
             this.TabApplyMods.SuspendLayout();
             this.GroupMods.SuspendLayout();
@@ -100,7 +103,7 @@
             // 
             // ButtonAuroraForums
             // 
-            this.ButtonAuroraForums.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonAuroraForums.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonAuroraForums.Location = new System.Drawing.Point(20, 706);
             this.ButtonAuroraForums.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.ButtonAuroraForums.Name = "ButtonAuroraForums";
@@ -112,7 +115,7 @@
             // 
             // ButtonAuroraBugs
             // 
-            this.ButtonAuroraBugs.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonAuroraBugs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonAuroraBugs.ForeColor = System.Drawing.Color.OrangeRed;
             this.ButtonAuroraBugs.Location = new System.Drawing.Point(20, 806);
             this.ButtonAuroraBugs.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
@@ -125,7 +128,7 @@
             // 
             // ButtonUpdateAurora
             // 
-            this.ButtonUpdateAurora.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonUpdateAurora.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonUpdateAurora.Location = new System.Drawing.Point(20, 606);
             this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
@@ -137,7 +140,7 @@
             // 
             // ButtonModSubreddit
             // 
-            this.ButtonModSubreddit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonModSubreddit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonModSubreddit.Location = new System.Drawing.Point(403, 706);
             this.ButtonModSubreddit.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.ButtonModSubreddit.Name = "ButtonModSubreddit";
@@ -174,7 +177,7 @@
             // ButtonInstallAurora
             // 
             this.ButtonInstallAurora.Enabled = false;
-            this.ButtonInstallAurora.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonInstallAurora.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonInstallAurora.Location = new System.Drawing.Point(20, 506);
             this.ButtonInstallAurora.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.ButtonInstallAurora.Name = "ButtonInstallAurora";
@@ -186,7 +189,7 @@
             // ButtonModBugs
             // 
             this.ButtonModBugs.Enabled = false;
-            this.ButtonModBugs.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonModBugs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonModBugs.Location = new System.Drawing.Point(403, 806);
             this.ButtonModBugs.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.ButtonModBugs.Name = "ButtonModBugs";
@@ -219,14 +222,14 @@
             this.CheckMusic.UseVisualStyleBackColor = true;
             this.CheckMusic.CheckedChanged += new System.EventHandler(this.CheckMusic_CheckedChanged);
             // 
-            // TabGameMods
+            // TabApplyMods
             // 
             this.TabApplyMods.BackColor = System.Drawing.SystemColors.Control;
             this.TabApplyMods.Controls.Add(this.ListUtilities);
             this.TabApplyMods.Controls.Add(this.GroupMods);
             this.TabApplyMods.Location = new System.Drawing.Point(4, 38);
             this.TabApplyMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.TabApplyMods.Name = "TabGameMods";
+            this.TabApplyMods.Name = "TabApplyMods";
             this.TabApplyMods.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.TabApplyMods.Size = new System.Drawing.Size(770, 1046);
             this.TabApplyMods.TabIndex = 2;
@@ -264,6 +267,16 @@
             this.GroupMods.TabStop = false;
             this.GroupMods.Text = "Game mods";
             // 
+            // LabelDatabaseMods
+            // 
+            this.LabelDatabaseMods.AutoSize = true;
+            this.LabelDatabaseMods.Location = new System.Drawing.Point(0, 200);
+            this.LabelDatabaseMods.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.LabelDatabaseMods.Name = "LabelDatabaseMods";
+            this.LabelDatabaseMods.Size = new System.Drawing.Size(187, 29);
+            this.LabelDatabaseMods.TabIndex = 4;
+            this.LabelDatabaseMods.Text = "Database mods:";
+            // 
             // LabelUtilities
             // 
             this.LabelUtilities.AutoSize = true;
@@ -287,12 +300,12 @@
             this.CheckEnableGameMods.UseVisualStyleBackColor = true;
             this.CheckEnableGameMods.CheckedChanged += new System.EventHandler(this.CheckEnableGameMods_CheckChanged);
             // 
-            // ListGameMods
+            // ListDatabaseMods
             // 
             this.ListDatabaseMods.FormattingEnabled = true;
             this.ListDatabaseMods.Location = new System.Drawing.Point(0, 250);
             this.ListDatabaseMods.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.ListDatabaseMods.Name = "ListGameMods";
+            this.ListDatabaseMods.Name = "ListDatabaseMods";
             this.ListDatabaseMods.Size = new System.Drawing.Size(765, 324);
             this.ListDatabaseMods.Sorted = true;
             this.ListDatabaseMods.TabIndex = 6;
@@ -410,21 +423,49 @@
             this.ListManageMods.UseCompatibleStateImageBehavior = false;
             this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
             // 
-            // LabelDatabaseMods
+            // ButtonUpdateAuroraLoader
             // 
-            this.LabelDatabaseMods.AutoSize = true;
-            this.LabelDatabaseMods.Location = new System.Drawing.Point(0, 200);
-            this.LabelDatabaseMods.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.LabelDatabaseMods.Name = "LabelDatabaseMods";
-            this.LabelDatabaseMods.Size = new System.Drawing.Size(187, 29);
-            this.LabelDatabaseMods.TabIndex = 4;
-            this.LabelDatabaseMods.Text = "Database mods:";
+            this.ButtonUpdateAuroraLoader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(403, 606);
+            this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
+            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(373, 88);
+            this.ButtonUpdateAuroraLoader.TabIndex = 12;
+            this.ButtonUpdateAuroraLoader.Text = "Update AuroraLoader";
+            this.ButtonUpdateAuroraLoader.UseVisualStyleBackColor = true;
+            this.ButtonUpdateAuroraLoader.Click += new System.EventHandler(this.ButtonUpdateAuroraLoader_Click);
+            // 
+            // ButtonReadme
+            // 
+            this.ButtonReadme.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonReadme.Location = new System.Drawing.Point(403, 506);
+            this.ButtonReadme.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.ButtonReadme.Name = "ButtonReadme";
+            this.ButtonReadme.Size = new System.Drawing.Size(373, 88);
+            this.ButtonReadme.TabIndex = 13;
+            this.ButtonReadme.Text = "Readme";
+            this.ButtonReadme.UseVisualStyleBackColor = true;
+            this.ButtonReadme.Click += new System.EventHandler(this.ButtonReadme_Click);
+            // 
+            // LabelAuroraLoaderVersion
+            // 
+            this.LabelAuroraLoaderVersion.AutoSize = true;
+            this.LabelAuroraLoaderVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(42, 150);
+            this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
+            this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(360, 29);
+            this.LabelAuroraLoaderVersion.TabIndex = 7;
+            this.LabelAuroraLoaderVersion.Text = "AuroraLoader Version: Unknown";
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1635, 1088);
+            this.Controls.Add(this.LabelAuroraLoaderVersion);
+            this.Controls.Add(this.ButtonReadme);
+            this.Controls.Add(this.ButtonUpdateAuroraLoader);
             this.Controls.Add(this.CheckMusic);
             this.Controls.Add(this.TrackVolume);
             this.Controls.Add(this.ButtonModBugs);
@@ -485,6 +526,9 @@
         private System.Windows.Forms.CheckedListBox ListUtilities;
         private System.Windows.Forms.Label LabelUtilities;
         private System.Windows.Forms.Label LabelDatabaseMods;
+        private System.Windows.Forms.Button ButtonUpdateAuroraLoader;
+        private System.Windows.Forms.Button ButtonReadme;
+        private System.Windows.Forms.Label LabelAuroraLoaderVersion;
     }
 }
 
