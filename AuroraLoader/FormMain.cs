@@ -158,7 +158,8 @@ namespace AuroraLoader
             ListUtilities.Items.Clear();
             ListUtilities.Items.AddRange(_modRegistry.Mods.Where(
                 m => m.Installed
-                && (m.Type == ModType.UTILITY || m.Type == ModType.ROOTUTILITY))
+                && (m.Type == ModType.UTILITY || m.Type == ModType.ROOTUTILITY || m.Type == ModType.THEME)
+                && m.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
                 .Select(mod => mod.Name).ToArray());
         }
 
@@ -238,7 +239,8 @@ namespace AuroraLoader
                 mod => mod.Installed
                 && GetAllowedModStatuses().Contains(mod.Installation.Status)
                 && mod.Type == ModType.EXE
-                && mod.Name != "AuroraLoader"))
+                && mod.Name != "AuroraLoader"
+                && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion)))
             {
                 ComboSelectLaunchExe.Items.Add(mod.Name);
             }
@@ -272,7 +274,9 @@ namespace AuroraLoader
             ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
                 mod => mod.Installed
                 && GetAllowedModStatuses().Contains(mod.Installation.Status)
-                && mod.Type == ModType.DATABASE).Select(mod => mod.Name).ToArray());
+                && mod.Type == ModType.DATABASE
+                && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
+                .Select(mod => mod.Name).ToArray());
         }
 
         /// <summary>

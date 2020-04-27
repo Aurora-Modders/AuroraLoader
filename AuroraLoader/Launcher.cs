@@ -25,10 +25,16 @@ namespace AuroraLoader
                 throw new Exception("Use the other parameter");
             }
 
+            UninstallThemeMods(installation, registry);
             UninstallDbMods(installation, registry);
 
             var processes = new List<Process>();
 
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.THEME))
+            {
+                Log.Debug($"Theme: {mod.Name}");
+                InstallThemeMod(mod, installation);
+            }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOTUTILITY))
             {
                 Log.Debug("Root Utility: " + mod.Name);
@@ -114,6 +120,31 @@ namespace AuroraLoader
 
         }
 
+        private static void InstallThemeMod(Mod mod, GameInstallation installation)
+        {
+            Program.CopyDirectory(mod.Installation.ModFolder, installation.InstallationPath);
+            Log.Debug($"Installed theme mod: {mod.Name}");
+        }
+
+        private static void UninstallThemeMods(GameInstallation installation, ModRegistry registry)
+        {
+            var installed = registry.Mods.Where(m => m.Installed && m.Type == ModType.THEME).ToList();
+
+            foreach (var mod in installed)
+            {
+                foreach (var file in Directory.EnumerateFiles(mod.Installation.ModFolder, "*.*", SearchOption.AllDirectories))
+                {
+                    var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(mod.Installation.ModFolder, file));
+                    if (File.Exists(out_file))
+                    {
+                        File.Delete(out_file);
+                    }
+                }
+
+                Log.Debug($"Uninstalled theme mod: {mod.Name}");
+            }
+        }
+
         private static void InstallDbMod(Mod mod, GameInstallation installation)
         {
             const string TABLE = "CREATE TABLE IF NOT EXISTS A_THIS_SAVE_IS_MODDED (ModName Text PRIMARY KEY);";
@@ -147,6 +178,8 @@ namespace AuroraLoader
 
                     command = new SQLiteCommand(sql, connection);
                     command.ExecuteNonQuery();
+
+                    Log.Debug($"Installed db mod: {mod.Name}");
                 }
 
                 connection.Close();
