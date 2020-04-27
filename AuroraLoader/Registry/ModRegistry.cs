@@ -30,10 +30,10 @@ namespace AuroraLoader.Registry
             _remoteRegistry = remoteRegistry;
         }
 
-        public void Update()
+        public void Update(AuroraVersion version)
         {
-            _localRegistry.Update();
-            _remoteRegistry.Update();
+            _localRegistry.Update(version);
+            _remoteRegistry.Update(version);
 
             var mods = new List<Mod>();
 
@@ -79,19 +79,19 @@ namespace AuroraLoader.Registry
             Mods = mods;
         }
 
-        public void UpdateAuroraLoader(Mod mod)
+        public void UpdateAuroraLoader(Mod mod, AuroraVersion version)
         {
             if (mod.Name != "AuroraLoader")
             {
                 throw new Exception("This method can only be used to update the mod representing AuroraLoader");
             }
 
-            InstallOrUpdate(mod);
+            InstallOrUpdate(mod, version);
             File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
         }
 
         // TODO I would prefer to handle caching withing LocalModRegistry
-        public void InstallOrUpdate(Mod mod)
+        public void InstallOrUpdate(Mod mod, AuroraVersion version)
         {
             if (mod.Installed && !mod.CanBeUpdated)
             {
@@ -143,7 +143,7 @@ namespace AuroraLoader.Registry
             }
 
             // Update mod in registry
-            Update();
+            Update(version);
         }
     }
 }

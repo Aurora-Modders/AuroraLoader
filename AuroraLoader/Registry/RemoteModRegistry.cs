@@ -21,9 +21,9 @@ namespace AuroraLoader.Registry
             _mirrorRegistry = mirrorRegistry;
         }
 
-        public void Update()
+        public void Update(AuroraVersion version)
         {
-            _mirrorRegistry.Update();
+            _mirrorRegistry.Update(version);
             var modListings = new List<ModListing>();
             foreach (var mirror in _mirrorRegistry.Mirrors)
             {

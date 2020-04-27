@@ -81,7 +81,7 @@ namespace AuroraLoader
             MessageBox.Show($"Installing AuroraLoader {auroraLoaderMod.Listing.LatestVersion}");
             try
             {
-                var thread = new Thread(() => _modRegistry.UpdateAuroraLoader(auroraLoaderMod));
+                var thread = new Thread(() => _modRegistry.UpdateAuroraLoader(auroraLoaderMod, _auroraVersionRegistry.CurrentAuroraVersion));
                 thread.Start();
                 var progress = new FormProgress(thread);
                 progress.ShowDialog();
@@ -101,13 +101,15 @@ namespace AuroraLoader
         /// </summary>
         private void RefreshAuroraInstallData()
         {
-            _auroraVersionRegistry.Update();
+            _auroraVersionRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
             if (_auroraVersionRegistry.CurrentAuroraVersion == null)
             {
                 LabelVersion.Text = "Aurora version: Unknown";
             }
             else
             {
+                _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
+
                 LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
                 LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
                 LabelAuroraLoaderVersion.Text = $"AuroraLoader Version: {_modRegistry.Mods.Single(m => m.Name == "AuroraLoader").Installation.Version}";
@@ -285,7 +287,7 @@ namespace AuroraLoader
         /// </summary>
         public void UpdateManageModsListView()
         {
-            _modRegistry.Update();
+            _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
             ListManageMods.BeginUpdate();
             ListManageMods.Clear();
             ListManageMods.AllowColumnReorder = true;
@@ -367,7 +369,7 @@ namespace AuroraLoader
 
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            _modRegistry.InstallOrUpdate(mod);
+            _modRegistry.InstallOrUpdate(mod, _auroraVersionRegistry.CurrentAuroraVersion);
             UpdateManageModsListView();
             UpdateGameModsListView();
             UpdateUtilitiesListView();

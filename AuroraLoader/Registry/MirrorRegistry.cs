@@ -22,7 +22,7 @@ namespace AuroraLoader.Registry
         /// <summary>
         /// Mirrors are only defined locally, for now
         /// </summary>
-        public void Update()
+        public void Update(AuroraVersion version)
         {
             var mirrors = new List<Mirror>();
             try

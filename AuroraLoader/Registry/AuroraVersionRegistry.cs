@@ -41,9 +41,9 @@ namespace AuroraLoader.Registry
             _mirrorRegistry = mirrorRegistry;
         }
 
-        public void Update()
+        public void Update(AuroraVersion version)
         {
-            _mirrorRegistry.Update();
+            _mirrorRegistry.Update(version);
             UpdateKnownVersionsFromCache();
             UpdateKnownAuroraVersionsFromMirror();
         }
