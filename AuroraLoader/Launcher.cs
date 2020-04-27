@@ -76,6 +76,7 @@ namespace AuroraLoader
         {
             //var java = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") + @"\Common Files\Oracle\Java\javapath";
 
+            Log.Debug($"Running command: {command} in folder: {folder}");
             var pieces = command.Split(' ');
             var exe = pieces[0];
             var args = "";
