@@ -6,7 +6,7 @@ None, not even Aurora. If you get error messages related to missing a .NET Core 
 
 # Usage
 
-Download and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora you'll be prompted to download one automatically.
+Download the latest release and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora you'll be prompted to download one automatically.
 
 Mods in the online registry can be viewed, installed, upgraded, and configured on the 'Manage Mods' tab. They'll be stored in a `Mods` directory.
 
