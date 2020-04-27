@@ -556,9 +556,15 @@ namespace AuroraLoader
         {
             try
             {
+                var file = Path.Combine(Program.AuroraLoaderExecutableDirectory, "loader_readme.txt");
+                if (!File.Exists(file))
+                {
+                    File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"), file);
+                }
+
                 var info = new ProcessStartInfo()
                 {
-                    FileName = Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"),
+                    FileName = file,
                     UseShellExecute = true
                 };
                 Process.Start(info);
