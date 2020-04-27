@@ -53,6 +53,8 @@ namespace AuroraLoader.Mods
             mod.Updates = settings.ContainsKey("Updates") ? settings["Updates"] : null;
             mod.ModInternalConfigFile = settings.ContainsKey("Config") ? settings["Config"] : null;
 
+            mod.HighestInstalledVersion = mod.Version;
+
             ValidateModConfiguration(mod);
 
             return mod;
