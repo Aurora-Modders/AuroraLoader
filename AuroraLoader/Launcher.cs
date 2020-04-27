@@ -35,6 +35,11 @@ namespace AuroraLoader
                 Log.Debug($"Theme: {mod.Name}");
                 InstallThemeMod(mod, installation);
             }
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
+            {
+                Log.Debug("Database: " + mod.Name);
+                InstallDbMod(mod, installation);
+            }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOTUTILITY))
             {
                 Log.Debug("Root Utility: " + mod.Name);
@@ -48,12 +53,7 @@ namespace AuroraLoader
                 var process = Run(mod.Installation.ModFolder, mod.Installation.ExecuteCommand);
                 processes.Add(process);
             }
-            foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
-            {
-                Log.Debug("Database: " + mod.Name);
-                InstallDbMod(mod, installation);
-            }
-
+            
             if (executableMod != null)
             {
                 CopyToFolder(executableMod, installation.InstallationPath);
