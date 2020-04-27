@@ -158,7 +158,7 @@ namespace AuroraLoader
             ListUtilities.Items.Clear();
             ListUtilities.Items.AddRange(_modRegistry.Mods.Where(
                 m => m.Installed
-                && (m.Type == ModType.UTILITY || m.Type == ModType.ROOTUTILITY))
+                && (m.Type == ModType.UTILITY || m.Type == ModType.ROOTUTILITY || m.Type == ModType.THEME))
                 .Select(mod => mod.Name).ToArray());
         }
 
