@@ -572,6 +572,7 @@ namespace AuroraLoader
             catch (Exception exc)
             {
                 Log.Error($"Couldn't load readme from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md")}", exc);
+                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
             }
         }
 
