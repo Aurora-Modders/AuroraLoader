@@ -79,7 +79,7 @@ namespace AuroraLoader.Mods
                     throw new Exception("Mod of type " + mod.Type.ToString() + " must define an Exe");
                 }
             }
-            if (mod.ExecuteCommand.Equals("Aurora.exe"))
+            else if (mod.ExecuteCommand.Equals("Aurora.exe"))
             {
                 throw new Exception("Mod exe can not be Aurora.exe");
             }

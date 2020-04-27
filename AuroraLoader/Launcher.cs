@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,47 +10,57 @@ namespace AuroraLoader
 {
     static class Launcher
     {
-        public static Process Launch(IList<Mod> mods, Mod executableMod = null)
+        private const string CONNECTION_STRING = "Data Source=AuroraDB.db;Version=3;New=False;Compress=True;";
+
+        public static List<Process> Launch(GameInstallation installation, IList<Mod> mods, Mod executableMod = null)
         {
             if (mods.Any(mod => mod.Type == ModType.EXE))
             {
                 throw new Exception("Use the other parameter");
             }
 
+            var processes = new List<Process>();
+
             foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOTUTILITY))
             {
                 Log.Debug("Root Utility: " + mod.Name);
-                CopyToRoot(mod);
-                Run(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), mod.Installation.ExecuteCommand);
+                CopyToFolder(mod, installation.InstallationPath);
+                var process = Run(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), mod.Installation.ExecuteCommand);
+                processes.Add(process);
             }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.UTILITY))
             {
                 Log.Debug("Utility: " + mod.Name);
-                Run(mod.Installation.ModFolder, mod.Installation.ExecuteCommand);
+                var process = Run(mod.Installation.ModFolder, mod.Installation.ExecuteCommand);
+                processes.Add(process);
             }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
             {
                 Log.Debug("Database: " + mod.Name);
-                throw new Exception("Database mods not supported yet: " + mod.Name);
+                ApplyDbMod(mod, installation);
             }
 
             if (executableMod != null)
             {
-                CopyToRoot(executableMod);
-                return Run(Program.AuroraLoaderExecutableDirectory, executableMod.Installation.ExecuteCommand);
+                CopyToFolder(executableMod, installation.InstallationPath);
+                var process = Run(Program.AuroraLoaderExecutableDirectory, executableMod.Installation.ExecuteCommand);
+                processes.Insert(0, process);
             }
             else
             {
-                return Run(Program.AuroraLoaderExecutableDirectory, "Aurora.exe");
+                var process = Run(installation.InstallationPath, "Aurora.exe");
+                processes.Insert(0, process);
             }
+
+            return processes;
         }
 
-        private static void CopyToRoot(Mod mod)
+        private static void CopyToFolder(Mod mod, string folder)
         {
             var dir = Path.GetDirectoryName(mod.Installation.ModFolder);
             foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
             {
-                File.Copy(file, Path.Combine(Program.AuroraLoaderExecutableDirectory, Path.GetFileName(file)), true);
+                File.Copy(file, Path.Combine(folder, Path.GetFileName(file)), true);
             }
         }
 
@@ -83,6 +94,23 @@ namespace AuroraLoader
 
             var process = Process.Start(info);
             return process;
+        }
+
+        private static void ApplyDbMod(Mod mod, GameInstallation installation)
+        {
+            using (var connection = new SQLiteConnection(CONNECTION_STRING))
+            {
+                connection.Open();
+
+                foreach (var file in Directory.EnumerateFiles(mod.Installation.ModFolder, "*.sql"))
+                {
+                    var sql = File.ReadAllText(file);
+                    var command = new SQLiteCommand(sql, connection);
+                    command.ExecuteNonQuery();
+                }
+
+                connection.Close();
+            }
         }
     }
 }
