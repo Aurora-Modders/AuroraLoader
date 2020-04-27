@@ -55,6 +55,7 @@ namespace AuroraLoader
                 return;
             }
 
+            Reader.Position = 0;
             WaveOut.Play();
         }
 
@@ -71,7 +72,6 @@ namespace AuroraLoader
             }
 
             WaveOut.Stop();
-            Reader.Position = 0;
         }
 
         private void Initialize()
