@@ -58,19 +58,7 @@ namespace AuroraLoader.Registry
                 try
                 {
                     var newMod = ModConfigurationReader.ModConfigurationFromIni(file);
-                    if (mods.Any(mod => mod.Name == newMod.Name))
-                    {
-                        var existingMod = mods.Single(mod => mod.Name == newMod.Name);
-                        if (newMod.Version.CompareTo(existingMod.Version) > 0)
-                        {
-                            mods.Remove(existingMod);
-                            mods.Add(newMod);
-                        }
-                    }
-                    else
-                    {
-                        mods.Add(newMod);
-                    }
+                    mods.Add(newMod);
                 }
                 catch (Exception e)
                 {
