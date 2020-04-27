@@ -309,7 +309,7 @@ namespace AuroraLoader
                         mod.Name,
                         mod.Type.ToString(),
                         mod.Installation?.TargetAuroraVersion.ToString() == "1" ? "Any" : mod.Installation?.TargetAuroraVersion.ToString(),
-                        mod.Installation?.Version.ToString(),
+                        mod.Installation?.HighestInstalledVersion.ToString(),
                         mod.Listing?.LatestVersion.ToString() ?? "Not found"
                     });
                     ListManageMods.Items.Add(li);
