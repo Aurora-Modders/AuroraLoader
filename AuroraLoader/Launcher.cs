@@ -5,19 +5,27 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using AuroraLoader.Mods;
+using AuroraLoader.Registry;
 
 namespace AuroraLoader
 {
     static class Launcher
     {
-        private const string CONNECTION_STRING = "Data Source=AuroraDB.db;Version=3;New=False;Compress=True;";
+        public static string GetConnectionString(GameInstallation installation)
+        {
+            var db = Path.Combine(installation.InstallationPath, "AuroraDB.db");
 
-        public static List<Process> Launch(GameInstallation installation, IList<Mod> mods, Mod executableMod = null)
+            return $"Data Source={db};Version=3;New=False;Compress=True;";
+        }
+
+        public static List<Process> Launch(GameInstallation installation, ModRegistry registry, IList<Mod> mods, Mod executableMod = null)
         {
             if (mods.Any(mod => mod.Type == ModType.EXE))
             {
                 throw new Exception("Use the other parameter");
             }
+
+            UninstallDbMods(installation, registry);
 
             var processes = new List<Process>();
 
@@ -37,7 +45,7 @@ namespace AuroraLoader
             foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
             {
                 Log.Debug("Database: " + mod.Name);
-                ApplyDbMod(mod, installation);
+                InstallDbMod(mod, installation);
             }
 
             if (executableMod != null)
@@ -96,23 +104,98 @@ namespace AuroraLoader
             return process;
         }
 
-        private static void ApplyDbMod(Mod mod, GameInstallation installation)
+        private static void InstallDbMod(Mod mod, GameInstallation installation)
         {
             const string TABLE = "CREATE TABLE IF NOT EXISTS A_THIS_SAVE_IS_MODDED (ModName Text PRIMARY KEY);";
 
-            using (var connection = new SQLiteConnection(CONNECTION_STRING))
+            using (var connection = new SQLiteConnection(GetConnectionString(installation)))
             {
                 connection.Open();
                 var table = new SQLiteCommand(TABLE, connection);
                 table.ExecuteNonQuery();
 
-                foreach (var file in Directory.EnumerateFiles(mod.Installation.ModFolder, "*.sql"))
+                var files = Directory.EnumerateFiles(mod.Installation.ModFolder, "*.sql").ToList();
+                try
+                {
+                    var uninstall = files.Single(f => Path.GetFileName(f).Equals("uninstall.sql"));
+                    files.Remove(uninstall);
+                }
+                catch (Exception)
+                {
+                    Log.Debug($"No uninstall for db mod: {mod.Name}");
+                }
+                
+                foreach (var file in files)
                 {
                     var sql = File.ReadAllText(file);
                     var command = new SQLiteCommand(sql, connection);
                     command.ExecuteNonQuery();
+
+                    sql = $"INSERT INTO A_THIS_SAVE_IS_MODDED(ModName)" +
+                            $"SELECT '{mod.Name}'" +
+                            $"WHERE NOT EXISTS(SELECT 1 FROM A_THIS_SAVE_IS_MODDED WHERE ModName = '{mod.Name}');";
+
+                    command = new SQLiteCommand(sql, connection);
+                    command.ExecuteNonQuery();
                 }
 
+                connection.Close();
+            }
+        }
+
+        private static void UninstallDbMods(GameInstallation installation, ModRegistry registry)
+        {
+            var installed = registry.Mods.Where(m => m.Installed && m.Type == ModType.DATABASE).ToList();
+
+            using (var connection = new SQLiteConnection(GetConnectionString(installation)))
+            {
+                connection.Open();
+
+                var sql = "SELECT * FROM sqlite_master WHERE name ='A_THIS_SAVE_IS_MODDED' and type='table';";
+                var command = new SQLiteCommand(sql, connection);
+                var reader = command.ExecuteReader();
+                if (!reader.Read())
+                {
+                    reader.Close();
+                    connection.Close();
+                    return;
+                }
+                else
+                {
+                    reader.Close();
+                }
+
+                sql = "SELECT * FROM A_THIS_SAVE_IS_MODDED";
+                command = new SQLiteCommand(sql, connection);
+                reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var name = reader[0].ToString();
+                    var mod = installed.FirstOrDefault(m => m.Name.Equals(name));
+
+                    if (mod == null)
+                    {
+                        throw new Exception($"Installed db mod {name} not found");
+                    }
+                    else
+                    {
+                        var file = Path.Combine(mod.Installation.ModFolder, "uninstall.sql");
+                        if (!File.Exists(file))
+                        {
+                            throw new Exception($"Db mod {name} uninstall.sql not found");
+                        }
+                        
+                        sql = File.ReadAllText(file);
+                        sql += $"\nDELETE FROM A_THIS_SAVE_IS_MODDED\nWHERE ModName = '{name}';";
+                        command = new SQLiteCommand(sql, connection);
+                        command.ExecuteNonQuery();
+
+                        Log.Debug($"Uninstalled db mod: {name}");
+                    }
+                }
+
+                reader.Close();
                 connection.Close();
             }
         }

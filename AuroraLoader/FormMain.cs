@@ -427,7 +427,7 @@ namespace AuroraLoader
                 executableMod = null;
             }
             var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
-            var process = Launcher.Launch(installation, mods, executableMod)[0];
+            var process = Launcher.Launch(installation, _modRegistry, mods, executableMod)[0];
 
             AuroraThread = new Thread(() => RunGame(process))
             {
