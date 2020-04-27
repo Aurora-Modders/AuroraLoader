@@ -98,9 +98,13 @@ namespace AuroraLoader
 
         private static void ApplyDbMod(Mod mod, GameInstallation installation)
         {
+            const string TABLE = "CREATE TABLE IF NOT EXISTS A_THIS_SAVE_IS_MODDED (ModName Text PRIMARY KEY);";
+
             using (var connection = new SQLiteConnection(CONNECTION_STRING))
             {
                 connection.Open();
+                var table = new SQLiteCommand(TABLE, connection);
+                table.ExecuteNonQuery();
 
                 foreach (var file in Directory.EnumerateFiles(mod.Installation.ModFolder, "*.sql"))
                 {
