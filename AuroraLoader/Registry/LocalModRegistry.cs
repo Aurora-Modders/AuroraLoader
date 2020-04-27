@@ -48,11 +48,10 @@ namespace AuroraLoader.Registry
                 if (!Directory.Exists(Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString())))
                 {
                     Directory.CreateDirectory(auroraLoaderModDirectory);
+                    File.Move(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);
+                    File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoaderModDirectory, "AuroraLoader.Exe"), true);
                 }
-                File.Move(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);
-                File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoaderModDirectory, "AuroraLoader.Exe"), true);
             }
-
 
             foreach (var file in Directory.EnumerateFiles(ModDirectory, "mod.ini", SearchOption.AllDirectories))
             {
