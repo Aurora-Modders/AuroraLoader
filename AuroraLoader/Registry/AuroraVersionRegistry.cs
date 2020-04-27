@@ -1,10 +1,10 @@
-﻿using AuroraLoader.Mods;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using AuroraLoader.Mods;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {

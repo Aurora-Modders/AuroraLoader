@@ -1,12 +1,14 @@
-using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
+using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader
 {
@@ -41,6 +43,8 @@ namespace AuroraLoader
                 }
             }
 
+            var assemblies = LoadSQLiteAssemblies();
+
             // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -67,6 +71,34 @@ namespace AuroraLoader
 
             var progress = new FormProgress(thread) { Text = "Installing Aurora" };
             progress.ShowDialog();
+        }
+
+        // Found this online, I'm not this slick
+        private static IEnumerable<Assembly> LoadSQLiteAssemblies()
+        {
+            foreach (string file in new string[] {
+                Path.Combine(AuroraLoaderExecutableDirectory, "System.Data.SQLite.dll"),
+                Path.Combine(AuroraLoaderExecutableDirectory, "x86", "SQLite.Interop.dll"),
+                Path.Combine(AuroraLoaderExecutableDirectory, "x64", "SQLite.Interop.dll")
+            })
+            {
+                Assembly assembly = null;
+                try
+                {
+                    //Load assembly using byte array
+                    byte[] rawAssembly = File.ReadAllBytes(file);
+                    assembly = Assembly.Load(rawAssembly);
+                }
+                catch (Exception exc)
+                {
+                    Log.Error($"Failed to load {file}", exc);
+                }
+
+                if (assembly != null)
+                {
+                    yield return assembly;
+                }
+            }
         }
 
         public static string GetChecksum(byte[] bytes)

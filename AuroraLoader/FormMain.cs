@@ -1,7 +1,4 @@
-﻿using AuroraLoader.Mods;
-using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -10,6 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using AuroraLoader.Mods;
+using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader
 {

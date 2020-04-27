@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using AuroraLoader.Mods;
 using System.Linq;
+using System.Net;
 using System.Text.Json;
+using AuroraLoader.Mods;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {
@@ -80,7 +80,7 @@ namespace AuroraLoader.Registry
                 catch (Exception e)
                 {
                     Log.Error($"Failed to download mod listing from {ModsUrl}", e);
-                    
+
                 }
             }
 

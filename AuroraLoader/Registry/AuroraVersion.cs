@@ -1,5 +1,5 @@
-﻿using Semver;
-using System;
+﻿using System;
+using Semver;
 
 namespace AuroraLoader
 {
