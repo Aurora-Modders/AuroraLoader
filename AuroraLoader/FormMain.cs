@@ -191,8 +191,11 @@ namespace AuroraLoader
                 ButtonModBugs.ForeColor = Color.Black;
 
                 ComboSelectLaunchExe.SelectedItem = ComboSelectLaunchExe.Items[0];
+                for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
+                {
+                    ListDatabaseMods.SetItemChecked(i, false);
+                }
 
-                CheckEnableGameMods.Enabled = true;
                 ComboSelectLaunchExe.Enabled = false;
                 ListDatabaseMods.Enabled = false;
                 CheckApproved.Enabled = false;
@@ -426,7 +429,8 @@ namespace AuroraLoader
             {
                 executableMod = null;
             }
-            var process = Launcher.Launch(mods, executableMod);
+            var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
+            var process = Launcher.Launch(installation, _modRegistry, mods, executableMod)[0];
 
             AuroraThread = new Thread(() => RunGame(process))
             {
@@ -552,9 +556,15 @@ namespace AuroraLoader
         {
             try
             {
+                var file = Path.Combine(Program.AuroraLoaderExecutableDirectory, "loader_readme.txt");
+                if (!File.Exists(file))
+                {
+                    File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"), file);
+                }
+
                 var info = new ProcessStartInfo()
                 {
-                    FileName = Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"),
+                    FileName = file,
                     UseShellExecute = true
                 };
                 Process.Start(info);
@@ -562,6 +572,7 @@ namespace AuroraLoader
             catch (Exception exc)
             {
                 Log.Error($"Couldn't load readme from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md")}", exc);
+                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
             }
         }
 

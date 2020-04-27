@@ -22,8 +22,12 @@ namespace AuroraLoader
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Log.Clear();
+            Log.Debug("Start logging");
+
             if (!File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "aurora.exe")))
             {
+                Log.Debug("Aurora not installed");
                 var dialog = MessageBox.Show("Aurora not installed. Download and install? This might take a while.", "Install Aurora", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
