@@ -101,8 +101,16 @@ namespace AuroraLoader
             };
             //info.EnvironmentVariables["PATH"] = java + ";" + Environment.GetEnvironmentVariable("PATH");
 
-            var process = Process.Start(info);
-            return process;
+            try
+            {
+                var process = Process.Start(info);
+                return process;
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to run {command}", e);
+                return null;
+            }
         }
 
         private static void InstallDbMod(Mod mod, GameInstallation installation)

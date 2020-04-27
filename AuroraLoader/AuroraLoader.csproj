@@ -52,33 +52,6 @@
 
   <ItemGroup>
   <None Include="Resources\Aurora.ico" />
-  <Content Include="Music\README.txt">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 01 Red Giant.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 02 Airglow.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 04 Light Years.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 05 In Time.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 06 Cepheid.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 07 Comet Halley.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 08 Ultra Deep Field.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
-  <Content Include="Music\Stellardrone - Light Years - 10 Messier 45.mp3">
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-  </Content>
 </ItemGroup>
 
   <ItemGroup>
