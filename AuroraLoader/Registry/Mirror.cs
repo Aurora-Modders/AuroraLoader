@@ -80,6 +80,7 @@ namespace AuroraLoader.Registry
                 catch (Exception e)
                 {
                     Log.Error($"Failed to download mod listing from {ModsUrl}", e);
+                    
                 }
             }
 
