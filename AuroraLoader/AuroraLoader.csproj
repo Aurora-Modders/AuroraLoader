@@ -57,6 +57,7 @@
   <ItemGroup>
     <Reference Include="System.Data.SQLite">
       <HintPath>System.Data.SQLite.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
 
