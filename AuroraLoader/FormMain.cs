@@ -191,8 +191,11 @@ namespace AuroraLoader
                 ButtonModBugs.ForeColor = Color.Black;
 
                 ComboSelectLaunchExe.SelectedItem = ComboSelectLaunchExe.Items[0];
+                for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
+                {
+                    ListDatabaseMods.SetItemChecked(i, false);
+                }
 
-                CheckEnableGameMods.Enabled = true;
                 ComboSelectLaunchExe.Enabled = false;
                 ListDatabaseMods.Enabled = false;
                 CheckApproved.Enabled = false;
