@@ -55,7 +55,7 @@ namespace AuroraLoader
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show($"Most Aurora updates are not save-game compatible!{Environment.NewLine}We'll back up your database.{Environment.NewLine}Are you sure you want to continue?", "Warning!", MessageBoxButtons.OKCancel);
+            var result = MessageBox.Show("Updating Aurora will wipe out your saves! Are you sure you want to continue?", "Warning!", MessageBoxButtons.OKCancel);
             if (result != DialogResult.OK)
             {
                 return;
@@ -64,8 +64,6 @@ namespace AuroraLoader
             try
             {
                 var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
-                Installer.BackupAurora(installation);
-
                 var thread = new Thread(() =>
                 {
                     var aurora_files = Installer.GetLatestAuroraFiles();
@@ -145,14 +143,6 @@ namespace AuroraLoader
                     ButtonUpdateAuroraLoader.Text = $"Update AuroraLoader to {auroraLoaderMod.Listing.LatestVersion}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
                     ButtonUpdateAuroraLoader.Enabled = true;
-
-                    // Disable 'update aurora' button if there is a loader update that should be grabbed first
-                    if (ButtonUpdateAurora.Enabled == true)
-                    {
-                        ButtonUpdateAurora.Text = "Update loader";
-                        ButtonUpdateAurora.ForeColor = Color.Black;
-                        ButtonUpdateAurora.Enabled = false;
-                    }
                 }
                 else
                 {
