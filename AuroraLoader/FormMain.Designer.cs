@@ -183,6 +183,7 @@
             this.CheckEnableGameMods.TabIndex = 21;
             this.CheckEnableGameMods.Text = "Enable Mods";
             this.CheckEnableGameMods.UseVisualStyleBackColor = true;
+            this.CheckEnableGameMods.CheckedChanged += new System.EventHandler(this.CheckEnableGameMods_CheckedChanged);
             // 
             // CheckPublic
             // 
@@ -263,7 +264,7 @@
             // ListManageMods
             // 
             this.ListManageMods.HideSelection = false;
-            this.ListManageMods.Location = new System.Drawing.Point(655, 99);
+            this.ListManageMods.Location = new System.Drawing.Point(869, 43);
             this.ListManageMods.Name = "ListManageMods";
             this.ListManageMods.Size = new System.Drawing.Size(403, 204);
             this.ListManageMods.TabIndex = 32;

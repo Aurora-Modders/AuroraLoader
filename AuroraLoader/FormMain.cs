@@ -525,24 +525,28 @@ namespace AuroraLoader
 
         private void LinkSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
         }
 
         private void LinkFourms_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/");
         }
 
         private void LinkVanillaBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
         }
 
         private void LinkModdedBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
+            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
         }
 
-
+        private void CheckEnableGameMods_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateGameModsListView();
+            UpdateLaunchExeCombo();
+        }
     }
 }
