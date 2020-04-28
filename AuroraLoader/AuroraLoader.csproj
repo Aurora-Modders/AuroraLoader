@@ -8,6 +8,10 @@
     <ApplicationIcon>Aurora.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="TestUpdates\**" />
     <EmbeddedResource Remove="TestUpdates\**" />
@@ -89,6 +93,9 @@
     <None Update="..\README.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </None>
+    <None Update="System.Data.SQLite.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="update_loader.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
