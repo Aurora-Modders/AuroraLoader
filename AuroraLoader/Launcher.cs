@@ -20,6 +20,7 @@ namespace AuroraLoader
 
         public static List<Process> Launch(GameInstallation installation, ModRegistry registry, IList<Mod> mods, Mod executableMod = null)
         {
+            Log.Debug($"Launching from {installation.InstallationPath}");
             if (mods.Any(mod => mod.Type == ModType.EXE))
             {
                 throw new Exception("Use the other parameter");
