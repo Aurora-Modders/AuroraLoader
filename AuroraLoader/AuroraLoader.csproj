@@ -77,9 +77,11 @@
     </None>
     <None Update="mod.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="..\README.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="update_loader.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
