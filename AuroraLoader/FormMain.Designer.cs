@@ -31,13 +31,9 @@
             this.ButtonSinglePlayer = new System.Windows.Forms.Button();
             this.LabelVersion = new System.Windows.Forms.Label();
             this.LabelChecksum = new System.Windows.Forms.Label();
-            this.ButtonAuroraForums = new System.Windows.Forms.Button();
-            this.ButtonAuroraBugs = new System.Windows.Forms.Button();
             this.ButtonUpdateAurora = new System.Windows.Forms.Button();
-            this.ButtonModSubreddit = new System.Windows.Forms.Button();
             this.ButtonMultiPlayer = new System.Windows.Forms.Button();
             this.ButtonInstallAurora = new System.Windows.Forms.Button();
-            this.ButtonModBugs = new System.Windows.Forms.Button();
             this.TrackVolume = new System.Windows.Forms.TrackBar();
             this.CheckMusic = new System.Windows.Forms.CheckBox();
             this.ButtonUpdateAuroraLoader = new System.Windows.Forms.Button();
@@ -53,12 +49,16 @@
             this.ButtonInstallOrUpdate = new System.Windows.Forms.Button();
             this.ButtonConfigureMod = new System.Windows.Forms.Button();
             this.ListManageMods = new System.Windows.Forms.ListView();
+            this.LinkFourms = new System.Windows.Forms.LinkLabel();
+            this.LinkVanillaBug = new System.Windows.Forms.LinkLabel();
+            this.LinkSubreddit = new System.Windows.Forms.LinkLabel();
+            this.LinkModdedBug = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.TrackVolume)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonSinglePlayer
             // 
-            this.ButtonSinglePlayer.Location = new System.Drawing.Point(238, 132);
+            this.ButtonSinglePlayer.Location = new System.Drawing.Point(286, 13);
             this.ButtonSinglePlayer.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonSinglePlayer.Name = "ButtonSinglePlayer";
             this.ButtonSinglePlayer.Size = new System.Drawing.Size(98, 63);
@@ -87,29 +87,6 @@
             this.LabelChecksum.TabIndex = 8;
             this.LabelChecksum.Text = "Aurora checksum:";
             // 
-            // ButtonAuroraForums
-            // 
-            this.ButtonAuroraForums.Location = new System.Drawing.Point(29, 308);
-            this.ButtonAuroraForums.Margin = new System.Windows.Forms.Padding(4);
-            this.ButtonAuroraForums.Name = "ButtonAuroraForums";
-            this.ButtonAuroraForums.Size = new System.Drawing.Size(154, 36);
-            this.ButtonAuroraForums.TabIndex = 9;
-            this.ButtonAuroraForums.Text = "Aurora Forums";
-            this.ButtonAuroraForums.UseVisualStyleBackColor = true;
-            this.ButtonAuroraForums.Click += new System.EventHandler(this.ButtonAuroraForums_Click);
-            // 
-            // ButtonAuroraBugs
-            // 
-            this.ButtonAuroraBugs.ForeColor = System.Drawing.Color.OrangeRed;
-            this.ButtonAuroraBugs.Location = new System.Drawing.Point(29, 352);
-            this.ButtonAuroraBugs.Margin = new System.Windows.Forms.Padding(4);
-            this.ButtonAuroraBugs.Name = "ButtonAuroraBugs";
-            this.ButtonAuroraBugs.Size = new System.Drawing.Size(154, 36);
-            this.ButtonAuroraBugs.TabIndex = 11;
-            this.ButtonAuroraBugs.Text = "Report a bug";
-            this.ButtonAuroraBugs.UseVisualStyleBackColor = true;
-            this.ButtonAuroraBugs.Click += new System.EventHandler(this.ButtonAuroraBugs_Click);
-            // 
             // ButtonUpdateAurora
             // 
             this.ButtonUpdateAurora.Location = new System.Drawing.Point(14, 257);
@@ -120,17 +97,6 @@
             this.ButtonUpdateAurora.Text = "Update Aurora";
             this.ButtonUpdateAurora.UseVisualStyleBackColor = true;
             this.ButtonUpdateAurora.Click += new System.EventHandler(this.ButtonUpdateAurora_Click);
-            // 
-            // ButtonModSubreddit
-            // 
-            this.ButtonModSubreddit.Location = new System.Drawing.Point(198, 308);
-            this.ButtonModSubreddit.Margin = new System.Windows.Forms.Padding(4);
-            this.ButtonModSubreddit.Name = "ButtonModSubreddit";
-            this.ButtonModSubreddit.Size = new System.Drawing.Size(154, 36);
-            this.ButtonModSubreddit.TabIndex = 13;
-            this.ButtonModSubreddit.Text = "Mod subreddit";
-            this.ButtonModSubreddit.UseVisualStyleBackColor = true;
-            this.ButtonModSubreddit.Click += new System.EventHandler(this.ButtonModsSubreddit_Click);
             // 
             // ButtonMultiPlayer
             // 
@@ -146,25 +112,13 @@
             // ButtonInstallAurora
             // 
             this.ButtonInstallAurora.Enabled = false;
-            this.ButtonInstallAurora.Location = new System.Drawing.Point(29, 145);
+            this.ButtonInstallAurora.Location = new System.Drawing.Point(29, 122);
             this.ButtonInstallAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonInstallAurora.Name = "ButtonInstallAurora";
             this.ButtonInstallAurora.Size = new System.Drawing.Size(118, 60);
             this.ButtonInstallAurora.TabIndex = 18;
             this.ButtonInstallAurora.Text = "Install Aurora";
             this.ButtonInstallAurora.UseVisualStyleBackColor = true;
-            // 
-            // ButtonModBugs
-            // 
-            this.ButtonModBugs.Enabled = false;
-            this.ButtonModBugs.Location = new System.Drawing.Point(197, 352);
-            this.ButtonModBugs.Margin = new System.Windows.Forms.Padding(4);
-            this.ButtonModBugs.Name = "ButtonModBugs";
-            this.ButtonModBugs.Size = new System.Drawing.Size(154, 36);
-            this.ButtonModBugs.TabIndex = 19;
-            this.ButtonModBugs.Text = "Report a bug";
-            this.ButtonModBugs.UseVisualStyleBackColor = true;
-            this.ButtonModBugs.Click += new System.EventHandler(this.ButtonModBugs_Click);
             // 
             // TrackVolume
             // 
@@ -201,7 +155,7 @@
             // 
             // ButtonReadme
             // 
-            this.ButtonReadme.Location = new System.Drawing.Point(346, 39);
+            this.ButtonReadme.Location = new System.Drawing.Point(577, 53);
             this.ButtonReadme.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonReadme.Name = "ButtonReadme";
             this.ButtonReadme.Size = new System.Drawing.Size(106, 39);
@@ -233,7 +187,7 @@
             // CheckPublic
             // 
             this.CheckPublic.AutoSize = true;
-            this.CheckPublic.Location = new System.Drawing.Point(146, 579);
+            this.CheckPublic.Location = new System.Drawing.Point(150, 570);
             this.CheckPublic.Name = "CheckPublic";
             this.CheckPublic.Size = new System.Drawing.Size(56, 19);
             this.CheckPublic.TabIndex = 22;
@@ -243,7 +197,7 @@
             // CheckPower
             // 
             this.CheckPower.AutoSize = true;
-            this.CheckPower.Location = new System.Drawing.Point(146, 634);
+            this.CheckPower.Location = new System.Drawing.Point(150, 625);
             this.CheckPower.Name = "CheckPower";
             this.CheckPower.Size = new System.Drawing.Size(81, 19);
             this.CheckPower.TabIndex = 23;
@@ -272,7 +226,7 @@
             // ListDatabaseMods
             // 
             this.ListDatabaseMods.FormattingEnabled = true;
-            this.ListDatabaseMods.Location = new System.Drawing.Point(446, 616);
+            this.ListDatabaseMods.Location = new System.Drawing.Point(538, 465);
             this.ListDatabaseMods.Name = "ListDatabaseMods";
             this.ListDatabaseMods.Size = new System.Drawing.Size(221, 202);
             this.ListDatabaseMods.TabIndex = 26;
@@ -280,7 +234,7 @@
             // ListUtilities
             // 
             this.ListUtilities.FormattingEnabled = true;
-            this.ListUtilities.Location = new System.Drawing.Point(66, 684);
+            this.ListUtilities.Location = new System.Drawing.Point(355, 528);
             this.ListUtilities.Name = "ListUtilities";
             this.ListUtilities.Size = new System.Drawing.Size(136, 148);
             this.ListUtilities.TabIndex = 27;
@@ -309,18 +263,66 @@
             // ListManageMods
             // 
             this.ListManageMods.HideSelection = false;
-            this.ListManageMods.Location = new System.Drawing.Point(739, 160);
+            this.ListManageMods.Location = new System.Drawing.Point(655, 99);
             this.ListManageMods.Name = "ListManageMods";
             this.ListManageMods.Size = new System.Drawing.Size(403, 204);
             this.ListManageMods.TabIndex = 32;
             this.ListManageMods.UseCompatibleStateImageBehavior = false;
             this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
             // 
+            // LinkFourms
+            // 
+            this.LinkFourms.AutoSize = true;
+            this.LinkFourms.Location = new System.Drawing.Point(410, 336);
+            this.LinkFourms.Name = "LinkFourms";
+            this.LinkFourms.Size = new System.Drawing.Size(86, 15);
+            this.LinkFourms.TabIndex = 33;
+            this.LinkFourms.TabStop = true;
+            this.LinkFourms.Text = "Aurora Fourms";
+            this.LinkFourms.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkFourms_LinkClicked);
+            // 
+            // LinkVanillaBug
+            // 
+            this.LinkVanillaBug.AutoSize = true;
+            this.LinkVanillaBug.Location = new System.Drawing.Point(526, 335);
+            this.LinkVanillaBug.Name = "LinkVanillaBug";
+            this.LinkVanillaBug.Size = new System.Drawing.Size(75, 15);
+            this.LinkVanillaBug.TabIndex = 34;
+            this.LinkVanillaBug.TabStop = true;
+            this.LinkVanillaBug.Text = "Report a Bug";
+            this.LinkVanillaBug.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkVanillaBug_LinkClicked);
+            // 
+            // LinkSubreddit
+            // 
+            this.LinkSubreddit.AutoSize = true;
+            this.LinkSubreddit.Location = new System.Drawing.Point(422, 368);
+            this.LinkSubreddit.Name = "LinkSubreddit";
+            this.LinkSubreddit.Size = new System.Drawing.Size(86, 15);
+            this.LinkSubreddit.TabIndex = 35;
+            this.LinkSubreddit.TabStop = true;
+            this.LinkSubreddit.Text = "Mod Subreddit";
+            this.LinkSubreddit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkSubreddit_LinkClicked);
+            // 
+            // LinkModdedBug
+            // 
+            this.LinkModdedBug.AutoSize = true;
+            this.LinkModdedBug.Location = new System.Drawing.Point(526, 368);
+            this.LinkModdedBug.Name = "LinkModdedBug";
+            this.LinkModdedBug.Size = new System.Drawing.Size(75, 15);
+            this.LinkModdedBug.TabIndex = 36;
+            this.LinkModdedBug.TabStop = true;
+            this.LinkModdedBug.Text = "Report a Bug";
+            this.LinkModdedBug.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkModdedBug_LinkClicked);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1369, 880);
+            this.Controls.Add(this.LinkModdedBug);
+            this.Controls.Add(this.LinkSubreddit);
+            this.Controls.Add(this.LinkVanillaBug);
+            this.Controls.Add(this.LinkFourms);
             this.Controls.Add(this.ListManageMods);
             this.Controls.Add(this.ButtonConfigureMod);
             this.Controls.Add(this.ButtonInstallOrUpdate);
@@ -336,13 +338,9 @@
             this.Controls.Add(this.ButtonUpdateAuroraLoader);
             this.Controls.Add(this.CheckMusic);
             this.Controls.Add(this.TrackVolume);
-            this.Controls.Add(this.ButtonModBugs);
             this.Controls.Add(this.ButtonInstallAurora);
             this.Controls.Add(this.ButtonMultiPlayer);
-            this.Controls.Add(this.ButtonModSubreddit);
             this.Controls.Add(this.ButtonUpdateAurora);
-            this.Controls.Add(this.ButtonAuroraBugs);
-            this.Controls.Add(this.ButtonAuroraForums);
             this.Controls.Add(this.LabelChecksum);
             this.Controls.Add(this.LabelVersion);
             this.Controls.Add(this.ButtonSinglePlayer);
@@ -361,13 +359,9 @@
         private System.Windows.Forms.Button ButtonSinglePlayer;
         private System.Windows.Forms.Label LabelVersion;
         private System.Windows.Forms.Label LabelChecksum;
-        private System.Windows.Forms.Button ButtonAuroraForums;
-        private System.Windows.Forms.Button ButtonAuroraBugs;
         private System.Windows.Forms.Button ButtonUpdateAurora;
-        private System.Windows.Forms.Button ButtonModSubreddit;
         private System.Windows.Forms.Button ButtonMultiPlayer;
         private System.Windows.Forms.Button ButtonInstallAurora;
-        private System.Windows.Forms.Button ButtonModBugs;
         private System.Windows.Forms.TrackBar TrackVolume;
         private System.Windows.Forms.CheckBox CheckMusic;
         private System.Windows.Forms.Button ButtonUpdateAuroraLoader;
@@ -383,6 +377,10 @@
         private System.Windows.Forms.Button ButtonInstallOrUpdate;
         private System.Windows.Forms.Button ButtonConfigureMod;
         private System.Windows.Forms.ListView ListManageMods;
+        private System.Windows.Forms.LinkLabel LinkFourms;
+        private System.Windows.Forms.LinkLabel LinkVanillaBug;
+        private System.Windows.Forms.LinkLabel LinkSubreddit;
+        private System.Windows.Forms.LinkLabel LinkModdedBug;
     }
 }
 

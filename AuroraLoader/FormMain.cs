@@ -474,25 +474,7 @@ namespace AuroraLoader
             UpdateLaunchExeCombo();
         }
 
-        private void ButtonAuroraForums_Click(object sender, EventArgs e)
-        {
-            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?action=forum#c14");
-        }
 
-        private void ButtonAuroraBugs_Click(object sender, EventArgs e)
-        {
-            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
-        }
-
-        private void ButtonModsSubreddit_Click(object sender, EventArgs e)
-        {
-            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
-        }
-
-        private void ButtonModBugs_Click(object sender, EventArgs e)
-        {
-            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
-        }
 
         private void ButtonReadme_Click(object sender, EventArgs e)
         {
@@ -540,5 +522,27 @@ namespace AuroraLoader
         {
 
         }
+
+        private void LinkSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void LinkFourms_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void LinkVanillaBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void LinkModdedBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+
     }
 }
