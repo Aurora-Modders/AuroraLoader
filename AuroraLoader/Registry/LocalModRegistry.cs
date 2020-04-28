@@ -1,11 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using AuroraLoader.Mods;
 using System.Linq;
-using System.Diagnostics;
-using System.Xml;
+using AuroraLoader.Mods;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {
@@ -43,7 +41,7 @@ namespace AuroraLoader.Registry
             // Load the mod configuration for AuroraLoader itself
             if (File.Exists(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini")))
             {
-                var auroraLoader = ModConfigurationReader.ModConfigurationFromIni(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mod.ini"));
+                var auroraLoader = ModConfigurationReader.ModConfigurationFromIni(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"));
                 var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString());
                 if (!Directory.Exists(Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString())))
                 {
@@ -83,7 +81,7 @@ namespace AuroraLoader.Registry
                             mods.Add(newMod);
                         }
                     }
-                    
+
                 }
                 catch (Exception e)
                 {

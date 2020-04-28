@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using AuroraLoader.Mods;
-using System.Diagnostics;
-using System.Windows.Forms;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {

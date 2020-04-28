@@ -1,5 +1,3 @@
-using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +5,8 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
+using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader
 {
@@ -41,6 +41,20 @@ namespace AuroraLoader
                 }
             }
 
+            // Grab ourselves a copy of the existing SQLite interops. If it's good enough for Aurora, it's good enough for us...
+            try
+            {
+                Log.Debug("Copying SQLite interop dlls");
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86"));
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"));
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
+            }
+            catch (Exception exc)
+            {
+                Log.Error("Failure while copying SQLite interop DLLs", exc);
+            }
+
             // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -52,6 +66,7 @@ namespace AuroraLoader
             var localRegistry = new LocalModRegistry(configuration);
             var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
             var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
+            Log.Debug("Launching main form");
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
 
