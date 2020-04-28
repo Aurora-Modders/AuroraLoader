@@ -543,10 +543,45 @@ namespace AuroraLoader
             Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
         }
 
-        private void CheckEnableGameMods_CheckedChanged(object sender, EventArgs e)
+
+        private void CheckEnableGameMod_CheckChanged(object sender, EventArgs e)
         {
-            UpdateGameModsListView();
-            UpdateLaunchExeCombo();
+            if (CheckEnableGameMods.Checked)
+            {
+                var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    LinkVanillaBug.Enabled = false;
+                    LinkModdedBug.Enabled = true;
+
+                    ComboSelectLaunchExe.Enabled = true;
+                    ListDatabaseMods.Enabled = true;
+                    CheckApproved.Enabled = true;
+                    CheckPower.Enabled = true;
+                    CheckPublic.Enabled = true;
+                }
+                else
+                {
+                    CheckEnableGameMods.Checked = false;
+                }
+            }
+            if (!CheckEnableGameMods.Checked)
+            {
+                LinkVanillaBug.Enabled = true;
+                LinkModdedBug.Enabled = false;
+
+                ComboSelectLaunchExe.SelectedItem = ComboSelectLaunchExe.Items[0];
+                for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
+                {
+                    ListDatabaseMods.SetItemChecked(i, false);
+                }
+
+                ComboSelectLaunchExe.Enabled = false;
+                ListDatabaseMods.Enabled = false;
+                CheckApproved.Enabled = false;
+                CheckPower.Enabled = false;
+                CheckPublic.Enabled = false;
+            }
         }
     }
 }

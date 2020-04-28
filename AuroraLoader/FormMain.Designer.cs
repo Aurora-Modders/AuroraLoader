@@ -70,7 +70,7 @@
             // LabelVersion
             // 
             this.LabelVersion.AutoSize = true;
-            this.LabelVersion.Location = new System.Drawing.Point(29, 28);
+            this.LabelVersion.Location = new System.Drawing.Point(29, 24);
             this.LabelVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelVersion.Name = "LabelVersion";
             this.LabelVersion.Size = new System.Drawing.Size(141, 15);
@@ -112,7 +112,7 @@
             // ButtonInstallAurora
             // 
             this.ButtonInstallAurora.Enabled = false;
-            this.ButtonInstallAurora.Location = new System.Drawing.Point(29, 122);
+            this.ButtonInstallAurora.Location = new System.Drawing.Point(616, 193);
             this.ButtonInstallAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonInstallAurora.Name = "ButtonInstallAurora";
             this.ButtonInstallAurora.Size = new System.Drawing.Size(118, 60);
@@ -183,7 +183,7 @@
             this.CheckEnableGameMods.TabIndex = 21;
             this.CheckEnableGameMods.Text = "Enable Mods";
             this.CheckEnableGameMods.UseVisualStyleBackColor = true;
-            this.CheckEnableGameMods.CheckedChanged += new System.EventHandler(this.CheckEnableGameMods_CheckedChanged);
+            this.CheckEnableGameMods.CheckedChanged += new System.EventHandler(this.CheckEnableGameMod_CheckChanged);
             // 
             // CheckPublic
             // 
