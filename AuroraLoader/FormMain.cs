@@ -293,7 +293,35 @@ namespace AuroraLoader
 
         private void ListManageMods_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ButtonInstallOrUpdate.Enabled = false;	
+            ButtonConfigureMod.Enabled = false;	
 
+            if (ListManageMods.SelectedItems.Count > 0)	
+            {	
+                var selected = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);	
+                if (selected.Installed)	
+                {	
+                    ButtonInstallOrUpdate.Text = "Update";	
+                    if (selected.CanBeUpdated)	
+                    {	
+                        ButtonInstallOrUpdate.Enabled = true;	
+                    }	
+                    if (selected.Installation.ModInternalConfigFile != null)	
+                    {	
+                        ButtonConfigureMod.Enabled = true;	
+                    }	
+                }	
+                else	
+                {	
+                    ButtonInstallOrUpdate.Text = "Install";	
+                    ButtonInstallOrUpdate.Enabled = true;	
+                }	
+            }	
+            else	
+            {	
+                ButtonInstallOrUpdate.Text = "Update";	
+                ButtonInstallOrUpdate.Enabled = false;	
+            }
         }
 
         private void ButtonInstallOrUpdateMods_Click(object sender, EventArgs e)
