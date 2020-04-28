@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Windows.Forms;
 using AuroraLoader.Mods;
 using Microsoft.Extensions.Configuration;
 
@@ -134,7 +135,8 @@ namespace AuroraLoader.Registry
             }
             catch (Exception e)
             {
-                Log.Error($"Failed while installing or updating {mod.Name}", e);
+                Log.Error($"Failed while installing or updating {mod.Name} from {mod.Listing.LatestVersionUrl}", e);
+                MessageBox.Show($"Failed to download {mod.Name} from {mod.Listing.LatestVersionUrl}!");
             }
             finally
             {
