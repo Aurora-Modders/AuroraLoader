@@ -520,8 +520,6 @@ namespace AuroraLoader
             UpdateLaunchExeCombo();
         }
 
-
-
         private void ButtonReadme_Click(object sender, EventArgs e)
         {
             try

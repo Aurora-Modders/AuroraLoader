@@ -81,6 +81,10 @@ namespace AuroraLoader.Registry
                             mods.Add(newMod);
                         }
                     }
+                    else if (mods.Count(m => m.Name == newMod.Name) == 0)
+                    {
+                        mods.Add(newMod);
+                    }
 
                 }
                 catch (Exception e)

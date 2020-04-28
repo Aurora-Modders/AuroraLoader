@@ -62,6 +62,7 @@
     <Reference Include="System.Data.SQLite">
       <HintPath>System.Data.SQLite.dll</HintPath>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Private>true</Private>
     </Reference>
   </ItemGroup>
 
@@ -95,7 +96,7 @@
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="System.Data.SQLite.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="update_loader.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
