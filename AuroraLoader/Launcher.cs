@@ -165,7 +165,7 @@ namespace AuroraLoader
                 {
                     Log.Debug($"No uninstall for db mod: {mod.Name}");
                 }
-                
+
                 foreach (var file in files)
                 {
                     var sql = File.ReadAllText(file);
@@ -229,7 +229,7 @@ namespace AuroraLoader
                         {
                             throw new Exception($"Db mod {name} uninstall.sql not found");
                         }
-                        
+
                         sql = File.ReadAllText(file);
                         sql += $"\nDELETE FROM A_THIS_SAVE_IS_MODDED\nWHERE ModName = '{name}';";
                         command = new SQLiteCommand(sql, connection);

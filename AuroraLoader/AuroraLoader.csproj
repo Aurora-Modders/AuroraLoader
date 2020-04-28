@@ -51,12 +51,13 @@
   </ItemGroup>
 
   <ItemGroup>
-  <None Include="Resources\Aurora.ico" />
-</ItemGroup>
+    <None Include="Resources\Aurora.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="System.Data.SQLite">
       <HintPath>System.Data.SQLite.dll</HintPath>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Reference>
   </ItemGroup>
 
@@ -66,6 +67,7 @@
     </None>
     <None Update="aurora_versions.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="Examples\DatabaseMod\uninstall.sql">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -78,15 +80,19 @@
     </None>
     <None Update="mirrors.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="mod.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="..\README.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
     <None Update="update_loader.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
   </ItemGroup>
 

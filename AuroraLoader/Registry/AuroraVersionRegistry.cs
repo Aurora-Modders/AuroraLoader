@@ -1,10 +1,10 @@
-﻿using AuroraLoader.Mods;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using AuroraLoader.Mods;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {
@@ -78,7 +78,7 @@ namespace AuroraLoader.Registry
         {
             try
             {
-                var rawFileContents = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora_versions.ini"));
+                var rawFileContents = File.ReadAllText(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"));
                 AuroraVersions = ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList();
             }
             catch (Exception e)

@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using AuroraLoader.Mods;
-using System.Diagnostics;
-using System.Windows.Forms;
+using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {
@@ -88,6 +86,9 @@ namespace AuroraLoader.Registry
 
             InstallOrUpdate(mod, version);
             File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
+            File.Copy(Path.Combine(mod.Installation.ModFolder, "mod.ini"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"), true);
+            File.Copy(Path.Combine(mod.Installation.ModFolder, "mirrors.ini"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini"), true);
+            File.Copy(Path.Combine(mod.Installation.ModFolder, "aurora_versions.ini"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"), true);
         }
 
         // TODO I would prefer to handle caching withing LocalModRegistry
