@@ -92,7 +92,7 @@ namespace AuroraLoader
                 thread.Start();
                 var progress = new FormProgress(thread);
                 progress.ShowDialog();
-                Process.Start(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "update_loader.bat"));
+                Process.Start(Path.Combine(Program.AuroraLoaderExecutableDirectory, "update_loader.bat"));
                 Application.Exit();
                 return;
             }
