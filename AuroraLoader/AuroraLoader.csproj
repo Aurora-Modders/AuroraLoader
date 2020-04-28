@@ -6,7 +6,6 @@
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>AuroraLoader.Program</StartupObject>
     <ApplicationIcon>Aurora.ico</ApplicationIcon>
-    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
   </PropertyGroup>
 
   <ItemGroup>

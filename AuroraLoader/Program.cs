@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
@@ -49,16 +47,13 @@ namespace AuroraLoader
                 Log.Debug("Copying SQLite interop dlls");
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86"));
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"));
-                File.Copy(Path.Combine("D:/downloads/AuroraLoader.0.22.3.standalone", "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
-                File.Copy(Path.Combine("D:/downloads/AuroraLoader.0.22.3.standalone", "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
             }
             catch (Exception exc)
             {
                 Log.Error("Failure while copying SQLite interop DLLs", exc);
             }
-
-
-            var assemblies = LoadSQLiteAssemblies();
 
             // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
@@ -87,34 +82,6 @@ namespace AuroraLoader
 
             var progress = new FormProgress(thread) { Text = "Installing Aurora" };
             progress.ShowDialog();
-        }
-
-        // Found this online, I'm not this slick
-        private static IEnumerable<Assembly> LoadSQLiteAssemblies()
-        {
-            foreach (string file in new string[] {
-                Path.Combine(AuroraLoaderExecutableDirectory, "System.Data.SQLite.dll"),
-                Path.Combine(AuroraLoaderExecutableDirectory, "x86", "SQLite.Interop.dll"),
-                Path.Combine(AuroraLoaderExecutableDirectory, "x64", "SQLite.Interop.dll")
-            })
-            {
-                Assembly assembly = null;
-                try
-                {
-                    //Load assembly using byte array
-                    byte[] rawAssembly = File.ReadAllBytes(file);
-                    assembly = Assembly.Load(rawAssembly);
-                }
-                catch (Exception exc)
-                {
-                    Log.Error($"Failed to load {file}", exc);
-                }
-
-                if (assembly != null)
-                {
-                    yield return assembly;
-                }
-            }
         }
 
         public static string GetChecksum(byte[] bytes)
