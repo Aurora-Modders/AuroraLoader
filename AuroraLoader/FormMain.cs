@@ -49,7 +49,7 @@ namespace AuroraLoader
             CheckApproved.Enabled = false;
             CheckPower.Enabled = false;
             CheckPublic.Enabled = false;
-            TabMods.SelectedTab = TabApplyMods;
+
         }
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
@@ -565,5 +565,9 @@ namespace AuroraLoader
 
         }
 
+        private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
