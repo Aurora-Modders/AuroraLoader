@@ -49,7 +49,7 @@
             this.ButtonInstallOrUpdate = new System.Windows.Forms.Button();
             this.ButtonConfigureMod = new System.Windows.Forms.Button();
             this.ListManageMods = new System.Windows.Forms.ListView();
-            this.LinkFourms = new System.Windows.Forms.LinkLabel();
+            this.LinkForums = new System.Windows.Forms.LinkLabel();
             this.LinkVanillaBug = new System.Windows.Forms.LinkLabel();
             this.LinkSubreddit = new System.Windows.Forms.LinkLabel();
             this.LinkModdedBug = new System.Windows.Forms.LinkLabel();
@@ -277,16 +277,16 @@
             this.ListManageMods.UseCompatibleStateImageBehavior = false;
             this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
             // 
-            // LinkFourms
+            // LinkForums
             // 
-            this.LinkFourms.AutoSize = true;
-            this.LinkFourms.Location = new System.Drawing.Point(232, 188);
-            this.LinkFourms.Name = "LinkFourms";
-            this.LinkFourms.Size = new System.Drawing.Size(86, 15);
-            this.LinkFourms.TabIndex = 33;
-            this.LinkFourms.TabStop = true;
-            this.LinkFourms.Text = "Aurora Fourms";
-            this.LinkFourms.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkFourms_LinkClicked);
+            this.LinkForums.AutoSize = true;
+            this.LinkForums.Location = new System.Drawing.Point(232, 188);
+            this.LinkForums.Name = "LinkForums";
+            this.LinkForums.Size = new System.Drawing.Size(86, 15);
+            this.LinkForums.TabIndex = 33;
+            this.LinkForums.TabStop = true;
+            this.LinkForums.Text = "Aurora Forums";
+            this.LinkForums.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkForums_LinkClicked);
             // 
             // LinkVanillaBug
             // 
@@ -369,7 +369,7 @@
             this.Controls.Add(this.LinkModdedBug);
             this.Controls.Add(this.LinkSubreddit);
             this.Controls.Add(this.LinkVanillaBug);
-            this.Controls.Add(this.LinkFourms);
+            this.Controls.Add(this.LinkForums);
             this.Controls.Add(this.ListManageMods);
             this.Controls.Add(this.ButtonConfigureMod);
             this.Controls.Add(this.ButtonInstallOrUpdate);
@@ -424,7 +424,7 @@
         private System.Windows.Forms.Button ButtonInstallOrUpdate;
         private System.Windows.Forms.Button ButtonConfigureMod;
         private System.Windows.Forms.ListView ListManageMods;
-        private System.Windows.Forms.LinkLabel LinkFourms;
+        private System.Windows.Forms.LinkLabel LinkForums;
         private System.Windows.Forms.LinkLabel LinkVanillaBug;
         private System.Windows.Forms.LinkLabel LinkSubreddit;
         private System.Windows.Forms.LinkLabel LinkModdedBug;
