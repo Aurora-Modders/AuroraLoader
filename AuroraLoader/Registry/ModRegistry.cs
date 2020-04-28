@@ -86,6 +86,9 @@ namespace AuroraLoader.Registry
 
             InstallOrUpdate(mod, version);
             File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
+            File.Copy(Path.Combine(mod.Installation.ModFolder, "mod.ini"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"), true);
+            File.Copy(Path.Combine(mod.Installation.ModFolder, "mirrors.ini"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini"), true);
+            File.Copy(Path.Combine(mod.Installation.ModFolder, "aurora_versions.ini"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"), true);
         }
 
         // TODO I would prefer to handle caching withing LocalModRegistry
