@@ -58,7 +58,6 @@
             // 
             // ButtonSinglePlayer
             // 
-            this.ButtonSinglePlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonSinglePlayer.Location = new System.Drawing.Point(238, 132);
             this.ButtonSinglePlayer.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonSinglePlayer.Name = "ButtonSinglePlayer";
@@ -71,28 +70,25 @@
             // LabelVersion
             // 
             this.LabelVersion.AutoSize = true;
-            this.LabelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LabelVersion.Location = new System.Drawing.Point(29, 28);
             this.LabelVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelVersion.Name = "LabelVersion";
-            this.LabelVersion.Size = new System.Drawing.Size(186, 20);
+            this.LabelVersion.Size = new System.Drawing.Size(141, 15);
             this.LabelVersion.TabIndex = 7;
             this.LabelVersion.Text = "Aurora version: Unknown";
             // 
             // LabelChecksum
             // 
             this.LabelChecksum.AutoSize = true;
-            this.LabelChecksum.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LabelChecksum.Location = new System.Drawing.Point(29, 58);
             this.LabelChecksum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelChecksum.Name = "LabelChecksum";
-            this.LabelChecksum.Size = new System.Drawing.Size(137, 20);
+            this.LabelChecksum.Size = new System.Drawing.Size(103, 15);
             this.LabelChecksum.TabIndex = 8;
             this.LabelChecksum.Text = "Aurora checksum:";
             // 
             // ButtonAuroraForums
             // 
-            this.ButtonAuroraForums.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonAuroraForums.Location = new System.Drawing.Point(29, 308);
             this.ButtonAuroraForums.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonAuroraForums.Name = "ButtonAuroraForums";
@@ -104,7 +100,6 @@
             // 
             // ButtonAuroraBugs
             // 
-            this.ButtonAuroraBugs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonAuroraBugs.ForeColor = System.Drawing.Color.OrangeRed;
             this.ButtonAuroraBugs.Location = new System.Drawing.Point(29, 352);
             this.ButtonAuroraBugs.Margin = new System.Windows.Forms.Padding(4);
@@ -117,7 +112,6 @@
             // 
             // ButtonUpdateAurora
             // 
-            this.ButtonUpdateAurora.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonUpdateAurora.Location = new System.Drawing.Point(14, 257);
             this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
@@ -129,7 +123,6 @@
             // 
             // ButtonModSubreddit
             // 
-            this.ButtonModSubreddit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonModSubreddit.Location = new System.Drawing.Point(198, 308);
             this.ButtonModSubreddit.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonModSubreddit.Name = "ButtonModSubreddit";
@@ -142,7 +135,6 @@
             // ButtonMultiPlayer
             // 
             this.ButtonMultiPlayer.Enabled = false;
-            this.ButtonMultiPlayer.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonMultiPlayer.Location = new System.Drawing.Point(387, 87);
             this.ButtonMultiPlayer.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonMultiPlayer.Name = "ButtonMultiPlayer";
@@ -154,7 +146,6 @@
             // ButtonInstallAurora
             // 
             this.ButtonInstallAurora.Enabled = false;
-            this.ButtonInstallAurora.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonInstallAurora.Location = new System.Drawing.Point(29, 145);
             this.ButtonInstallAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonInstallAurora.Name = "ButtonInstallAurora";
@@ -166,7 +157,6 @@
             // ButtonModBugs
             // 
             this.ButtonModBugs.Enabled = false;
-            this.ButtonModBugs.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonModBugs.Location = new System.Drawing.Point(197, 352);
             this.ButtonModBugs.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonModBugs.Name = "ButtonModBugs";
@@ -189,11 +179,10 @@
             // CheckMusic
             // 
             this.CheckMusic.AutoSize = true;
-            this.CheckMusic.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.CheckMusic.Location = new System.Drawing.Point(14, 193);
             this.CheckMusic.Margin = new System.Windows.Forms.Padding(4);
             this.CheckMusic.Name = "CheckMusic";
-            this.CheckMusic.Size = new System.Drawing.Size(79, 28);
+            this.CheckMusic.Size = new System.Drawing.Size(58, 19);
             this.CheckMusic.TabIndex = 2;
             this.CheckMusic.Text = "Music";
             this.CheckMusic.UseVisualStyleBackColor = true;
@@ -201,7 +190,6 @@
             // 
             // ButtonUpdateAuroraLoader
             // 
-            this.ButtonUpdateAuroraLoader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(259, 225);
             this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
@@ -213,7 +201,6 @@
             // 
             // ButtonReadme
             // 
-            this.ButtonReadme.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ButtonReadme.Location = new System.Drawing.Point(346, 39);
             this.ButtonReadme.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonReadme.Name = "ButtonReadme";
@@ -226,11 +213,10 @@
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.AutoSize = true;
-            this.LabelAuroraLoaderVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(29, 90);
             this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
-            this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(240, 20);
+            this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(177, 15);
             this.LabelAuroraLoaderVersion.TabIndex = 7;
             this.LabelAuroraLoaderVersion.Text = "AuroraLoader Version: Unknown";
             // 
@@ -277,7 +263,7 @@
             // ComboSelectLaunchExe
             // 
             this.ComboSelectLaunchExe.FormattingEnabled = true;
-            this.ComboSelectLaunchExe.Location = new System.Drawing.Point(406, 433);
+            this.ComboSelectLaunchExe.Location = new System.Drawing.Point(259, 465);
             this.ComboSelectLaunchExe.Name = "ComboSelectLaunchExe";
             this.ComboSelectLaunchExe.Size = new System.Drawing.Size(241, 23);
             this.ComboSelectLaunchExe.TabIndex = 25;
@@ -286,7 +272,7 @@
             // ListDatabaseMods
             // 
             this.ListDatabaseMods.FormattingEnabled = true;
-            this.ListDatabaseMods.Location = new System.Drawing.Point(387, 492);
+            this.ListDatabaseMods.Location = new System.Drawing.Point(406, 515);
             this.ListDatabaseMods.Name = "ListDatabaseMods";
             this.ListDatabaseMods.Size = new System.Drawing.Size(221, 202);
             this.ListDatabaseMods.TabIndex = 26;
@@ -294,7 +280,7 @@
             // ListUtilityMods
             // 
             this.ListUtilityMods.FormattingEnabled = true;
-            this.ListUtilityMods.Location = new System.Drawing.Point(434, 720);
+            this.ListUtilityMods.Location = new System.Drawing.Point(66, 684);
             this.ListUtilityMods.Name = "ListUtilityMods";
             this.ListUtilityMods.Size = new System.Drawing.Size(136, 148);
             this.ListUtilityMods.TabIndex = 27;
