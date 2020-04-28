@@ -444,7 +444,7 @@ namespace AuroraLoader
         private void RunGame(Process process)
         {
             var songs = new List<Song>();
-            var folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Music");
+            var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Music");
             if (Directory.Exists(folder))
             {
                 foreach (var mp3 in Directory.EnumerateFiles(folder, "*.mp3", SearchOption.AllDirectories))
