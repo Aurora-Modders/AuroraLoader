@@ -98,10 +98,15 @@ namespace AuroraLoader
             }
 
             Log.Debug("Running: " + command);
+            if (!exe.ToLower().Equals("java"))
+            {
+                exe = Path.Combine(folder, exe);
+            }
+
             var info = new ProcessStartInfo()
             {
                 WorkingDirectory = folder,
-                FileName = Path.Combine(folder, exe),
+                FileName = exe,
                 Arguments = args,
                 UseShellExecute = true,
                 CreateNoWindow = true
