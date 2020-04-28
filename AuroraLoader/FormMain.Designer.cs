@@ -50,9 +50,9 @@
             this.ComboSelectLaunchExe = new System.Windows.Forms.ComboBox();
             this.ListDatabaseMods = new System.Windows.Forms.CheckedListBox();
             this.ListUtilities = new System.Windows.Forms.CheckedListBox();
-            this.ListManageMods = new System.Windows.Forms.CheckedListBox();
             this.ButtonInstallOrUpdate = new System.Windows.Forms.Button();
             this.ButtonConfigureMod = new System.Windows.Forms.Button();
+            this.ListManageMods = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.TrackVolume)).BeginInit();
             this.SuspendLayout();
             // 
@@ -286,15 +286,6 @@
             this.ListUtilities.TabIndex = 27;
             this.ListUtilities.SelectedIndexChanged += new System.EventHandler(this.ListUtilityMods_SelectedIndexChanged);
             // 
-            // ListManageMods
-            // 
-            this.ListManageMods.FormattingEnabled = true;
-            this.ListManageMods.Location = new System.Drawing.Point(797, 28);
-            this.ListManageMods.Name = "ListManageMods";
-            this.ListManageMods.Size = new System.Drawing.Size(382, 328);
-            this.ListManageMods.TabIndex = 28;
-            this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
-            // 
             // ButtonInstallOrUpdate
             // 
             this.ButtonInstallOrUpdate.Location = new System.Drawing.Point(782, 395);
@@ -315,14 +306,24 @@
             this.ButtonConfigureMod.UseVisualStyleBackColor = true;
             this.ButtonConfigureMod.Click += new System.EventHandler(this.ButtonConfigureMod_Click);
             // 
+            // ListManageMods
+            // 
+            this.ListManageMods.HideSelection = false;
+            this.ListManageMods.Location = new System.Drawing.Point(980, 99);
+            this.ListManageMods.Name = "ListManageMods";
+            this.ListManageMods.Size = new System.Drawing.Size(403, 204);
+            this.ListManageMods.TabIndex = 32;
+            this.ListManageMods.UseCompatibleStateImageBehavior = false;
+            this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1369, 880);
+            this.Controls.Add(this.ListManageMods);
             this.Controls.Add(this.ButtonConfigureMod);
             this.Controls.Add(this.ButtonInstallOrUpdate);
-            this.Controls.Add(this.ListManageMods);
             this.Controls.Add(this.ListUtilities);
             this.Controls.Add(this.ListDatabaseMods);
             this.Controls.Add(this.ComboSelectLaunchExe);
@@ -379,9 +380,9 @@
         private System.Windows.Forms.ComboBox ComboSelectLaunchExe;
         private System.Windows.Forms.CheckedListBox ListDatabaseMods;
         private System.Windows.Forms.CheckedListBox ListUtilities;
-        private System.Windows.Forms.CheckedListBox ListManageMods;
         private System.Windows.Forms.Button ButtonInstallOrUpdate;
         private System.Windows.Forms.Button ButtonConfigureMod;
+        private System.Windows.Forms.ListView ListManageMods;
     }
 }
 
