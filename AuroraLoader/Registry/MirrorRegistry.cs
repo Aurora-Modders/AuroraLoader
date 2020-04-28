@@ -29,7 +29,14 @@ namespace AuroraLoader.Registry
             {
                 foreach (var rootUrl in File.ReadAllLines(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini")))
                 {
-                    mirrors.Add(new Mirror(_configuration, rootUrl));
+                    try
+                    {
+                        mirrors.Add(new Mirror(_configuration, rootUrl));
+                    }
+                    catch (Exception exc)
+                    {
+                        Log.Error($"Failed to add {rootUrl} as a mirror", exc);
+                    }
                 }
             }
             catch (Exception e)
@@ -38,11 +45,6 @@ namespace AuroraLoader.Registry
             }
 
             Mirrors = mirrors;
-        }
-
-        public void AddMirror(Mirror mirror)
-        {
-            Mirrors.Add(mirror);
         }
     }
 }

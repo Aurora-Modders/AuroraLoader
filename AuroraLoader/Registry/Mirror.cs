@@ -48,6 +48,7 @@ namespace AuroraLoader.Registry
                 catch (Exception e)
                 {
                     Log.Error($"Failed to download Aurora version listing from {VersionsUrl}", e);
+                    throw;
                 }
 
             }
@@ -80,7 +81,7 @@ namespace AuroraLoader.Registry
                 catch (Exception e)
                 {
                     Log.Error($"Failed to download mod listing from {ModsUrl}", e);
-
+                    throw;
                 }
             }
 
