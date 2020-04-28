@@ -43,6 +43,14 @@ namespace AuroraLoader
             Program.CopyDirectory(clean, folder);
         }
 
+        // TODO replace with solution leveraging clean_install
+        public static void BackupAurora(GameInstallation current)
+        {
+            Directory.CreateDirectory(current.VersionedDirectory);
+            File.Copy(Path.Combine(current.InstallationPath, "Aurora.exe"), Path.Combine(current.VersionedDirectory, "Aurora.exe"), true);
+            File.Copy(Path.Combine(current.InstallationPath, "AuroraDB.db"), Path.Combine(current.VersionedDirectory, "AuroraDB.db"), true);
+        }
+
         public static void UpdateAurora(GameInstallation current, Dictionary<string, string> aurora_files)
         {
             var update = SemVersion.Parse(aurora_files["Version"]);
@@ -77,7 +85,7 @@ namespace AuroraLoader
             }
         }
 
-        public static void DownloadAuroraPieces(string folder, Dictionary<string, string> aurora_files)
+        public static void DownloadAuroraPieces(string installationPath, Dictionary<string, string> aurora_files)
         {
             aurora_files.Remove("Version");
 
@@ -113,7 +121,7 @@ namespace AuroraLoader
                     // need to delete exe and db before overwriting
                     foreach (var file in Directory.EnumerateFiles(extract_folder))
                     {
-                        var dest = Path.Combine(folder, Path.GetFileName(file));
+                        var dest = Path.Combine(installationPath, Path.GetFileName(file));
 
                         if (File.Exists(dest))
                         {
@@ -121,7 +129,7 @@ namespace AuroraLoader
                         }
                     }
 
-                    Program.CopyDirectory(extract_folder, folder);
+                    Program.CopyDirectory(extract_folder, installationPath);
                 }
             }
 
