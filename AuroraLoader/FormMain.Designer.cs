@@ -195,9 +195,9 @@
             this.CheckPublic.AutoSize = true;
             this.CheckPublic.Location = new System.Drawing.Point(28, 234);
             this.CheckPublic.Name = "CheckPublic";
-            this.CheckPublic.Size = new System.Drawing.Size(56, 19);
+            this.CheckPublic.Size = new System.Drawing.Size(59, 19);
             this.CheckPublic.TabIndex = 22;
-            this.CheckPublic.Text = "Pubic";
+            this.CheckPublic.Text = "Public";
             this.CheckPublic.UseVisualStyleBackColor = true;
             this.CheckPublic.CheckedChanged += new System.EventHandler(this.CheckModStatus_CheckChanged);
             // 

@@ -101,7 +101,7 @@ namespace AuroraLoader
             var info = new ProcessStartInfo()
             {
                 WorkingDirectory = folder,
-                FileName = exe,
+                FileName = Path.Combine(folder, exe),
                 Arguments = args,
                 UseShellExecute = true,
                 CreateNoWindow = true
