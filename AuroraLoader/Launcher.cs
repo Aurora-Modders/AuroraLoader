@@ -20,6 +20,7 @@ namespace AuroraLoader
 
         public static List<Process> Launch(GameInstallation installation, ModRegistry registry, IList<Mod> mods, Mod executableMod = null)
         {
+            Log.Debug($"Launching from {installation.InstallationPath}");
             if (mods.Any(mod => mod.Type == ModType.EXE))
             {
                 throw new Exception("Use the other parameter");
@@ -35,6 +36,11 @@ namespace AuroraLoader
                 Log.Debug($"Theme: {mod.Name}");
                 InstallThemeMod(mod, installation);
             }
+            foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
+            {
+                Log.Debug("Database: " + mod.Name);
+                InstallDbMod(mod, installation);
+            }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOTUTILITY))
             {
                 Log.Debug("Root Utility: " + mod.Name);
@@ -48,12 +54,7 @@ namespace AuroraLoader
                 var process = Run(mod.Installation.ModFolder, mod.Installation.ExecuteCommand);
                 processes.Add(process);
             }
-            foreach (var mod in mods.Where(mod => mod.Type == ModType.DATABASE))
-            {
-                Log.Debug("Database: " + mod.Name);
-                InstallDbMod(mod, installation);
-            }
-
+            
             if (executableMod != null)
             {
                 CopyToFolder(executableMod, installation.InstallationPath);
@@ -97,6 +98,11 @@ namespace AuroraLoader
             }
 
             Log.Debug("Running: " + command);
+            if (!exe.ToLower().Equals("java"))
+            {
+                exe = Path.Combine(folder, exe);
+            }
+
             var info = new ProcessStartInfo()
             {
                 WorkingDirectory = folder,
