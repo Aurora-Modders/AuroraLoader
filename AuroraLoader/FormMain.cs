@@ -49,6 +49,7 @@ namespace AuroraLoader
             CheckApproved.Enabled = false;
             CheckPower.Enabled = false;
             CheckPublic.Enabled = false;
+            LinkModdedBug.Enabled = false;
 
         }
 

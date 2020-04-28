@@ -224,7 +224,7 @@
             // ComboSelectLaunchExe
             // 
             this.ComboSelectLaunchExe.FormattingEnabled = true;
-            this.ComboSelectLaunchExe.Location = new System.Drawing.Point(91, 297);
+            this.ComboSelectLaunchExe.Location = new System.Drawing.Point(594, 281);
             this.ComboSelectLaunchExe.Name = "ComboSelectLaunchExe";
             this.ComboSelectLaunchExe.Size = new System.Drawing.Size(241, 23);
             this.ComboSelectLaunchExe.TabIndex = 25;
@@ -233,23 +233,23 @@
             // ListDatabaseMods
             // 
             this.ListDatabaseMods.FormattingEnabled = true;
-            this.ListDatabaseMods.Location = new System.Drawing.Point(277, 363);
+            this.ListDatabaseMods.Location = new System.Drawing.Point(650, 71);
             this.ListDatabaseMods.Name = "ListDatabaseMods";
-            this.ListDatabaseMods.Size = new System.Drawing.Size(221, 202);
+            this.ListDatabaseMods.Size = new System.Drawing.Size(185, 202);
             this.ListDatabaseMods.TabIndex = 26;
             // 
             // ListUtilities
             // 
             this.ListUtilities.FormattingEnabled = true;
-            this.ListUtilities.Location = new System.Drawing.Point(28, 363);
+            this.ListUtilities.Location = new System.Drawing.Point(460, 71);
             this.ListUtilities.Name = "ListUtilities";
-            this.ListUtilities.Size = new System.Drawing.Size(232, 202);
+            this.ListUtilities.Size = new System.Drawing.Size(184, 202);
             this.ListUtilities.TabIndex = 27;
             this.ListUtilities.SelectedIndexChanged += new System.EventHandler(this.ListUtilityMods_SelectedIndexChanged);
             // 
             // ButtonInstallOrUpdate
             // 
-            this.ButtonInstallOrUpdate.Location = new System.Drawing.Point(531, 293);
+            this.ButtonInstallOrUpdate.Location = new System.Drawing.Point(28, 574);
             this.ButtonInstallOrUpdate.Name = "ButtonInstallOrUpdate";
             this.ButtonInstallOrUpdate.Size = new System.Drawing.Size(100, 25);
             this.ButtonInstallOrUpdate.TabIndex = 29;
@@ -259,7 +259,7 @@
             // 
             // ButtonConfigureMod
             // 
-            this.ButtonConfigureMod.Location = new System.Drawing.Point(637, 293);
+            this.ButtonConfigureMod.Location = new System.Drawing.Point(134, 574);
             this.ButtonConfigureMod.Name = "ButtonConfigureMod";
             this.ButtonConfigureMod.Size = new System.Drawing.Size(100, 25);
             this.ButtonConfigureMod.TabIndex = 30;
@@ -270,9 +270,9 @@
             // ListManageMods
             // 
             this.ListManageMods.HideSelection = false;
-            this.ListManageMods.Location = new System.Drawing.Point(531, 71);
+            this.ListManageMods.Location = new System.Drawing.Point(28, 329);
             this.ListManageMods.Name = "ListManageMods";
-            this.ListManageMods.Size = new System.Drawing.Size(281, 216);
+            this.ListManageMods.Size = new System.Drawing.Size(807, 239);
             this.ListManageMods.TabIndex = 32;
             this.ListManageMods.UseCompatibleStateImageBehavior = false;
             this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
@@ -324,7 +324,7 @@
             // LabelExeMod
             // 
             this.LabelExeMod.AutoSize = true;
-            this.LabelExeMod.Location = new System.Drawing.Point(28, 300);
+            this.LabelExeMod.Location = new System.Drawing.Point(460, 284);
             this.LabelExeMod.Name = "LabelExeMod";
             this.LabelExeMod.Size = new System.Drawing.Size(53, 15);
             this.LabelExeMod.TabIndex = 37;
@@ -333,7 +333,7 @@
             // LabelUtilities
             // 
             this.LabelUtilities.AutoSize = true;
-            this.LabelUtilities.Location = new System.Drawing.Point(28, 345);
+            this.LabelUtilities.Location = new System.Drawing.Point(460, 48);
             this.LabelUtilities.Name = "LabelUtilities";
             this.LabelUtilities.Size = new System.Drawing.Size(46, 15);
             this.LabelUtilities.TabIndex = 38;
@@ -342,7 +342,7 @@
             // LabelDBMods
             // 
             this.LabelDBMods.AutoSize = true;
-            this.LabelDBMods.Location = new System.Drawing.Point(277, 345);
+            this.LabelDBMods.Location = new System.Drawing.Point(650, 43);
             this.LabelDBMods.Name = "LabelDBMods";
             this.LabelDBMods.Size = new System.Drawing.Size(55, 15);
             this.LabelDBMods.TabIndex = 39;
@@ -351,11 +351,11 @@
             // ManageMods
             // 
             this.ManageMods.AutoSize = true;
-            this.ManageMods.Location = new System.Drawing.Point(531, 43);
+            this.ManageMods.Location = new System.Drawing.Point(39, 311);
             this.ManageMods.Name = "ManageMods";
-            this.ManageMods.Size = new System.Drawing.Size(125, 15);
+            this.ManageMods.Size = new System.Drawing.Size(130, 15);
             this.ManageMods.TabIndex = 40;
-            this.ManageMods.Text = "Manage Intalled Mods";
+            this.ManageMods.Text = "Manage Installed Mods";
             // 
             // FormMain
             // 
