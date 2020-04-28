@@ -639,6 +639,7 @@ namespace AuroraLoader
         {
             UpdateGameModsListView();
             UpdateUtilitiesListView();
+            UpdateLaunchExeCombo();
         }
     }
 }

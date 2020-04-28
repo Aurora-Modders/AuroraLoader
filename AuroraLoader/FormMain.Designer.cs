@@ -1,4 +1,6 @@
-﻿namespace AuroraLoader
+﻿using System.Windows.Forms;
+
+namespace AuroraLoader
 {
     partial class FormMain
     {
@@ -220,6 +222,7 @@
             this.CheckApproved.Size = new System.Drawing.Size(78, 19);
             this.CheckApproved.TabIndex = 24;
             this.CheckApproved.Text = "Approved";
+            this.CheckApproved.Enabled = true;
             this.CheckApproved.UseVisualStyleBackColor = true;
             this.CheckApproved.CheckedChanged += new System.EventHandler(this.CheckModStatus_CheckChanged);
             // 
@@ -230,6 +233,7 @@
             this.ComboSelectLaunchExe.Name = "ComboSelectLaunchExe";
             this.ComboSelectLaunchExe.Size = new System.Drawing.Size(241, 23);
             this.ComboSelectLaunchExe.TabIndex = 25;
+            this.ComboSelectLaunchExe.DropDownStyle = ComboBoxStyle.DropDownList;
             this.ComboSelectLaunchExe.SelectedIndexChanged += new System.EventHandler(this.ComboSelectLaunchExe_SelectedIndexChanged);
             // 
             // ListDatabaseMods
@@ -330,7 +334,7 @@
             this.LabelExeMod.Name = "LabelExeMod";
             this.LabelExeMod.Size = new System.Drawing.Size(53, 15);
             this.LabelExeMod.TabIndex = 37;
-            this.LabelExeMod.Text = "Exe Mod";
+            this.LabelExeMod.Text = "Executable mod:";
             // 
             // LabelUtilities
             // 
