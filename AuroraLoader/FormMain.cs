@@ -253,7 +253,7 @@ namespace AuroraLoader
             ListManageMods.Clear();
             ListManageMods.AllowColumnReorder = true;
             ListManageMods.FullRowSelect = true;
-            ListManageMods.Dock = DockStyle.Top;
+            //ListManageMods.Dock = DockStyle.Top;
             ListManageMods.View = View.Details;
             ListManageMods.Columns.Add("Name");
             ListManageMods.Columns.Add("Type");
@@ -582,6 +582,16 @@ namespace AuroraLoader
                 CheckPower.Enabled = false;
                 CheckPublic.Enabled = false;
             }
+        }
+
+        private void LabelVersion_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CheckPower_CheckedChanged_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
