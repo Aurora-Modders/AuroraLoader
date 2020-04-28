@@ -635,9 +635,10 @@ namespace AuroraLoader
 
         }
 
-        private void CheckPower_CheckedChanged_1(object sender, EventArgs e)
+        private void CheckModStatus_CheckChanged(object sender, EventArgs e)
         {
-
+            UpdateGameModsListView();
+            UpdateUtilitiesListView();
         }
     }
 }

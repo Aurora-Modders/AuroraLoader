@@ -199,6 +199,7 @@
             this.CheckPublic.TabIndex = 22;
             this.CheckPublic.Text = "Pubic";
             this.CheckPublic.UseVisualStyleBackColor = true;
+            this.CheckPublic.CheckedChanged += new System.EventHandler(this.CheckModStatus_CheckChanged);
             // 
             // CheckPower
             // 
@@ -209,7 +210,7 @@
             this.CheckPower.TabIndex = 23;
             this.CheckPower.Text = "Poweruser";
             this.CheckPower.UseVisualStyleBackColor = true;
-            this.CheckPower.CheckedChanged += new System.EventHandler(this.CheckPower_CheckedChanged_1);
+            this.CheckPower.CheckedChanged += new System.EventHandler(this.CheckModStatus_CheckChanged);
             // 
             // CheckApproved
             // 
@@ -220,6 +221,7 @@
             this.CheckApproved.TabIndex = 24;
             this.CheckApproved.Text = "Approved";
             this.CheckApproved.UseVisualStyleBackColor = true;
+            this.CheckApproved.CheckedChanged += new System.EventHandler(this.CheckModStatus_CheckChanged);
             // 
             // ComboSelectLaunchExe
             // 
