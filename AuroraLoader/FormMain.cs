@@ -55,6 +55,12 @@ namespace AuroraLoader
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
         {
+            var result = MessageBox.Show("Updating Aurora will wipe out your saves! Are you sure you want to continue?", "Warning!", MessageBoxButtons.OKCancel);
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
             try
             {
                 var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
@@ -123,7 +129,7 @@ namespace AuroraLoader
                 }
                 else
                 {
-                    ButtonUpdateAurora.Text = "Aurora is up to date";
+                    ButtonUpdateAurora.Text = "Aurora up to date";
                     ButtonUpdateAurora.ForeColor = Color.Black;
                     ButtonUpdateAurora.Enabled = false;
                 }
@@ -137,10 +143,18 @@ namespace AuroraLoader
                     ButtonUpdateAuroraLoader.Text = $"Update AuroraLoader to {auroraLoaderMod.Listing.LatestVersion}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
                     ButtonUpdateAuroraLoader.Enabled = true;
+
+                    // Disable 'update aurora' button if there is a loader update that should be grabbed first
+                    if (ButtonUpdateAurora.Enabled == true)
+                    {
+                        ButtonUpdateAurora.Text = "Update loader";
+                        ButtonUpdateAurora.ForeColor = Color.Black;
+                        ButtonUpdateAurora.Enabled = false;
+                    }
                 }
                 else
                 {
-                    ButtonUpdateAuroraLoader.Text = "AuroraLoader is up to date";
+                    ButtonUpdateAuroraLoader.Text = "Loader up to date";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Black;
                     ButtonUpdateAuroraLoader.Enabled = false;
                 }
@@ -401,7 +415,6 @@ namespace AuroraLoader
 
             ButtonSinglePlayer.Enabled = false;
             ButtonMultiPlayer.Enabled = false;
-            ButtonInstallAurora.Enabled = false;
             ButtonUpdateAurora.Enabled = false;
 
             var mods = _modRegistry.Mods.Where(mod =>
@@ -637,6 +650,7 @@ namespace AuroraLoader
         {
             UpdateGameModsListView();
             UpdateUtilitiesListView();
+            UpdateLaunchExeCombo();
         }
     }
 }
