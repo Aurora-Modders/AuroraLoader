@@ -129,7 +129,7 @@ namespace AuroraLoader
                 }
                 else
                 {
-                    ButtonUpdateAurora.Text = "Aurora is up to date";
+                    ButtonUpdateAurora.Text = "Aurora up to date";
                     ButtonUpdateAurora.ForeColor = Color.Black;
                     ButtonUpdateAurora.Enabled = false;
                 }
@@ -154,7 +154,7 @@ namespace AuroraLoader
                 }
                 else
                 {
-                    ButtonUpdateAuroraLoader.Text = "AuroraLoader is up to date";
+                    ButtonUpdateAuroraLoader.Text = "Loader up to date";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Black;
                     ButtonUpdateAuroraLoader.Enabled = false;
                 }
@@ -415,7 +415,6 @@ namespace AuroraLoader
 
             ButtonSinglePlayer.Enabled = false;
             ButtonMultiPlayer.Enabled = false;
-            ButtonInstallAurora.Enabled = false;
             ButtonUpdateAurora.Enabled = false;
 
             var mods = _modRegistry.Mods.Where(mod =>
