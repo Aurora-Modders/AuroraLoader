@@ -272,7 +272,7 @@
             // ListDatabaseMods
             // 
             this.ListDatabaseMods.FormattingEnabled = true;
-            this.ListDatabaseMods.Location = new System.Drawing.Point(406, 515);
+            this.ListDatabaseMods.Location = new System.Drawing.Point(446, 616);
             this.ListDatabaseMods.Name = "ListDatabaseMods";
             this.ListDatabaseMods.Size = new System.Drawing.Size(221, 202);
             this.ListDatabaseMods.TabIndex = 26;
@@ -309,7 +309,7 @@
             // ListManageMods
             // 
             this.ListManageMods.HideSelection = false;
-            this.ListManageMods.Location = new System.Drawing.Point(980, 99);
+            this.ListManageMods.Location = new System.Drawing.Point(739, 160);
             this.ListManageMods.Name = "ListManageMods";
             this.ListManageMods.Size = new System.Drawing.Size(403, 204);
             this.ListManageMods.TabIndex = 32;
