@@ -43,6 +43,21 @@ namespace AuroraLoader
                 }
             }
 
+            // Grab ourselves a copy of the existing SQLite interops. If it's good enough for Aurora, it's good enough for us...
+            try
+            {
+                Log.Debug("Copying SQLite interop dlls");
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86"));
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"));
+                File.Copy(Path.Combine("D:/downloads/AuroraLoader.0.22.3.standalone", "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
+                File.Copy(Path.Combine("D:/downloads/AuroraLoader.0.22.3.standalone", "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
+            }
+            catch (Exception exc)
+            {
+                Log.Error("Failure while copying SQLite interop DLLs", exc);
+            }
+
+
             var assemblies = LoadSQLiteAssemblies();
 
             // TODO would love to set up dependency injection
@@ -56,6 +71,7 @@ namespace AuroraLoader
             var localRegistry = new LocalModRegistry(configuration);
             var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
             var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
+            Log.Debug("Launching main form");
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
 

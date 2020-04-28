@@ -78,7 +78,7 @@ namespace AuroraLoader.Registry
         {
             try
             {
-                var rawFileContents = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "aurora_versions.ini"));
+                var rawFileContents = File.ReadAllText(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"));
                 AuroraVersions = ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList();
             }
             catch (Exception e)

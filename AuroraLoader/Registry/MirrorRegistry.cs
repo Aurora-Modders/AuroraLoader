@@ -27,14 +27,14 @@ namespace AuroraLoader.Registry
             var mirrors = new List<Mirror>();
             try
             {
-                foreach (var rootUrl in File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mirrors.ini")))
+                foreach (var rootUrl in File.ReadAllLines(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini")))
                 {
                     mirrors.Add(new Mirror(_configuration, rootUrl));
                 }
             }
             catch (Exception e)
             {
-                Log.Error($"Failed to parse mirror data from {Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mirrors.ini")}", e);
+                Log.Error($"Failed to parse mirror data from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini")}", e);
             }
 
             Mirrors = mirrors;
