@@ -143,6 +143,14 @@ namespace AuroraLoader
                     ButtonUpdateAuroraLoader.Text = $"Update AuroraLoader to {auroraLoaderMod.Listing.LatestVersion}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
                     ButtonUpdateAuroraLoader.Enabled = true;
+
+                    // Disable 'update aurora' button if there is a loader update that should be grabbed first
+                    if (ButtonUpdateAurora.Enabled == true)
+                    {
+                        ButtonUpdateAurora.Text = "Update loader";
+                        ButtonUpdateAurora.ForeColor = Color.Black;
+                        ButtonUpdateAurora.Enabled = false;
+                    }
                 }
                 else
                 {
