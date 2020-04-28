@@ -58,10 +58,10 @@
             // 
             // ButtonSinglePlayer
             // 
-            this.ButtonSinglePlayer.Location = new System.Drawing.Point(286, 13);
+            this.ButtonSinglePlayer.Location = new System.Drawing.Point(227, 60);
             this.ButtonSinglePlayer.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonSinglePlayer.Name = "ButtonSinglePlayer";
-            this.ButtonSinglePlayer.Size = new System.Drawing.Size(98, 63);
+            this.ButtonSinglePlayer.Size = new System.Drawing.Size(100, 25);
             this.ButtonSinglePlayer.TabIndex = 2;
             this.ButtonSinglePlayer.Text = "Single Player";
             this.ButtonSinglePlayer.UseVisualStyleBackColor = true;
@@ -70,7 +70,7 @@
             // LabelVersion
             // 
             this.LabelVersion.AutoSize = true;
-            this.LabelVersion.Location = new System.Drawing.Point(29, 24);
+            this.LabelVersion.Location = new System.Drawing.Point(36, 37);
             this.LabelVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelVersion.Name = "LabelVersion";
             this.LabelVersion.Size = new System.Drawing.Size(141, 15);
@@ -80,7 +80,7 @@
             // LabelChecksum
             // 
             this.LabelChecksum.AutoSize = true;
-            this.LabelChecksum.Location = new System.Drawing.Point(29, 58);
+            this.LabelChecksum.Location = new System.Drawing.Point(53, 216);
             this.LabelChecksum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelChecksum.Name = "LabelChecksum";
             this.LabelChecksum.Size = new System.Drawing.Size(103, 15);
@@ -89,10 +89,10 @@
             // 
             // ButtonUpdateAurora
             // 
-            this.ButtonUpdateAurora.Location = new System.Drawing.Point(14, 257);
+            this.ButtonUpdateAurora.Location = new System.Drawing.Point(232, 395);
             this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
-            this.ButtonUpdateAurora.Size = new System.Drawing.Size(152, 46);
+            this.ButtonUpdateAurora.Size = new System.Drawing.Size(100, 25);
             this.ButtonUpdateAurora.TabIndex = 12;
             this.ButtonUpdateAurora.Text = "Update Aurora";
             this.ButtonUpdateAurora.UseVisualStyleBackColor = true;
@@ -104,7 +104,7 @@
             this.ButtonMultiPlayer.Location = new System.Drawing.Point(387, 87);
             this.ButtonMultiPlayer.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonMultiPlayer.Name = "ButtonMultiPlayer";
-            this.ButtonMultiPlayer.Size = new System.Drawing.Size(66, 95);
+            this.ButtonMultiPlayer.Size = new System.Drawing.Size(100, 25);
             this.ButtonMultiPlayer.TabIndex = 17;
             this.ButtonMultiPlayer.Text = "Multi Player";
             this.ButtonMultiPlayer.UseVisualStyleBackColor = true;
@@ -115,7 +115,7 @@
             this.ButtonInstallAurora.Location = new System.Drawing.Point(616, 193);
             this.ButtonInstallAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonInstallAurora.Name = "ButtonInstallAurora";
-            this.ButtonInstallAurora.Size = new System.Drawing.Size(118, 60);
+            this.ButtonInstallAurora.Size = new System.Drawing.Size(100, 25);
             this.ButtonInstallAurora.TabIndex = 18;
             this.ButtonInstallAurora.Text = "Install Aurora";
             this.ButtonInstallAurora.UseVisualStyleBackColor = true;
@@ -124,7 +124,7 @@
             // 
             this.TrackVolume.Enabled = false;
             this.TrackVolume.LargeChange = 1;
-            this.TrackVolume.Location = new System.Drawing.Point(113, 193);
+            this.TrackVolume.Location = new System.Drawing.Point(487, 160);
             this.TrackVolume.Margin = new System.Windows.Forms.Padding(4);
             this.TrackVolume.Name = "TrackVolume";
             this.TrackVolume.Size = new System.Drawing.Size(162, 45);
@@ -133,7 +133,7 @@
             // CheckMusic
             // 
             this.CheckMusic.AutoSize = true;
-            this.CheckMusic.Location = new System.Drawing.Point(14, 193);
+            this.CheckMusic.Location = new System.Drawing.Point(269, 146);
             this.CheckMusic.Margin = new System.Windows.Forms.Padding(4);
             this.CheckMusic.Name = "CheckMusic";
             this.CheckMusic.Size = new System.Drawing.Size(58, 19);
@@ -147,7 +147,7 @@
             this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(259, 225);
             this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
-            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(143, 69);
+            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(100, 25);
             this.ButtonUpdateAuroraLoader.TabIndex = 12;
             this.ButtonUpdateAuroraLoader.Text = "Update AuroraLoader";
             this.ButtonUpdateAuroraLoader.UseVisualStyleBackColor = true;
@@ -158,7 +158,7 @@
             this.ButtonReadme.Location = new System.Drawing.Point(577, 53);
             this.ButtonReadme.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonReadme.Name = "ButtonReadme";
-            this.ButtonReadme.Size = new System.Drawing.Size(106, 39);
+            this.ButtonReadme.Size = new System.Drawing.Size(100, 25);
             this.ButtonReadme.TabIndex = 13;
             this.ButtonReadme.Text = "Readme";
             this.ButtonReadme.UseVisualStyleBackColor = true;
@@ -167,7 +167,7 @@
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.AutoSize = true;
-            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(29, 90);
+            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(47, 252);
             this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
             this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(177, 15);
@@ -245,7 +245,7 @@
             // 
             this.ButtonInstallOrUpdate.Location = new System.Drawing.Point(782, 395);
             this.ButtonInstallOrUpdate.Name = "ButtonInstallOrUpdate";
-            this.ButtonInstallOrUpdate.Size = new System.Drawing.Size(93, 48);
+            this.ButtonInstallOrUpdate.Size = new System.Drawing.Size(100, 25);
             this.ButtonInstallOrUpdate.TabIndex = 29;
             this.ButtonInstallOrUpdate.Text = "Install";
             this.ButtonInstallOrUpdate.UseVisualStyleBackColor = true;
@@ -255,7 +255,7 @@
             // 
             this.ButtonConfigureMod.Location = new System.Drawing.Point(980, 386);
             this.ButtonConfigureMod.Name = "ButtonConfigureMod";
-            this.ButtonConfigureMod.Size = new System.Drawing.Size(162, 39);
+            this.ButtonConfigureMod.Size = new System.Drawing.Size(100, 25);
             this.ButtonConfigureMod.TabIndex = 30;
             this.ButtonConfigureMod.Text = "Configure";
             this.ButtonConfigureMod.UseVisualStyleBackColor = true;
