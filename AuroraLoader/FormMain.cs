@@ -49,7 +49,8 @@ namespace AuroraLoader
             CheckApproved.Enabled = false;
             CheckPower.Enabled = false;
             CheckPublic.Enabled = false;
-            TabMods.SelectedTab = TabApplyMods;
+            LinkModdedBug.Enabled = false;
+
         }
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
@@ -169,46 +170,7 @@ namespace AuroraLoader
 
         private void CheckEnableGameMods_CheckChanged(object sender, EventArgs e)
         {
-            if (CheckEnableGameMods.Checked)
-            {
-                var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
-                if (result == DialogResult.OK)
-                {
-                    ButtonAuroraBugs.Enabled = false;
-                    ButtonAuroraBugs.ForeColor = Color.Black;
-                    ButtonModBugs.Enabled = true;
-                    ButtonModBugs.ForeColor = Color.OrangeRed;
 
-                    ComboSelectLaunchExe.Enabled = true;
-                    ListDatabaseMods.Enabled = true;
-                    CheckApproved.Enabled = true;
-                    CheckPower.Enabled = true;
-                    CheckPublic.Enabled = true;
-                }
-                else
-                {
-                    CheckEnableGameMods.Checked = false;
-                }
-            }
-            if (!CheckEnableGameMods.Checked)
-            {
-                ButtonAuroraBugs.Enabled = true;
-                ButtonAuroraBugs.ForeColor = Color.OrangeRed;
-                ButtonModBugs.Enabled = false;
-                ButtonModBugs.ForeColor = Color.Black;
-
-                ComboSelectLaunchExe.SelectedItem = ComboSelectLaunchExe.Items[0];
-                for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
-                {
-                    ListDatabaseMods.SetItemChecked(i, false);
-                }
-
-                ComboSelectLaunchExe.Enabled = false;
-                ListDatabaseMods.Enabled = false;
-                CheckApproved.Enabled = false;
-                CheckPower.Enabled = false;
-                CheckPublic.Enabled = false;
-            }
         }
 
         private IList<ModStatus> GetAllowedModStatuses()
@@ -292,7 +254,7 @@ namespace AuroraLoader
             ListManageMods.Clear();
             ListManageMods.AllowColumnReorder = true;
             ListManageMods.FullRowSelect = true;
-            ListManageMods.Dock = DockStyle.Top;
+            //ListManageMods.Dock = DockStyle.Top;
             ListManageMods.View = View.Details;
             ListManageMods.Columns.Add("Name");
             ListManageMods.Columns.Add("Type");
@@ -332,36 +294,35 @@ namespace AuroraLoader
 
         private void ListManageMods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ButtonInstallOrUpdate.Enabled = false;
-            ButtonConfigureMod.Enabled = false;
+            ButtonInstallOrUpdate.Enabled = false;	
+            ButtonConfigureMod.Enabled = false;	
 
-            if (ListManageMods.SelectedItems.Count > 0)
-            {
-                var selected = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-                if (selected.Installed)
-                {
-                    ButtonInstallOrUpdate.Text = "Update";
-                    if (selected.CanBeUpdated)
-                    {
-                        ButtonInstallOrUpdate.Enabled = true;
-                    }
-                    if (selected.Installation.ModInternalConfigFile != null)
-                    {
-                        ButtonConfigureMod.Enabled = true;
-                    }
-                }
-                else
-                {
-                    ButtonInstallOrUpdate.Text = "Install";
-                    ButtonInstallOrUpdate.Enabled = true;
-                }
+            if (ListManageMods.SelectedItems.Count > 0)	
+            {	
+                var selected = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);	
+                if (selected.Installed)	
+                {	
+                    ButtonInstallOrUpdate.Text = "Update";	
+                    if (selected.CanBeUpdated)	
+                    {	
+                        ButtonInstallOrUpdate.Enabled = true;	
+                    }	
+                    if (selected.Installation.ModInternalConfigFile != null)	
+                    {	
+                        ButtonConfigureMod.Enabled = true;	
+                    }	
+                }	
+                else	
+                {	
+                    ButtonInstallOrUpdate.Text = "Install";	
+                    ButtonInstallOrUpdate.Enabled = true;	
+                }	
+            }	
+            else	
+            {	
+                ButtonInstallOrUpdate.Text = "Update";	
+                ButtonInstallOrUpdate.Enabled = false;	
             }
-            else
-            {
-                ButtonInstallOrUpdate.Text = "Update";
-                ButtonInstallOrUpdate.Enabled = false;
-            }
-
         }
 
         private void ButtonInstallOrUpdateMods_Click(object sender, EventArgs e)
@@ -542,25 +503,7 @@ namespace AuroraLoader
             UpdateLaunchExeCombo();
         }
 
-        private void ButtonAuroraForums_Click(object sender, EventArgs e)
-        {
-            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?action=forum#c14");
-        }
 
-        private void ButtonAuroraBugs_Click(object sender, EventArgs e)
-        {
-            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
-        }
-
-        private void ButtonModsSubreddit_Click(object sender, EventArgs e)
-        {
-            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
-        }
-
-        private void ButtonModBugs_Click(object sender, EventArgs e)
-        {
-            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
-        }
 
         private void ButtonReadme_Click(object sender, EventArgs e)
         {
@@ -604,7 +547,78 @@ namespace AuroraLoader
 
         }
 
-        private void ListUtilities_SelectedIndexChanged(object sender, EventArgs e)
+        private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LinkSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+        }
+
+        private void LinkFourms_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/");
+        }
+
+        private void LinkVanillaBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
+        }
+
+        private void LinkModdedBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
+        }
+
+
+        private void CheckEnableGameMod_CheckChanged(object sender, EventArgs e)
+        {
+            if (CheckEnableGameMods.Checked)
+            {
+                var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    LinkVanillaBug.Enabled = false;
+                    LinkModdedBug.Enabled = true;
+
+                    ComboSelectLaunchExe.Enabled = true;
+                    ListDatabaseMods.Enabled = true;
+                    CheckApproved.Enabled = true;
+                    CheckPower.Enabled = true;
+                    CheckPublic.Enabled = true;
+                }
+                else
+                {
+                    CheckEnableGameMods.Checked = false;
+                }
+            }
+            if (!CheckEnableGameMods.Checked)
+            {
+                LinkVanillaBug.Enabled = true;
+                LinkModdedBug.Enabled = false;
+
+                ComboSelectLaunchExe.SelectedItem = ComboSelectLaunchExe.Items[0];
+                for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
+                {
+                    ListDatabaseMods.SetItemChecked(i, false);
+                }
+
+                ComboSelectLaunchExe.Enabled = false;
+                ListDatabaseMods.Enabled = false;
+                CheckApproved.Enabled = false;
+                CheckPower.Enabled = false;
+                CheckPublic.Enabled = false;
+            }
+        }
+
+        private void LabelVersion_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CheckPower_CheckedChanged_1(object sender, EventArgs e)
         {
 
         }
