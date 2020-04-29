@@ -1,6 +1,6 @@
 ![.NET Core](https://github.com/Aurora-Modders/AuroraLoader/workflows/.NET%20Core/badge.svg?branch=master)
 
-![](https://user-images.githubusercontent.com/711467/80448136-4e431c80-88e9-11ea-8d01-f691e45ad66a.png)
+![](https://i.ibb.co/LJHr0rN/Capture.png)
 
 # Installation Requirements
 
@@ -14,7 +14,7 @@ Download the latest release and extract to a directory. Run the .exe. If the dir
 
 # Features
 
-- Automatically updates Aurora and itself
+- Automatically installs, backs up, and updates both Aurora and itself
 - Browse mods on the Aurora Registry by type, version, and whether or not they've been approved by the developer
 - Validates mod structure and compatibility with your version of Aurora
 - Supports running Aurora with custom exe launchers, database modifications, and any launching number of utilities*
