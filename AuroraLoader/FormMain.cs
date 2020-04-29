@@ -43,13 +43,11 @@ namespace AuroraLoader
             UpdateManageModsListView();
 
             Cursor = Cursors.Default;
-            CheckEnableGameMods.Enabled = true;
-            ComboSelectLaunchExe.Enabled = false;
+            CheckEnableMods.Enabled = true;
+            ComboSelectExecutableMod.Enabled = false;
             ListDatabaseMods.Enabled = false;
-            CheckApproved.Enabled = false;
-            CheckPower.Enabled = false;
-            CheckPublic.Enabled = false;
-            LinkModdedBug.Enabled = false;
+            CheckEnablePoweruserMods.Enabled = false;
+            LinkDiscord.Enabled = false;
 
         }
 
@@ -111,15 +109,13 @@ namespace AuroraLoader
             _auroraVersionRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
             if (_auroraVersionRegistry.CurrentAuroraVersion == null)
             {
-                LabelVersion.Text = "Aurora version: Unknown";
+                LabelAuroraVersion.Text = "Aurora version: Unknown";
             }
             else
             {
                 _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
-
-                LabelChecksum.Text = $"Aurora checksum: {_auroraVersionRegistry.CurrentAuroraVersion.Checksum}";
-                LabelVersion.Text = $"Aurora version: {_auroraVersionRegistry.CurrentAuroraVersion.Version}";
-                LabelAuroraLoaderVersion.Text = $"AuroraLoader Version: {_modRegistry.Mods.Single(m => m.Name == "AuroraLoader").Installation.Version}";
+                LabelAuroraVersion.Text = $"Aurora v{_auroraVersionRegistry.CurrentAuroraVersion.Version} ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
+                LabelAuroraLoaderVersion.Text = $"Loader v{_modRegistry.Mods.Single(m => m.Name == "AuroraLoader").Installation.Version}";
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
                 {
@@ -190,15 +186,12 @@ namespace AuroraLoader
         private IList<ModStatus> GetAllowedModStatuses()
         {
             var approvedStatuses = new List<ModStatus>();
-            if (CheckApproved.Checked)
+            if (CheckEnableMods.Checked)
             {
                 approvedStatuses.Add(ModStatus.APPROVED);
-            }
-            if (CheckPublic.Checked)
-            {
                 approvedStatuses.Add(ModStatus.PUBLIC);
             }
-            if (CheckPower.Checked)
+            if (CheckEnablePoweruserMods.Checked)
             {
                 approvedStatuses.Add(ModStatus.POWERUSER);
             }
@@ -210,8 +203,8 @@ namespace AuroraLoader
         /// </summary>
         private void UpdateLaunchExeCombo()
         {
-            ComboSelectLaunchExe.Items.Clear();
-            ComboSelectLaunchExe.Items.Add("Base game");
+            ComboSelectExecutableMod.Items.Clear();
+            ComboSelectExecutableMod.Items.Add("Base game");
 
             foreach (var mod in _modRegistry.Mods.Where(
                 mod => mod.Installed
@@ -220,11 +213,11 @@ namespace AuroraLoader
                 && mod.Name != "AuroraLoader"
                 && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion)))
             {
-                ComboSelectLaunchExe.Items.Add(mod.Name);
+                ComboSelectExecutableMod.Items.Add(mod.Name);
             }
-            if (ComboSelectLaunchExe.Items.Count > 0)
+            if (ComboSelectExecutableMod.Items.Count > 0)
             {
-                ComboSelectLaunchExe.SelectedIndex = 0;
+                ComboSelectExecutableMod.SelectedIndex = 0;
             }
         }
 
@@ -233,9 +226,9 @@ namespace AuroraLoader
         /// </summary>
         private void ComboSelectLaunchExe_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if ((string)ComboSelectLaunchExe.SelectedItem != "Base game")
+            if ((string)ComboSelectExecutableMod.SelectedItem != "Base game")
             {
-                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
+                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem);
             }
             else
             {
@@ -293,7 +286,7 @@ namespace AuroraLoader
             }
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            ButtonInstallOrUpdate.Enabled = false;
+            ButtonInstallOrUpdateMod.Enabled = false;
             ListManageMods.EndUpdate();
             ListManageMods.Focus();
             if (ListManageMods.Items.Count > 0)
@@ -308,7 +301,7 @@ namespace AuroraLoader
 
         private void ListManageMods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ButtonInstallOrUpdate.Enabled = false;
+            ButtonInstallOrUpdateMod.Enabled = false;
             ButtonConfigureMod.Enabled = false;
 
             if (ListManageMods.SelectedItems.Count > 0)
@@ -316,10 +309,10 @@ namespace AuroraLoader
                 var selected = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
                 if (selected.Installed)
                 {
-                    ButtonInstallOrUpdate.Text = "Update";
+                    ButtonInstallOrUpdateMod.Text = "Update";
                     if (selected.CanBeUpdated)
                     {
-                        ButtonInstallOrUpdate.Enabled = true;
+                        ButtonInstallOrUpdateMod.Enabled = true;
                     }
                     if (selected.Installation.ModInternalConfigFile != null)
                     {
@@ -328,14 +321,14 @@ namespace AuroraLoader
                 }
                 else
                 {
-                    ButtonInstallOrUpdate.Text = "Install";
-                    ButtonInstallOrUpdate.Enabled = true;
+                    ButtonInstallOrUpdateMod.Text = "Install";
+                    ButtonInstallOrUpdateMod.Enabled = true;
                 }
             }
             else
             {
-                ButtonInstallOrUpdate.Text = "Update";
-                ButtonInstallOrUpdate.Enabled = false;
+                ButtonInstallOrUpdateMod.Text = "Update";
+                ButtonInstallOrUpdateMod.Enabled = false;
             }
         }
 
@@ -414,7 +407,6 @@ namespace AuroraLoader
             }
 
             ButtonSinglePlayer.Enabled = false;
-            ButtonMultiPlayer.Enabled = false;
             ButtonUpdateAurora.Enabled = false;
 
             var mods = _modRegistry.Mods.Where(mod =>
@@ -422,9 +414,9 @@ namespace AuroraLoader
             || (ListUtilities.CheckedItems != null && ListUtilities.CheckedItems.Contains(mod.Name))).ToList();
 
             Mod executableMod;
-            if (ComboSelectLaunchExe.SelectedItem != null && (string)ComboSelectLaunchExe.SelectedItem != "Base game")
+            if (ComboSelectExecutableMod.SelectedItem != null && (string)ComboSelectExecutableMod.SelectedItem != "Base game")
             {
-                executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectLaunchExe.SelectedItem);
+                executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem);
             }
             else
             {
@@ -457,7 +449,7 @@ namespace AuroraLoader
 
             while (!process.HasExited)
             {
-                if (CheckMusic.Checked && songs.Count > 0)
+                if (CheckEnableMusic.Checked && songs.Count > 0)
                 {
                     var current = songs.Where(s => s.Playing).FirstOrDefault();
 
@@ -472,7 +464,7 @@ namespace AuroraLoader
                     {
                         Invoke((MethodInvoker)delegate
                         {
-                            current.Volume = TrackVolume.Value / 10d;
+                            current.Volume = TrackMusicVolume.Value / 10d;
                         });
                     }
                 }
@@ -507,7 +499,7 @@ namespace AuroraLoader
             MessageBox.Show("Game ended.");
             ButtonSinglePlayer.Enabled = true;
             RefreshAuroraInstallData();
-            ButtonInstallOrUpdate.Enabled = true;
+            ButtonInstallOrUpdateMod.Enabled = true;
         }
 
         private void ButtonSinglePlayer_Click(object sender, EventArgs e)
@@ -559,14 +551,13 @@ namespace AuroraLoader
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)
         {
-            if (CheckMusic.Checked)
+            if (CheckEnableMusic.Checked)
             {
-                TrackVolume.Value = 5;
-                TrackVolume.Enabled = true;
+                TrackMusicVolume.Enabled = true;
             }
             else
             {
-                TrackVolume.Enabled = false;
+                TrackMusicVolume.Enabled = false;
             }
         }
 
@@ -612,47 +603,38 @@ namespace AuroraLoader
 
         private void CheckEnableGameMod_CheckChanged(object sender, EventArgs e)
         {
-            if (CheckEnableGameMods.Checked)
+            if (CheckEnableMods.Checked)
             {
                 var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
                 if (result == DialogResult.OK)
                 {
-                    LinkVanillaBug.Enabled = false;
-                    LinkModdedBug.Enabled = true;
+                    LinkReportBug.Enabled = false;
+                    LinkDiscord.Enabled = true;
 
-                    ComboSelectLaunchExe.Enabled = true;
+                    ComboSelectExecutableMod.Enabled = true;
                     ListDatabaseMods.Enabled = true;
-                    CheckApproved.Enabled = true;
-                    CheckPower.Enabled = true;
-                    CheckPublic.Enabled = true;
+                    CheckEnablePoweruserMods.Enabled = true;
                 }
                 else
                 {
-                    CheckEnableGameMods.Checked = false;
+                    CheckEnableMods.Checked = false;
                 }
             }
-            if (!CheckEnableGameMods.Checked)
+            if (!CheckEnableMods.Checked)
             {
-                LinkVanillaBug.Enabled = true;
-                LinkModdedBug.Enabled = false;
+                LinkReportBug.Enabled = true;
+                LinkDiscord.Enabled = false;
 
-                ComboSelectLaunchExe.SelectedItem = ComboSelectLaunchExe.Items[0];
+                ComboSelectExecutableMod.SelectedItem = ComboSelectExecutableMod.Items[0];
                 for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
                 {
                     ListDatabaseMods.SetItemChecked(i, false);
                 }
 
-                ComboSelectLaunchExe.Enabled = false;
+                ComboSelectExecutableMod.Enabled = false;
                 ListDatabaseMods.Enabled = false;
-                CheckApproved.Enabled = false;
-                CheckPower.Enabled = false;
-                CheckPublic.Enabled = false;
+                CheckEnablePoweruserMods.Enabled = false;
             }
-        }
-
-        private void LabelVersion_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void CheckModStatus_CheckChanged(object sender, EventArgs e)
