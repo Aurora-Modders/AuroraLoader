@@ -72,21 +72,21 @@ namespace AuroraLoader
             // LabelAuroraVersion
             // 
             this.LabelAuroraVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraVersion.Location = new System.Drawing.Point(664, 934);
+            this.LabelAuroraVersion.Location = new System.Drawing.Point(674, 934);
             this.LabelAuroraVersion.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.LabelAuroraVersion.Name = "LabelAuroraVersion";
-            this.LabelAuroraVersion.Size = new System.Drawing.Size(210, 25);
+            this.LabelAuroraVersion.Size = new System.Drawing.Size(200, 25);
             this.LabelAuroraVersion.TabIndex = 7;
-            this.LabelAuroraVersion.Text = "Aurora v#.##.# (789ABC)";
+            this.LabelAuroraVersion.Text = "Aurora v#.##.#";
             this.LabelAuroraVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // ButtonUpdateAurora
             // 
             this.ButtonUpdateAurora.Enabled = false;
-            this.ButtonUpdateAurora.Location = new System.Drawing.Point(490, 895);
+            this.ButtonUpdateAurora.Location = new System.Drawing.Point(505, 895);
             this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
-            this.ButtonUpdateAurora.Size = new System.Drawing.Size(150, 45);
+            this.ButtonUpdateAurora.Size = new System.Drawing.Size(165, 45);
             this.ButtonUpdateAurora.TabIndex = 12;
             this.ButtonUpdateAurora.Text = "Update Aurora";
             this.ButtonUpdateAurora.UseVisualStyleBackColor = true;
@@ -120,7 +120,7 @@ namespace AuroraLoader
             this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(328, 895);
             this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
-            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(150, 45);
+            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(165, 45);
             this.ButtonUpdateAuroraLoader.TabIndex = 12;
             this.ButtonUpdateAuroraLoader.Text = "Update Loader";
             this.ButtonUpdateAuroraLoader.UseVisualStyleBackColor = true;
@@ -128,10 +128,10 @@ namespace AuroraLoader
             // 
             // ButtonReadme
             // 
-            this.ButtonReadme.Location = new System.Drawing.Point(720, 43);
+            this.ButtonReadme.Location = new System.Drawing.Point(720, 45);
             this.ButtonReadme.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.ButtonReadme.Name = "ButtonReadme";
-            this.ButtonReadme.Size = new System.Drawing.Size(120, 35);
+            this.ButtonReadme.Size = new System.Drawing.Size(120, 40);
             this.ButtonReadme.TabIndex = 13;
             this.ButtonReadme.Text = "Readme";
             this.ButtonReadme.UseVisualStyleBackColor = true;
@@ -140,10 +140,10 @@ namespace AuroraLoader
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(664, 909);
+            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(674, 909);
             this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
-            this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(210, 25);
+            this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(200, 25);
             this.LabelAuroraLoaderVersion.TabIndex = 7;
             this.LabelAuroraLoaderVersion.Text = "Loader v#.##.#";
             this.LabelAuroraLoaderVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;

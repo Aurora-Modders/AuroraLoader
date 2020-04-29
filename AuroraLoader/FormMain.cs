@@ -36,7 +36,7 @@ namespace AuroraLoader
             {
                 Icon = new Icon(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Aurora.ico"));
             }
-            catch (Exception exc)
+            catch
             {
                 Log.Debug("Failed to load icon");
             }
@@ -45,6 +45,12 @@ namespace AuroraLoader
             _ = MessageBox.Show(new Form { TopMost = true }, "AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
 
+            CheckEnableMods.Enabled = true;
+            ComboSelectExecutableMod.Enabled = false;
+            ListDatabaseMods.Enabled = false;
+            CheckEnablePoweruserMods.Enabled = false;
+            ButtonMultiplayer.Enabled = false;
+
             RefreshAuroraInstallData();
             UpdateUtilitiesListView();
             UpdateExecutableModCombo();
@@ -52,12 +58,6 @@ namespace AuroraLoader
             UpdateManageModsListView();
 
             Cursor = Cursors.Default;
-            CheckEnableMods.Enabled = true;
-            ComboSelectExecutableMod.Enabled = false;
-            ListDatabaseMods.Enabled = false;
-            CheckEnablePoweruserMods.Enabled = false;
-            LinkDiscord.Enabled = false;
-
         }
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e)
@@ -258,7 +258,6 @@ namespace AuroraLoader
             ListManageMods.Clear();
             ListManageMods.AllowColumnReorder = true;
             ListManageMods.FullRowSelect = true;
-            //ListManageMods.Dock = DockStyle.Top;
             ListManageMods.View = View.Details;
             ListManageMods.Columns.Add("Name");
             ListManageMods.Columns.Add("Type");
@@ -283,17 +282,10 @@ namespace AuroraLoader
             }
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            ButtonInstallOrUpdateMod.Enabled = false;
             ListManageMods.EndUpdate();
-            ListManageMods.Focus();
-            if (ListManageMods.Items.Count > 0)
-            {
-                ListManageMods.Items[0].Selected = true;
-            }
-            else
-            {
-                ButtonConfigureMod.Enabled = false;
-            }
+
+            ButtonInstallOrUpdateMod.Enabled = false;
+            ButtonConfigureMod.Enabled = false;
         }
 
         private void ListManageMods_SelectedIndexChanged(object sender, EventArgs e)
@@ -331,7 +323,6 @@ namespace AuroraLoader
 
         private void ButtonInstallOrUpdateMods_Click(object sender, EventArgs e)
         {
-
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
             _modRegistry.InstallOrUpdate(mod, _auroraVersionRegistry.CurrentAuroraVersion);
@@ -547,12 +538,12 @@ namespace AuroraLoader
 
         private void LinkModSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
         }
 
         private void LinkVanillaSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(@"https://www.reddit.com/r/aurora");
+            Program.OpenBrowser(@"https://www.reddit.com/r/aurora/");
         }
 
         private void LinkForums_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
