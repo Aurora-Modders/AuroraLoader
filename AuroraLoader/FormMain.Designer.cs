@@ -170,7 +170,7 @@ namespace AuroraLoader
             this.CheckEnablePoweruserMods.TabIndex = 23;
             this.CheckEnablePoweruserMods.Text = "Enable Poweruser Mods";
             this.CheckEnablePoweruserMods.UseVisualStyleBackColor = true;
-            this.CheckEnablePoweruserMods.CheckedChanged += new System.EventHandler(this.CheckModStatus_CheckChanged);
+            this.CheckEnablePoweruserMods.CheckedChanged += new System.EventHandler(this.CheckEnablePoweruserMod_CheckChanged);
             // 
             // ComboSelectExecutableMod
             // 
@@ -181,7 +181,6 @@ namespace AuroraLoader
             this.ComboSelectExecutableMod.Name = "ComboSelectExecutableMod";
             this.ComboSelectExecutableMod.Size = new System.Drawing.Size(343, 33);
             this.ComboSelectExecutableMod.TabIndex = 25;
-            this.ComboSelectExecutableMod.SelectedIndexChanged += new System.EventHandler(this.ComboSelectLaunchExe_SelectedIndexChanged);
             // 
             // ListDatabaseMods
             // 
@@ -281,7 +280,7 @@ namespace AuroraLoader
             this.LinkDiscord.TabIndex = 36;
             this.LinkDiscord.TabStop = true;
             this.LinkDiscord.Text = "Discord";
-            this.LinkDiscord.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkModBug_LinkClicked);
+            this.LinkDiscord.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkDiscord_LinkClicked);
             // 
             // LabelUtilities
             // 

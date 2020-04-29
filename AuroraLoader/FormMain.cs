@@ -32,14 +32,23 @@ namespace AuroraLoader
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            //Icon = Properties.Resources.Aurora;
-            MessageBox.Show("AuroraLoader will check for updates and then launch, this might take a moment.");
+            try
+            {
+                Icon = new Icon(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Aurora.ico"));
+            }
+            catch (Exception exc)
+            {
+                Log.Debug("Failed to load icon");
+            }
+
+            // Show message on top
+            _ = MessageBox.Show(new Form { TopMost = true }, "AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
 
             RefreshAuroraInstallData();
             UpdateUtilitiesListView();
-            UpdateLaunchExeCombo();
-            UpdateGameModsListView();
+            UpdateExecutableModCombo();
+            UpdateDatabaseModListView();
             UpdateManageModsListView();
 
             Cursor = Cursors.Default;
@@ -180,7 +189,9 @@ namespace AuroraLoader
 
         private void CheckEnableGameMods_CheckChanged(object sender, EventArgs e)
         {
-
+            UpdateExecutableModCombo();
+            UpdateDatabaseModListView();
+            UpdateUtilitiesListView();
         }
 
         private IList<ModStatus> GetAllowedModStatuses()
@@ -201,7 +212,7 @@ namespace AuroraLoader
         /// <summary>
         /// Call to update the list of exe mods (enabled/disabled and filter by status)
         /// </summary>
-        private void UpdateLaunchExeCombo()
+        private void UpdateExecutableModCombo()
         {
             ComboSelectExecutableMod.Items.Clear();
             ComboSelectExecutableMod.Items.Add("Base game");
@@ -222,24 +233,10 @@ namespace AuroraLoader
         }
 
         /// <summary>
-        /// Enable the Configure EXE button if the EXE is configurable
-        /// </summary>
-        private void ComboSelectLaunchExe_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if ((string)ComboSelectExecutableMod.SelectedItem != "Base game")
-            {
-                var selectedMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem);
-            }
-            else
-            {
-            }
-        }
-
-        /// <summary>
         /// Call to update the list of 'game mods' below the exe mod combo
         /// Currently this is the Database modtype, no mods use this yet. Always empty.
         /// </summary>
-        private void UpdateGameModsListView()
+        private void UpdateDatabaseModListView()
         {
             ListDatabaseMods.Items.Clear();
             ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
@@ -339,9 +336,9 @@ namespace AuroraLoader
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
             _modRegistry.InstallOrUpdate(mod, _auroraVersionRegistry.CurrentAuroraVersion);
             UpdateManageModsListView();
-            UpdateGameModsListView();
+            UpdateDatabaseModListView();
             UpdateUtilitiesListView();
-            UpdateLaunchExeCombo();
+            UpdateExecutableModCombo();
             Cursor = Cursors.Default;
         }
 
@@ -393,6 +390,11 @@ namespace AuroraLoader
                 Log.Error($"Failed while trying to open {ListManageMods.SelectedItems[0]} config file", exc);
             }
 
+        }
+
+        private void ButtonSinglePlayer_Click(object sender, EventArgs e)
+        {
+            StartGame();
         }
 
         private void StartGame()
@@ -502,29 +504,6 @@ namespace AuroraLoader
             ButtonInstallOrUpdateMod.Enabled = true;
         }
 
-        private void ButtonSinglePlayer_Click(object sender, EventArgs e)
-        {
-            StartGame();
-        }
-
-        private void CheckApproved_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateGameModsListView();
-            UpdateLaunchExeCombo();
-        }
-
-        private void CheckPublic_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateGameModsListView();
-            UpdateLaunchExeCombo();
-        }
-
-        private void CheckPower_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateGameModsListView();
-            UpdateLaunchExeCombo();
-        }
-
         private void ButtonReadme_Click(object sender, EventArgs e)
         {
             try
@@ -561,14 +540,9 @@ namespace AuroraLoader
             }
         }
 
-        private void TabMods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            // TODO display description
         }
 
         private void LinkModSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -578,7 +552,7 @@ namespace AuroraLoader
 
         private void LinkVanillaSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+            Process.Start(@"https://www.reddit.com/r/aurora");
         }
 
         private void LinkForums_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -591,14 +565,9 @@ namespace AuroraLoader
             Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
         }
 
-        private void LinkModBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
-        }
-
         private void LinkDiscord_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
+            Program.OpenBrowser(@"https://discordapp.com/channels/314031775892373504/701885084646506628");
         }
 
         private void CheckEnableGameMod_CheckChanged(object sender, EventArgs e)
@@ -609,7 +578,6 @@ namespace AuroraLoader
                 if (result == DialogResult.OK)
                 {
                     LinkReportBug.Enabled = false;
-                    LinkDiscord.Enabled = true;
 
                     ComboSelectExecutableMod.Enabled = true;
                     ListDatabaseMods.Enabled = true;
@@ -623,7 +591,6 @@ namespace AuroraLoader
             if (!CheckEnableMods.Checked)
             {
                 LinkReportBug.Enabled = true;
-                LinkDiscord.Enabled = false;
 
                 ComboSelectExecutableMod.SelectedItem = ComboSelectExecutableMod.Items[0];
                 for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
@@ -635,13 +602,16 @@ namespace AuroraLoader
                 ListDatabaseMods.Enabled = false;
                 CheckEnablePoweruserMods.Enabled = false;
             }
+            UpdateDatabaseModListView();
+            UpdateUtilitiesListView();
+            UpdateExecutableModCombo();
         }
 
-        private void CheckModStatus_CheckChanged(object sender, EventArgs e)
+        private void CheckEnablePoweruserMod_CheckChanged(object sender, EventArgs e)
         {
-            UpdateGameModsListView();
+            UpdateDatabaseModListView();
             UpdateUtilitiesListView();
-            UpdateLaunchExeCombo();
+            UpdateExecutableModCombo();
         }
     }
 }
