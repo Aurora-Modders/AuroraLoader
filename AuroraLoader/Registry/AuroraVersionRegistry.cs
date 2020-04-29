@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using AuroraLoader.Mods;
 using Microsoft.Extensions.Configuration;
+using Semver;
 
 namespace AuroraLoader.Registry
 {
@@ -15,22 +16,7 @@ namespace AuroraLoader.Registry
     {
         public IList<AuroraVersion> AuroraVersions { get; private set; } = new List<AuroraVersion>();
 
-        public AuroraVersion CurrentAuroraVersion
-        {
-            get
-            {
-                try
-                {
-                    var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora.exe")));
-                    return AuroraVersions.Single(v => v.Checksum.Equals(checksum));
-                }
-                catch
-                {
-                    return null;
-                }
-
-            }
-        }
+        public AuroraVersion CurrentAuroraVersion { get; private set; }
 
         private readonly IConfiguration _configuration;
         private readonly MirrorRegistry _mirrorRegistry;
@@ -46,6 +32,17 @@ namespace AuroraLoader.Registry
             _mirrorRegistry.Update(version);
             UpdateKnownVersionsFromCache();
             UpdateKnownAuroraVersionsFromMirror();
+
+            var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora.exe")));
+            try
+            {
+                CurrentAuroraVersion = AuroraVersions.Single(v => v.Checksum.Equals(checksum));
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Couldn't find Aurora version associated with checksum {checksum}", e);
+                CurrentAuroraVersion = new AuroraVersion(SemVersion.Parse("1.0.0"), checksum);
+            }
         }
 
         internal void UpdateKnownAuroraVersionsFromMirror()
