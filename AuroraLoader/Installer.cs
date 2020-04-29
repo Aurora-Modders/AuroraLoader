@@ -43,6 +43,13 @@ namespace AuroraLoader
             Program.CopyDirectory(clean, folder);
         }
 
+        public static void BackupAurora(GameInstallation current)
+        {
+            Directory.CreateDirectory(current.VersionedDirectory);
+            File.Copy(Path.Combine(current.InstallationPath, "Aurora.exe"), Path.Combine(current.VersionedDirectory, "Aurora.exe"), true);
+            File.Copy(Path.Combine(current.InstallationPath, "AuroraDB.db"), Path.Combine(current.VersionedDirectory, "AuroraDB.db"), true);
+        }
+
         public static void UpdateAurora(GameInstallation current, Dictionary<string, string> aurora_files)
         {
             var update = SemVersion.Parse(aurora_files["Version"]);
