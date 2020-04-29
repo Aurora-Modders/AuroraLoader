@@ -158,7 +158,7 @@ namespace AuroraLoader
             this.CheckEnableMods.TabIndex = 21;
             this.CheckEnableMods.Text = "Enable Mods";
             this.CheckEnableMods.UseVisualStyleBackColor = true;
-            this.CheckEnableMods.CheckedChanged += new System.EventHandler(this.CheckEnableGameMod_CheckChanged);
+            this.CheckEnableMods.CheckedChanged += new System.EventHandler(this.CheckEnableMods_CheckChanged);
             // 
             // CheckEnablePoweruserMods
             // 

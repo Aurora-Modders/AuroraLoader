@@ -185,15 +185,6 @@ namespace AuroraLoader
                 .Select(mod => mod.Name).ToArray());
         }
 
-        /* Game mods tab */
-
-        private void CheckEnableGameMods_CheckChanged(object sender, EventArgs e)
-        {
-            UpdateExecutableModCombo();
-            UpdateDatabaseModListView();
-            UpdateUtilitiesListView();
-        }
-
         private IList<ModStatus> GetAllowedModStatuses()
         {
             var approvedStatuses = new List<ModStatus>();
@@ -561,7 +552,7 @@ namespace AuroraLoader
             Program.OpenBrowser(@"https://discordapp.com/channels/314031775892373504/701885084646506628");
         }
 
-        private void CheckEnableGameMod_CheckChanged(object sender, EventArgs e)
+        private void CheckEnableMods_CheckChanged(object sender, EventArgs e)
         {
             if (CheckEnableMods.Checked)
             {
