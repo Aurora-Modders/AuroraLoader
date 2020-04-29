@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using AuroraLoader.Mods;
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
+using Semver;
 
 namespace AuroraLoader
 {
@@ -52,9 +53,7 @@ namespace AuroraLoader
             ButtonMultiplayer.Enabled = false;
 
             RefreshAuroraInstallData();
-            UpdateUtilitiesListView();
-            UpdateExecutableModCombo();
-            UpdateDatabaseModListView();
+            UpdateListViews();
             UpdateManageModsListView();
 
             Cursor = Cursors.Default;
@@ -124,12 +123,18 @@ namespace AuroraLoader
             else
             {
                 _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
-                LabelAuroraVersion.Text = $"Aurora v{_auroraVersionRegistry.CurrentAuroraVersion.Version} ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
+                if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
+                {
+                    LabelAuroraVersion.Text = $"Aurora.exe checksum ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
+                } else
+                {
+                    LabelAuroraVersion.Text = $"Aurora v{_auroraVersionRegistry.CurrentAuroraVersion.Version} ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
+                }
                 LabelAuroraLoaderVersion.Text = $"Loader v{_modRegistry.Mods.Single(m => m.Name == "AuroraLoader").Installation.Version}";
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
                 {
-                    ButtonUpdateAurora.Text = $"Update Aurora to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
+                    ButtonUpdateAurora.Text = $"Update to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
                     ButtonUpdateAurora.ForeColor = Color.Green;
                     ButtonUpdateAurora.Enabled = true;
                 }
@@ -146,7 +151,7 @@ namespace AuroraLoader
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
                 if (auroraLoaderMod.CanBeUpdated)
                 {
-                    ButtonUpdateAuroraLoader.Text = $"Update AuroraLoader to {auroraLoaderMod.Listing.LatestVersion}";
+                    ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.Listing.LatestVersion}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
                     ButtonUpdateAuroraLoader.Enabled = true;
 
@@ -174,9 +179,9 @@ namespace AuroraLoader
         /* Utilities tab */
 
         /// <summary>
-        /// Populates the Utilities tab
+        /// Populates the Utilities and Database Mod tabs
         /// </summary>
-        private void UpdateUtilitiesListView()
+        private void UpdateListViews()
         {
             ListUtilities.Items.Clear();
             ListUtilities.Items.AddRange(_modRegistry.Mods.Where(
@@ -184,28 +189,15 @@ namespace AuroraLoader
                 && (m.Type == ModType.UTILITY || m.Type == ModType.ROOTUTILITY || m.Type == ModType.THEME)
                 && m.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
                 .Select(mod => mod.Name).ToArray());
-        }
 
-        private IList<ModStatus> GetAllowedModStatuses()
-        {
-            var approvedStatuses = new List<ModStatus>();
-            if (CheckEnableMods.Checked)
-            {
-                approvedStatuses.Add(ModStatus.APPROVED);
-                approvedStatuses.Add(ModStatus.PUBLIC);
-            }
-            if (CheckEnablePoweruserMods.Checked)
-            {
-                approvedStatuses.Add(ModStatus.POWERUSER);
-            }
-            return approvedStatuses;
-        }
+            ListDatabaseMods.Items.Clear();
+            ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
+                mod => mod.Installed
+                && GetAllowedModStatuses().Contains(mod.Installation.Status)
+                && mod.Type == ModType.DATABASE
+                && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
+                .Select(mod => mod.Name).ToArray());
 
-        /// <summary>
-        /// Call to update the list of exe mods (enabled/disabled and filter by status)
-        /// </summary>
-        private void UpdateExecutableModCombo()
-        {
             ComboSelectExecutableMod.Items.Clear();
             ComboSelectExecutableMod.Items.Add("Base game");
 
@@ -224,19 +216,59 @@ namespace AuroraLoader
             }
         }
 
-        /// <summary>
-        /// Call to update the list of 'game mods' below the exe mod combo
-        /// Currently this is the Database modtype, no mods use this yet. Always empty.
-        /// </summary>
-        private void UpdateDatabaseModListView()
+        private IList<ModStatus> GetAllowedModStatuses()
         {
-            ListDatabaseMods.Items.Clear();
-            ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
-                mod => mod.Installed
-                && GetAllowedModStatuses().Contains(mod.Installation.Status)
-                && mod.Type == ModType.DATABASE
-                && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
-                .Select(mod => mod.Name).ToArray());
+            var approvedStatuses = new List<ModStatus>();
+            if (CheckEnableMods.Checked)
+            {
+                approvedStatuses.Add(ModStatus.APPROVED);
+                approvedStatuses.Add(ModStatus.PUBLIC);
+            }
+            if (CheckEnablePoweruserMods.Checked)
+            {
+                approvedStatuses.Add(ModStatus.POWERUSER);
+            }
+            return approvedStatuses;
+        }
+
+        private void CheckEnableMods_CheckChanged(object sender, EventArgs e)
+        {
+            if (CheckEnableMods.Checked)
+            {
+                var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
+                if (result == DialogResult.OK)
+                {
+                    LinkReportBug.Enabled = false;
+
+                    ComboSelectExecutableMod.Enabled = true;
+                    ListDatabaseMods.Enabled = true;
+                    CheckEnablePoweruserMods.Enabled = true;
+                }
+                else
+                {
+                    CheckEnableMods.Checked = false;
+                }
+            }
+            if (!CheckEnableMods.Checked)
+            {
+                LinkReportBug.Enabled = true;
+
+                ComboSelectExecutableMod.SelectedItem = ComboSelectExecutableMod.Items[0];
+                for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
+                {
+                    ListDatabaseMods.SetItemChecked(i, false);
+                }
+
+                ComboSelectExecutableMod.Enabled = false;
+                ListDatabaseMods.Enabled = false;
+                CheckEnablePoweruserMods.Enabled = false;
+            }
+            UpdateListViews();
+        }
+
+        private void CheckEnablePoweruserMod_CheckChanged(object sender, EventArgs e)
+        {
+            UpdateListViews();
         }
 
         /// <summary>
@@ -319,9 +351,7 @@ namespace AuroraLoader
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
             _modRegistry.InstallOrUpdate(mod, _auroraVersionRegistry.CurrentAuroraVersion);
             UpdateManageModsListView();
-            UpdateDatabaseModListView();
-            UpdateUtilitiesListView();
-            UpdateExecutableModCombo();
+            UpdateListViews();
             Cursor = Cursors.Default;
         }
 
@@ -551,50 +581,6 @@ namespace AuroraLoader
         private void LinkDiscord_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Program.OpenBrowser(@"https://discordapp.com/channels/314031775892373504/701885084646506628");
-        }
-
-        private void CheckEnableMods_CheckChanged(object sender, EventArgs e)
-        {
-            if (CheckEnableMods.Checked)
-            {
-                var result = MessageBox.Show("By using game mods you agree to not post bug reports to the official Aurora bug report channels.", "Warning!", MessageBoxButtons.OKCancel);
-                if (result == DialogResult.OK)
-                {
-                    LinkReportBug.Enabled = false;
-
-                    ComboSelectExecutableMod.Enabled = true;
-                    ListDatabaseMods.Enabled = true;
-                    CheckEnablePoweruserMods.Enabled = true;
-                }
-                else
-                {
-                    CheckEnableMods.Checked = false;
-                }
-            }
-            if (!CheckEnableMods.Checked)
-            {
-                LinkReportBug.Enabled = true;
-
-                ComboSelectExecutableMod.SelectedItem = ComboSelectExecutableMod.Items[0];
-                for (int i = 0; i < ListDatabaseMods.Items.Count; i++)
-                {
-                    ListDatabaseMods.SetItemChecked(i, false);
-                }
-
-                ComboSelectExecutableMod.Enabled = false;
-                ListDatabaseMods.Enabled = false;
-                CheckEnablePoweruserMods.Enabled = false;
-            }
-            UpdateDatabaseModListView();
-            UpdateUtilitiesListView();
-            UpdateExecutableModCombo();
-        }
-
-        private void CheckEnablePoweruserMod_CheckChanged(object sender, EventArgs e)
-        {
-            UpdateDatabaseModListView();
-            UpdateUtilitiesListView();
-            UpdateExecutableModCombo();
         }
     }
 }
