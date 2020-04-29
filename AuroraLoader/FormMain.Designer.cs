@@ -91,7 +91,7 @@ namespace AuroraLoader
             this.LabelChecksum.Name = "LabelChecksum";
             this.LabelChecksum.Size = new System.Drawing.Size(153, 25);
             this.LabelChecksum.TabIndex = 8;
-            this.LabelChecksum.Text = "Aurora checksum:";
+            this.LabelChecksum.Text = "Aurora checksum: Unknown";
             // 
             // ButtonUpdateAurora
             // 
@@ -315,7 +315,7 @@ namespace AuroraLoader
             this.LinkSubreddit.TabIndex = 35;
             this.LinkSubreddit.TabStop = true;
             this.LinkSubreddit.Text = "Mod Subreddit";
-            this.LinkSubreddit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkSubreddit_LinkClicked);
+            this.LinkSubreddit.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkVanillaSubreddit_LinkClicked);
             // 
             // LinkModdedBug
             // 
@@ -327,7 +327,7 @@ namespace AuroraLoader
             this.LinkModdedBug.TabIndex = 36;
             this.LinkModdedBug.TabStop = true;
             this.LinkModdedBug.Text = "Report a Bug";
-            this.LinkModdedBug.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkModdedBug_LinkClicked);
+            this.LinkModdedBug.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkModBug_LinkClicked);
             // 
             // LabelExeMod
             // 
@@ -362,12 +362,12 @@ namespace AuroraLoader
             // ManageMods
             // 
             this.ManageMods.AutoSize = true;
-            this.ManageMods.Location = new System.Drawing.Point(56, 518);
+            this.ManageMods.Location = new System.Drawing.Point(40, 518);
             this.ManageMods.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.ManageMods.Name = "ManageMods";
-            this.ManageMods.Size = new System.Drawing.Size(198, 25);
+            this.ManageMods.Size = new System.Drawing.Size(131, 25);
             this.ManageMods.TabIndex = 40;
-            this.ManageMods.Text = "Manage Installed Mods";
+            this.ManageMods.Text = "Manage mods:";
             // 
             // FormMain
             // 

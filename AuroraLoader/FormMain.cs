@@ -580,7 +580,12 @@ namespace AuroraLoader
 
         }
 
-        private void LinkSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkModSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
+        }
+
+        private void LinkVanillaSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(@"https://www.reddit.com/r/aurora4x_mods/");
         }
@@ -595,11 +600,15 @@ namespace AuroraLoader
             Program.OpenBrowser(@"http://aurora2.pentarch.org/index.php?board=273.0");
         }
 
-        private void LinkModdedBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkModBug_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
         }
 
+        private void LinkDiscord_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Program.OpenBrowser(@"https://www.reddit.com/r/aurora4x_mods/");
+        }
 
         private void CheckEnableGameMod_CheckChanged(object sender, EventArgs e)
         {
