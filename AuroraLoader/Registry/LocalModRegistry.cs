@@ -43,7 +43,7 @@ namespace AuroraLoader.Registry
             {
                 var auroraLoader = ModConfigurationReader.ModConfigurationFromIni(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"));
                 var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString());
-                if (!Directory.Exists(Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString())))
+                if (!Directory.Exists(auroraLoaderModDirectory))
                 {
                     Directory.CreateDirectory(auroraLoaderModDirectory);
                     File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);

@@ -60,6 +60,7 @@ namespace AuroraLoader.Registry
             {
                 // Specially load in AuroraLoader itself
                 var auroraLoaderModInstallation = _localRegistry.ModInstallations.Single(i => i.Name == "AuroraLoader");
+                Log.Debug("Installed loader: " + auroraLoaderModInstallation.Version);
                 var auroraLoaderModListing = new ModListing(auroraLoaderModInstallation.Name, auroraLoaderModInstallation.Updates);
                 mods.Add(new Mod(auroraLoaderModInstallation, auroraLoaderModListing));
                 installedMods.Remove(auroraLoaderModInstallation);
@@ -86,6 +87,7 @@ namespace AuroraLoader.Registry
             }
 
             InstallOrUpdate(mod, version);
+            mod = Mods.Single(mod => mod.Name == "AuroraLoader");
             File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
             foreach (var file in new string[]
             {
