@@ -20,21 +20,21 @@ namespace AuroraLoader.Registry
 
         private readonly IConfiguration _configuration;
         private readonly LocalModRegistry _localRegistry;
-        private readonly MirrorRegistry _mirrorRegistry;
 
         public IEnumerable<ModListing> ModListings;
 
-        public ModRegistry(IConfiguration configuration, LocalModRegistry localRegistry, MirrorRegistry mirrorRegistry)
+        public IList<Mirror> Mirrors { get; private set; }
+
+        public ModRegistry(IConfiguration configuration, LocalModRegistry localRegistry)
         {
             _configuration = configuration;
             _localRegistry = localRegistry;
-            _mirrorRegistry = mirrorRegistry;
         }
 
         public void Update(AuroraVersion version)
         {
             _localRegistry.Update(version);
-            UpdateModListings(version);
+            UpdateModListings();
 
             var mods = new List<Mod>();
 
@@ -109,11 +109,11 @@ namespace AuroraLoader.Registry
             }
         }
 
-        public void UpdateModListings(AuroraVersion version)
+        public void UpdateModListings()
         {
-            _mirrorRegistry.Update(version);
+            Mirrors = ModConfigurationReader.UpdateMirrorsFromIni(_configuration);
             var modListings = new List<ModListing>();
-            foreach (var mirror in _mirrorRegistry.Mirrors)
+            foreach (var mirror in Mirrors)
             {
                 foreach (var mirrorListing in mirror.ModListings)
                 {

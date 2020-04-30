@@ -115,7 +115,7 @@ namespace AuroraLoader
         /// </summary>
         private void RefreshAuroraInstallData()
         {
-            _auroraVersionRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
+            _auroraVersionRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, _modRegistry.Mirrors);
             if (_auroraVersionRegistry.CurrentAuroraVersion == null)
             {
                 LabelAuroraVersion.Text = "Aurora version: Unknown";

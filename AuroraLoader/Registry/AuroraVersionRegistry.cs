@@ -19,19 +19,24 @@ namespace AuroraLoader.Registry
         public AuroraVersion CurrentAuroraVersion { get; private set; }
 
         private readonly IConfiguration _configuration;
-        private readonly MirrorRegistry _mirrorRegistry;
 
-        public AuroraVersionRegistry(IConfiguration configuration, MirrorRegistry mirrorRegistry)
+        public AuroraVersionRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
-            _mirrorRegistry = mirrorRegistry;
         }
 
         public void Update(AuroraVersion version)
         {
-            _mirrorRegistry.Update(version);
+            Update(version, null);
+        }
+
+        public void Update(AuroraVersion version, IList<Mirror> mirrors = null)
+        {
             UpdateKnownVersionsFromCache();
-            UpdateKnownAuroraVersionsFromMirror();
+            if (mirrors != null)
+            {
+                UpdateKnownAuroraVersionsFromMirrors(mirrors);
+            }
 
             var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora.exe")));
             try
@@ -45,11 +50,25 @@ namespace AuroraLoader.Registry
             }
         }
 
-        internal void UpdateKnownAuroraVersionsFromMirror()
+        internal void UpdateKnownVersionsFromCache()
+        {
+            try
+            {
+                var rawFileContents = File.ReadAllText(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"));
+                AuroraVersions = ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList();
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to parse version data from {_configuration["aurora_known_versions_relative_filepath"]}", e);
+            }
+        }
+
+        internal void UpdateKnownAuroraVersionsFromMirrors(IList<Mirror> mirrors)
         {
             var mirrorKnownVersions = new List<AuroraVersion>(AuroraVersions);
-            foreach (var mirror in _mirrorRegistry.Mirrors)
+            foreach (var mirror in mirrors)
             {
+                mirror.UpdateKnownAuroraVersions();
                 try
                 {
                     mirror.UpdateKnownAuroraVersions();
@@ -68,20 +87,6 @@ namespace AuroraLoader.Registry
             }
 
             AuroraVersions = mirrorKnownVersions.Union(AuroraVersions).ToList();
-            // TODO update local cache
-        }
-
-        internal void UpdateKnownVersionsFromCache()
-        {
-            try
-            {
-                var rawFileContents = File.ReadAllText(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"));
-                AuroraVersions = ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList();
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to parse version data from {_configuration["aurora_known_versions_relative_filepath"]}", e);
-            }
         }
 
         internal string GetChecksum(byte[] bytes)

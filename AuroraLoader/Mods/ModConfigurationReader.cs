@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
 using Semver;
 
 namespace AuroraLoader.Mods
@@ -91,6 +93,31 @@ namespace AuroraLoader.Mods
         {
             var settings = FromKeyValueString(versionChecksums);
             return settings.Select(kvp => new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
+        }
+
+        public static IList<Mirror> UpdateMirrorsFromIni(IConfiguration configuration)
+        {
+            var mirrors = new List<Mirror>();
+            try
+            {
+                foreach (var rootUrl in File.ReadAllLines(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini")))
+                {
+                    try
+                    {
+                        mirrors.Add(new Mirror(configuration, rootUrl));
+                    }
+                    catch (Exception exc)
+                    {
+                        Log.Error($"Failed to add {rootUrl} as a mirror", exc);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to parse mirror data from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini")}", e);
+            }
+
+            return mirrors;
         }
 
         public static Dictionary<string, string> FromKeyValueString(string str)

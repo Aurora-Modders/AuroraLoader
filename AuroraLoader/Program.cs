@@ -61,10 +61,9 @@ namespace AuroraLoader
                 .AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
-            var mirrorRegistry = new MirrorRegistry(configuration);
-            var auroraVersionRegistry = new AuroraVersionRegistry(configuration, mirrorRegistry);
+            var auroraVersionRegistry = new AuroraVersionRegistry(configuration);
             var localRegistry = new LocalModRegistry(configuration);
-            var modRegistry = new ModRegistry(configuration, localRegistry, mirrorRegistry);
+            var modRegistry = new ModRegistry(configuration, localRegistry);
             Log.Debug("Launching main form");
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
