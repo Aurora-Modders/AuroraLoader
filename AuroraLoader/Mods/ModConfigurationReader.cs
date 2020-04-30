@@ -57,36 +57,7 @@ namespace AuroraLoader.Mods
 
             mod.HighestInstalledVersion = mod.Version;
 
-            ValidateModConfiguration(mod);
-
             return mod;
-        }
-
-        private static void ValidateModConfiguration(ModConfiguration mod)
-        {
-            if (mod.Name == null || mod.Name.Length < 2)
-            {
-                throw new Exception("Mod name must have length at least 2");
-            }
-            if (mod.Version == null)
-            {
-                throw new Exception("Mod must have a version");
-            }
-            if (mod.TargetAuroraVersion == null)
-            {
-                throw new Exception("Mod must have an Aurora version");
-            }
-            if (mod.ExecuteCommand == null)
-            {
-                if (mod.Type == ModType.EXE || mod.Type == ModType.UTILITY || mod.Type == ModType.ROOTUTILITY)
-                {
-                    throw new Exception("Mod of type " + mod.Type.ToString() + " must define an Exe");
-                }
-            }
-            else if (mod.ExecuteCommand.Equals("Aurora.exe"))
-            {
-                throw new Exception("Mod exe can not be Aurora.exe");
-            }
         }
 
         public static IEnumerable<AuroraVersion> AuroraVersionsFromString(string versionChecksums)
@@ -95,7 +66,7 @@ namespace AuroraLoader.Mods
             return settings.Select(kvp => new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
         }
 
-        public static IList<Mirror> UpdateMirrorsFromIni(IConfiguration configuration)
+        public static IList<Mirror> GetMirrorsFromIni(IConfiguration configuration)
         {
             var mirrors = new List<Mirror>();
             try

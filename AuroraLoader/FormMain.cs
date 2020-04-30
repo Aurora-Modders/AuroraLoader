@@ -53,7 +53,7 @@ namespace AuroraLoader
             ButtonMultiplayer.Enabled = false;
 
             // Only check mirrors for new versions at app startup
-            _auroraVersionRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, _modRegistry.Mirrors);
+            _auroraVersionRegistry.Update(_modRegistry.Mirrors);
             RefreshAuroraInstallData();
             UpdateListViews();
             UpdateManageModsListView();
@@ -117,7 +117,7 @@ namespace AuroraLoader
         /// </summary>
         private void RefreshAuroraInstallData()
         {
-            _auroraVersionRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
+            _auroraVersionRegistry.Update();
             if (_auroraVersionRegistry.CurrentAuroraVersion == null)
             {
                 LabelAuroraVersion.Text = "Aurora version: Unknown";
@@ -352,7 +352,7 @@ namespace AuroraLoader
         {
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            _modRegistry.InstallOrUpdate(mod);
+            mod.InstallOrUpdate();
             UpdateManageModsListView();
             UpdateListViews();
             Cursor = Cursors.Default;

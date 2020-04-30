@@ -25,7 +25,7 @@ namespace AuroraLoader.Registry
             _configuration = configuration;
         }
 
-        public void Update(AuroraVersion version, IList<Mirror> mirrors = null)
+        public void Update(IList<Mirror> mirrors = null)
         {
             UpdateKnownVersionsFromCache();
             if (mirrors != null)

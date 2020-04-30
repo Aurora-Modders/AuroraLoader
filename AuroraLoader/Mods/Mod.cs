@@ -1,4 +1,10 @@
-﻿namespace AuroraLoader.Mods
+﻿using System;
+using System.IO;
+using System.IO.Compression;
+using System.Net;
+using System.Windows.Forms;
+
+namespace AuroraLoader.Mods
 {
     public class Mod
     {
@@ -20,6 +26,60 @@
         {
             Installation = modInstallation;
             Listing = modListing;
+        }
+
+        public void InstallOrUpdate()
+        {
+            if (Installed && !CanBeUpdated)
+            {
+                throw new Exception($"{Name} is already up to date!");
+            }
+
+            Log.Debug($"Preparing caches in {Program.CacheDirectory}");
+            var zip = Path.Combine(Program.ModDirectory, "update.current");
+            if (File.Exists(zip))
+            {
+                File.Delete(zip);
+            }
+
+            var extract_folder = Path.Combine(Program.CacheDirectory, "Extract");
+            if (Directory.Exists(extract_folder))
+            {
+                Directory.Delete(extract_folder, true);
+            }
+            Directory.CreateDirectory(extract_folder);
+
+            Log.Debug($"Downloading from {Listing.LatestVersionUrl}");
+            try
+            {
+                using (var client = new WebClient())
+                {
+                    client.DownloadFile(Listing.LatestVersionUrl, zip);
+                }
+
+                ZipFile.ExtractToDirectory(zip, extract_folder);
+
+                var mod_version_folder = Path.Combine(Program.ModDirectory, Name, Listing.LatestVersion.ToString());
+                if (Directory.Exists(mod_version_folder))
+                {
+                    Directory.Delete(mod_version_folder, true);
+                }
+                Directory.CreateDirectory(mod_version_folder);
+
+                ZipFile.ExtractToDirectory(zip, mod_version_folder);
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed while installing or updating {Name} from {Listing.LatestVersionUrl}", e);
+                // TODO this is probably poor practice
+                MessageBox.Show($"Failed to download {Name} from {Listing.LatestVersionUrl}!");
+            }
+            finally
+            {
+                // Cleanup
+                File.Delete(zip);
+                Directory.Delete(extract_folder, true);
+            }
         }
     }
 }

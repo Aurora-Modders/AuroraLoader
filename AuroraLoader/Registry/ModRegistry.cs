@@ -90,7 +90,7 @@ namespace AuroraLoader.Registry
                 throw new Exception("Could not find AuroraLoader mod");
             }
 
-            InstallOrUpdate(auroraLoaderMod);
+            auroraLoaderMod.InstallOrUpdate();
             auroraLoaderMod = Mods.Single(mod => mod.Name == "AuroraLoader");
             File.Copy(Path.Combine(auroraLoaderMod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
             foreach (var file in new string[]
@@ -111,9 +111,9 @@ namespace AuroraLoader.Registry
             }
         }
 
-        public void UpdateModListings()
+        private void UpdateModListings()
         {
-            Mirrors = ModConfigurationReader.UpdateMirrorsFromIni(_configuration);
+            Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
             var modListings = new List<ModListing>();
             foreach (var mirror in Mirrors)
             {
@@ -141,7 +141,7 @@ namespace AuroraLoader.Registry
 
         // Mods installed locally are identified by their mod.ini or mod.json file
         // This is known as their 'mod configuration' file.
-        public void UpdateModInstallationData()
+        private void UpdateModInstallationData()
         {
             var mods = new List<ModConfiguration>();
 
@@ -202,63 +202,6 @@ namespace AuroraLoader.Registry
             //    }
             //}
             ModInstallations = mods;
-        }
-
-        // TODO I would prefer to handle caching withing LocalModRegistry
-        public void InstallOrUpdate(Mod mod)
-        {
-            if (mod.Installed && !mod.CanBeUpdated)
-            {
-                throw new Exception($"{mod.Name} is already up to date!");
-            }
-
-            Log.Debug($"Preparing caches in {Program.CacheDirectory}");
-            var zip = Path.Combine(Program.ModDirectory, "update.current");
-            if (File.Exists(zip))
-            {
-                File.Delete(zip);
-            }
-
-            var extract_folder = Path.Combine(Program.CacheDirectory, "Extract");
-            if (Directory.Exists(extract_folder))
-            {
-                Directory.Delete(extract_folder, true);
-            }
-            Directory.CreateDirectory(extract_folder);
-
-            Log.Debug($"Downloading from {mod.Listing.LatestVersionUrl}");
-            try
-            {
-                using (var client = new WebClient())
-                {
-                    client.DownloadFile(mod.Listing.LatestVersionUrl, zip);
-                }
-
-                ZipFile.ExtractToDirectory(zip, extract_folder);
-
-                var mod_version_folder = Path.Combine(Program.ModDirectory, mod.Name, mod.Listing.LatestVersion.ToString());
-                if (Directory.Exists(mod_version_folder))
-                {
-                    Directory.Delete(mod_version_folder, true);
-                }
-                Directory.CreateDirectory(mod_version_folder);
-
-                ZipFile.ExtractToDirectory(zip, mod_version_folder);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed while installing or updating {mod.Name} from {mod.Listing.LatestVersionUrl}", e);
-                MessageBox.Show($"Failed to download {mod.Name} from {mod.Listing.LatestVersionUrl}!");
-            }
-            finally
-            {
-                // Cleanup
-                File.Delete(zip);
-                Directory.Delete(extract_folder, true);
-            }
-
-            // Update mod in registry
-            Update();
         }
     }
 }
