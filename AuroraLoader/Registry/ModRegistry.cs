@@ -29,13 +29,42 @@ namespace AuroraLoader.Registry
             Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
         }
 
-        public void Update()
+        public void Update(bool updateRemote = false, bool updateCache = false)
         {
-            var mods = new List<Mod>();
-            mods.AddRange(GetLocalMods());
-            mods.AddRange(UpdateModListings());
-            Mods = MergeDuplicateMods(mods);
-            // TODO update cache
+            var mods = GetLocalMods();
+            IList<Mod> remote = new List<Mod>();
+            if (updateRemote)
+            {
+                remote = GetModsFromMirrors();
+            }
+
+            foreach (var remoteMod in remote)
+            {
+                var existingMod = mods.SingleOrDefault(mod => mod.Name == remoteMod.Name);
+                if (existingMod != null)
+                {
+                    var updatedDownloadList = existingMod.Downloads.ToList();
+                    updatedDownloadList.AddRange(remoteMod.Downloads.Where(nd => !existingMod.Downloads.Any(ed => ed.Version == nd.Version)));
+                    existingMod.Downloads = updatedDownloadList;
+                }
+                else
+                {
+                    mods.Add(remoteMod);
+                }
+            }
+            Mods = mods;
+
+            if (updateRemote && updateCache)
+            {
+                foreach (var mod in Mods.Where(mod => mod.Installed))
+                {
+                    mod.UpdateCache();
+                }
+            }
+            else if (updateCache && !updateRemote)
+            {
+                throw new Exception("Updating cache without updating remote does nothing");
+            }
         }
 
         // Mods installed locally are identified by their mod.ini or mod.json file
@@ -49,12 +78,13 @@ namespace AuroraLoader.Registry
                 {
                     var newMod = JsonSerializer.Deserialize<Mod>(File.ReadAllText(modJsonFile), new JsonSerializerOptions()
                     {
-                        ReadCommentHandling = JsonCommentHandling.Skip
+                        ReadCommentHandling = JsonCommentHandling.Skip,
+                        PropertyNameCaseInsensitive = true
                     });
                     foreach (var modVersion in newMod.Downloads)
                     {
-                        var modVersionDirectory = Path.Combine(Program.ModDirectory, newMod.Name, modVersion.Version.ToString());
-                        if (Directory.Exists(modVersionDirectory))
+                        modVersion.Mod = newMod;
+                        if (Directory.Exists(modVersion.InstallationPath))
                         {
                             modVersion.Installed = true;
                         }
@@ -70,7 +100,7 @@ namespace AuroraLoader.Registry
             return mods;
         }
 
-        private IList<Mod> UpdateModListings()
+        private IList<Mod> GetModsFromMirrors()
         {
             var remoteMods = new List<Mod>();
             foreach (var mirror in Mirrors)
@@ -101,10 +131,16 @@ namespace AuroraLoader.Registry
                     try
                     {
                         var response = client.DownloadString(modJsonUrl);
-                        modsAtMirror.Add(JsonSerializer.Deserialize<Mod>(response, new JsonSerializerOptions()
+                        var mod = JsonSerializer.Deserialize<Mod>(response, new JsonSerializerOptions()
                         {
-                            ReadCommentHandling = JsonCommentHandling.Skip
-                        }));
+                            ReadCommentHandling = JsonCommentHandling.Skip,
+                            PropertyNameCaseInsensitive = true
+                        });
+                        foreach (var modVersion in mod.Downloads)
+                        {
+                            modVersion.Mod = mod;
+                        }
+                        modsAtMirror.Add(mod);
                     }
                     catch (Exception e)
                     {
@@ -116,36 +152,15 @@ namespace AuroraLoader.Registry
             return modsAtMirror;
         }
 
-        private IList<Mod> MergeDuplicateMods(IList<Mod> potentiallyContainsDuplicates)
-        {
-            var uniqueMods = new List<Mod>();
-            foreach (var newMod in potentiallyContainsDuplicates)
-            {
-                var existingMod = uniqueMods.SingleOrDefault(um => um.Name == newMod.Name);
-                if (existingMod != null)
-                {
-                    var updatedDownloadList = existingMod.Downloads.ToList();
-                    updatedDownloadList.AddRange(newMod.Downloads.Where(nd => !existingMod.Downloads.Any(ed => ed.Version == nd.Version)));
-                    existingMod.Downloads = updatedDownloadList;
-                }
-                else
-                {
-                    uniqueMods.Add(newMod);
-                }
-            }
-            return uniqueMods;
-        }
-
         public void UpdateAuroraLoader()
         {
             if (AuroraLoaderMod == null)
             {
                 throw new Exception("AuroraLoader mod not loaded");
             }
-            var targetVersion = AuroraLoaderMod.LatestVersion;
+            AuroraLoaderMod.LatestVersion.Install();
 
-            AuroraLoaderMod.InstallVersion(targetVersion);
-            File.Copy(Path.Combine(AuroraLoaderMod.ModVersionFolder(AuroraLoaderMod.LatestVersion), "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
+            File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.InstallationPath, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
             foreach (var file in new string[]
             {
                 "mod.json",
@@ -155,13 +170,14 @@ namespace AuroraLoader.Registry
             {
                 try
                 {
-                    File.Copy(Path.Combine(AuroraLoaderMod.ModVersionFolder(AuroraLoaderMod.LatestVersion), file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
+                    File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.InstallationPath, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
                 }
                 catch (Exception e)
                 {
                     Log.Error($"Failed to copy {file} while updating Aurora", e);
                 }
             }
+            AuroraLoaderMod.UpdateCache();
         }
     }
 }

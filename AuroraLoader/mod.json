@@ -3,7 +3,7 @@
 {
     // Required
     // Human-readable names with casing, punctuation, etc. are encouraged
-    "name": "Aurora Loader",
+    "name": "AuroraLoader",
 
     // Optional (but highly encouraged)
     "description": "A tool for discovering and safely installing content for Aurora",

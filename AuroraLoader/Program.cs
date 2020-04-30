@@ -87,7 +87,8 @@ namespace AuroraLoader
                 var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
                 var auroraLoader = JsonSerializer.Deserialize<Mod>(raw, new JsonSerializerOptions()
                 {
-                    ReadCommentHandling = JsonCommentHandling.Skip
+                    ReadCommentHandling = JsonCommentHandling.Skip,
+                    PropertyNameCaseInsensitive = true
                 });
                 var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.LatestVersion.Version.ToString());
                 if (!Directory.Exists(auroraLoaderModDirectory))

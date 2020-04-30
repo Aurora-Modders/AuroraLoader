@@ -54,6 +54,7 @@ namespace AuroraLoader
 
             // Only check mirrors for new versions at app startup
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
+            _modRegistry.Update(true);
             RefreshAuroraInstallData();
             UpdateListViews();
             UpdateManageModsListView();
@@ -123,7 +124,6 @@ namespace AuroraLoader
             }
             else
             {
-                _modRegistry.Update();
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
                 {
                     LabelAuroraVersion.Text = $"Aurora.exe checksum ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
@@ -188,6 +188,7 @@ namespace AuroraLoader
             ListUtilities.Items.Clear();
             ListUtilities.Items.AddRange(_modRegistry.Mods.Where(mod =>
                 (mod.Type == ModType.UTILITY || mod.Type == ModType.ROOTUTILITY)
+                && mod.Name != "AuroraLoader"
                 && mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null)
                 .Select(mod => mod.Name).ToArray());
 
@@ -204,7 +205,6 @@ namespace AuroraLoader
             foreach (var mod in _modRegistry.Mods.Where(
                 mod => mod.Type == ModType.EXECUTABLE
                 && GetAllowedModStatuses().Contains(mod.Status)
-                && mod.Name != "AuroraLoader"
                 && mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null))
             {
                 ComboSelectExecutableMod.Items.Add(mod.Name);
@@ -332,10 +332,15 @@ namespace AuroraLoader
                         ButtonConfigureMod.Enabled = true;
                     }
                 }
-                else
+                else if (selected.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null)
                 {
                     ButtonInstallOrUpdateMod.Text = "Install";
                     ButtonInstallOrUpdateMod.Enabled = true;
+                }
+                else
+                {
+                    ButtonInstallOrUpdateMod.Text = "Install";
+                    ButtonInstallOrUpdateMod.Enabled = false;
                 }
             }
             else
@@ -349,7 +354,7 @@ namespace AuroraLoader
         {
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            mod.InstallVersion(mod.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion));
+            mod.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Install();
             UpdateManageModsListView();
             UpdateListViews();
             Cursor = Cursors.Default;
@@ -382,7 +387,7 @@ namespace AuroraLoader
                 }
 
                 Log.Debug($"{mod.Name} config file: run {exe} in {mod.ModFolder} with args {args}");
-                if (!File.Exists(Path.Combine(mod.ModFolder, 
+                if (!File.Exists(Path.Combine(mod.ModFolder,
                     mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Version.ToString(), exe)))
                 {
                     MessageBox.Show($"Couldn't launch {Path.Combine(mod.ModFolder, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.json")} is correctly configured.");
