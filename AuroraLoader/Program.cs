@@ -85,17 +85,12 @@ namespace AuroraLoader
             if (File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json")))
             {
                 var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
-                var auroraLoader = JsonSerializer.Deserialize<Mod>(raw, new JsonSerializerOptions()
+                var auroraLoader = Mod.LoadMod(raw);
+                if (!Directory.Exists(auroraLoader.LatestVersion.InstallationPath))
                 {
-                    ReadCommentHandling = JsonCommentHandling.Skip,
-                    PropertyNameCaseInsensitive = true
-                });
-                var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.LatestVersion.Version.ToString());
-                if (!Directory.Exists(auroraLoaderModDirectory))
-                {
-                    Directory.CreateDirectory(auroraLoaderModDirectory);
-                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"), Path.Combine(auroraLoaderModDirectory, "mod.json"), true);
-                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoaderModDirectory, "AuroraLoader.Exe"), true);
+                    Directory.CreateDirectory(auroraLoader.LatestVersion.InstallationPath);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"), Path.Combine(auroraLoader.ModFolder, "mod.json"), true);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoader.LatestVersion.InstallationPath, "AuroraLoader.Exe"), true);
                 }
             }
         }

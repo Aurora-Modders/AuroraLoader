@@ -64,5 +64,23 @@ namespace AuroraLoader.Mods
                 WriteIndented = true
             }));
         }
+
+        public static Mod LoadMod(string rawJson)
+        {
+            var mod = JsonSerializer.Deserialize<Mod>(rawJson, new JsonSerializerOptions()
+            {
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                PropertyNameCaseInsensitive = true
+            });
+            foreach (var modVersion in mod.Downloads)
+            {
+                modVersion.Mod = mod;
+                if (Directory.Exists(modVersion.InstallationPath))
+                {
+                    modVersion.Installed = true;
+                }
+            }
+            return mod;
+        }
     }
 }

@@ -76,21 +76,7 @@ namespace AuroraLoader.Registry
             {
                 try
                 {
-                    var newMod = JsonSerializer.Deserialize<Mod>(File.ReadAllText(modJsonFile), new JsonSerializerOptions()
-                    {
-                        ReadCommentHandling = JsonCommentHandling.Skip,
-                        PropertyNameCaseInsensitive = true
-                    });
-                    foreach (var modVersion in newMod.Downloads)
-                    {
-                        modVersion.Mod = newMod;
-                        if (Directory.Exists(modVersion.InstallationPath))
-                        {
-                            modVersion.Installed = true;
-                        }
-                    }
-
-                    mods.Add(newMod);
+                    mods.Add(Mod.LoadMod(File.ReadAllText(modJsonFile)));
                 }
                 catch (Exception e)
                 {
@@ -131,16 +117,7 @@ namespace AuroraLoader.Registry
                     try
                     {
                         var response = client.DownloadString(modJsonUrl);
-                        var mod = JsonSerializer.Deserialize<Mod>(response, new JsonSerializerOptions()
-                        {
-                            ReadCommentHandling = JsonCommentHandling.Skip,
-                            PropertyNameCaseInsensitive = true
-                        });
-                        foreach (var modVersion in mod.Downloads)
-                        {
-                            modVersion.Mod = mod;
-                        }
-                        modsAtMirror.Add(mod);
+                        modsAtMirror.Add(Mod.LoadMod(response));
                     }
                     catch (Exception e)
                     {
