@@ -40,13 +40,18 @@
         {
             // Required
             // SemVer. Version of the mod.
-            "version": "0.23.5",
+            "version": "0.23.6",
 
             // Optional (but highly encouraged)
             // Target Aurora version. May be imprecise, i.e. '1.8' targets '1.8.*'
             "target_aurora_version": "1",
 
             // Required
+            "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.23.6/AuroraLoader-0.23.6.zip"
+        },
+        {
+            "version": "0.23.5",
+            "target_aurora_version": "1",
             "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.23.5/AuroraLoader-0.23.5.zip"
         },
 
