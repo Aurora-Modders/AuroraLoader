@@ -20,19 +20,21 @@ namespace AuroraLoader.Registry
 
         private readonly IConfiguration _configuration;
         private readonly LocalModRegistry _localRegistry;
-        private readonly RemoteModRegistry _remoteRegistry;
+        private readonly MirrorRegistry _mirrorRegistry;
 
-        public ModRegistry(IConfiguration configuration, LocalModRegistry localRegistry, RemoteModRegistry remoteRegistry)
+        public IEnumerable<ModListing> ModListings;
+
+        public ModRegistry(IConfiguration configuration, LocalModRegistry localRegistry, MirrorRegistry mirrorRegistry)
         {
             _configuration = configuration;
             _localRegistry = localRegistry;
-            _remoteRegistry = remoteRegistry;
+            _mirrorRegistry = mirrorRegistry;
         }
 
         public void Update(AuroraVersion version)
         {
             _localRegistry.Update(version);
-            _remoteRegistry.Update(version);
+            UpdateModListings(version);
 
             var mods = new List<Mod>();
 
@@ -42,7 +44,7 @@ namespace AuroraLoader.Registry
                 installedMods.Add(modInstallation);
             }
 
-            foreach (var modListing in _remoteRegistry.ModListings)
+            foreach (var modListing in ModListings)
             {
                 var installedMod = installedMods.FirstOrDefault(mod => mod.Name == modListing.ModName);
                 if (installedMod != null)
@@ -105,6 +107,34 @@ namespace AuroraLoader.Registry
                     Log.Error($"Failed to copy {file} while updating Aurora", e);
                 }
             }
+        }
+
+        public void UpdateModListings(AuroraVersion version)
+        {
+            _mirrorRegistry.Update(version);
+            var modListings = new List<ModListing>();
+            foreach (var mirror in _mirrorRegistry.Mirrors)
+            {
+                foreach (var mirrorListing in mirror.ModListings)
+                {
+                    // If we already have a listing for this mod from another mirror
+                    if (modListings.Any(l => l.ModName == mirrorListing.ModName))
+                    {
+                        // Update it if this mirror has a more recent version
+                        var match = modListings.Single(l => l.ModName == mirrorListing.ModName);
+                        if (modListings.Single(l => l.ModName == mirrorListing.ModName).LatestVersion.CompareTo(mirrorListing.LatestVersion) < 0)
+                        {
+                            match = new ModListing(match.ModName, mirrorListing.LatestVersionUrl);
+                        }
+                    }
+                    else
+                    {
+                        // Add the listing
+                        modListings.Add(mirrorListing);
+                    }
+                }
+            }
+            ModListings = modListings;
         }
 
         // TODO I would prefer to handle caching withing LocalModRegistry
