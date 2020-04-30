@@ -19,20 +19,22 @@ namespace AuroraLoader.Registry
         public IEnumerable<Mod> Mods { get; private set; }
 
         private readonly IConfiguration _configuration;
+        private readonly AuroraVersionRegistry _auroraVersionRegistry;
 
         public IEnumerable<ModListing> ModListings;
         public IList<ModConfiguration> ModInstallations;
 
         public IList<Mirror> Mirrors { get; private set; }
 
-        public ModRegistry(IConfiguration configuration)
+        public ModRegistry(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry)
         {
             _configuration = configuration;
+            _auroraVersionRegistry = auroraVersionRegistry;
         }
 
-        public void Update(AuroraVersion version)
+        public void Update()
         {
-            UpdateModInstallationData(version);
+            UpdateModInstallationData();
             UpdateModListings();
 
             var mods = new List<Mod>();
@@ -80,16 +82,17 @@ namespace AuroraLoader.Registry
             Mods = mods;
         }
 
-        public void UpdateAuroraLoader(Mod mod, AuroraVersion version)
+        public void UpdateAuroraLoader()
         {
-            if (mod.Name != "AuroraLoader")
+            var auroraLoaderMod = Mods.SingleOrDefault(mod => mod.Name == "AuroraLoader");
+            if (auroraLoaderMod == null)
             {
-                throw new Exception("This method can only be used to update the mod representing AuroraLoader");
+                throw new Exception("Could not find AuroraLoader mod");
             }
 
-            InstallOrUpdate(mod, version);
-            mod = Mods.Single(mod => mod.Name == "AuroraLoader");
-            File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
+            InstallOrUpdate(auroraLoaderMod);
+            auroraLoaderMod = Mods.Single(mod => mod.Name == "AuroraLoader");
+            File.Copy(Path.Combine(auroraLoaderMod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
             foreach (var file in new string[]
             {
                 "mod.ini",
@@ -99,7 +102,7 @@ namespace AuroraLoader.Registry
             {
                 try
                 {
-                    File.Copy(Path.Combine(mod.Installation.ModFolder, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
+                    File.Copy(Path.Combine(auroraLoaderMod.Installation.ModFolder, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
                 }
                 catch (Exception e)
                 {
@@ -138,7 +141,7 @@ namespace AuroraLoader.Registry
 
         // Mods installed locally are identified by their mod.ini or mod.json file
         // This is known as their 'mod configuration' file.
-        public void UpdateModInstallationData(AuroraVersion version)
+        public void UpdateModInstallationData()
         {
             var mods = new List<ModConfiguration>();
 
@@ -156,7 +159,8 @@ namespace AuroraLoader.Registry
                         }
                     }
 
-                    if (newMod.WorksForVersion(version))
+                    // TODO get rid of this dependency
+                    if (newMod.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
                     {
                         if (mods.Any(mod => mod.Name == newMod.Name))
                         {
@@ -201,7 +205,7 @@ namespace AuroraLoader.Registry
         }
 
         // TODO I would prefer to handle caching withing LocalModRegistry
-        public void InstallOrUpdate(Mod mod, AuroraVersion version)
+        public void InstallOrUpdate(Mod mod)
         {
             if (mod.Installed && !mod.CanBeUpdated)
             {
@@ -254,7 +258,7 @@ namespace AuroraLoader.Registry
             }
 
             // Update mod in registry
-            Update(version);
+            Update();
         }
     }
 }

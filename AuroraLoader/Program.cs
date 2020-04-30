@@ -68,7 +68,7 @@ namespace AuroraLoader
             CreateAuroraLoaderModDirectory();
 
             var auroraVersionRegistry = new AuroraVersionRegistry(configuration);
-            var modRegistry = new ModRegistry(configuration);
+            var modRegistry = new ModRegistry(configuration, auroraVersionRegistry);
             Log.Debug("Launching main form");
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }

@@ -97,7 +97,7 @@ namespace AuroraLoader
             MessageBox.Show($"Installing AuroraLoader {auroraLoaderMod.Listing.LatestVersion}");
             try
             {
-                var thread = new Thread(() => _modRegistry.UpdateAuroraLoader(auroraLoaderMod, _auroraVersionRegistry.CurrentAuroraVersion));
+                var thread = new Thread(() => _modRegistry.UpdateAuroraLoader());
                 thread.Start();
                 var progress = new FormProgress(thread);
                 progress.ShowDialog();
@@ -124,11 +124,12 @@ namespace AuroraLoader
             }
             else
             {
-                _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
+                _modRegistry.Update();
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
                 {
                     LabelAuroraVersion.Text = $"Aurora.exe checksum ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
-                } else
+                }
+                else
                 {
                     LabelAuroraVersion.Text = $"Aurora v{_auroraVersionRegistry.CurrentAuroraVersion.Version} ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
                 }
@@ -279,7 +280,7 @@ namespace AuroraLoader
         /// </summary>
         public void UpdateManageModsListView()
         {
-            _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion);
+            _modRegistry.Update();
             ListManageMods.BeginUpdate();
             ListManageMods.Clear();
             ListManageMods.AllowColumnReorder = true;
@@ -351,7 +352,7 @@ namespace AuroraLoader
         {
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            _modRegistry.InstallOrUpdate(mod, _auroraVersionRegistry.CurrentAuroraVersion);
+            _modRegistry.InstallOrUpdate(mod);
             UpdateManageModsListView();
             UpdateListViews();
             Cursor = Cursors.Default;
