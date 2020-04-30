@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
 using Semver;
 
@@ -17,16 +16,16 @@ namespace AuroraLoader.Mods
             return settings.Select(kvp => new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
         }
 
-        public static IList<Mirror> GetMirrorsFromIni(IConfiguration configuration)
+        public static IList<string> GetMirrorsFromIni(IConfiguration configuration)
         {
-            var mirrors = new List<Mirror>();
+            var mirrors = new List<string>();
             try
             {
                 foreach (var rootUrl in File.ReadAllLines(Path.Combine(Program.AuroraLoaderExecutableDirectory, "mirrors.ini")))
                 {
                     try
                     {
-                        mirrors.Add(new Mirror(configuration, rootUrl));
+                        mirrors.Add(rootUrl);
                     }
                     catch (Exception exc)
                     {

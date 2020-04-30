@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text.Json;
@@ -10,7 +9,6 @@ using System.Windows.Forms;
 using AuroraLoader.Mods;
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
-using Semver;
 
 namespace AuroraLoader
 {
@@ -91,7 +89,7 @@ namespace AuroraLoader
                 {
                     ReadCommentHandling = JsonCommentHandling.Skip
                 });
-                var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.LatestVersion.ToString());
+                var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.LatestVersion.Version.ToString());
                 if (!Directory.Exists(auroraLoaderModDirectory))
                 {
                     Directory.CreateDirectory(auroraLoaderModDirectory);

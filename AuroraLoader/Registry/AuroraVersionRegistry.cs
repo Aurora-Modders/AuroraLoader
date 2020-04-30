@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using AuroraLoader.Mods;
 using Microsoft.Extensions.Configuration;
@@ -25,7 +26,7 @@ namespace AuroraLoader.Registry
             _configuration = configuration;
         }
 
-        public void Update(IList<Mirror> mirrors = null)
+        public void Update(IList<string> mirrors = null)
         {
             UpdateKnownVersionsFromCache();
             if (mirrors != null)
@@ -37,6 +38,10 @@ namespace AuroraLoader.Registry
             try
             {
                 CurrentAuroraVersion = AuroraVersions.Single(v => v.Checksum.Equals(checksum));
+                // Update cache
+                File.WriteAllLines(
+                    Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"),
+                    AuroraVersions.Select(v => $"{v.Version}={v.Checksum}"));
             }
             catch (Exception e)
             {
@@ -58,30 +63,35 @@ namespace AuroraLoader.Registry
             }
         }
 
-        internal void UpdateKnownAuroraVersionsFromMirrors(IList<Mirror> mirrors)
+        internal void UpdateKnownAuroraVersionsFromMirrors(IList<string> mirrors)
         {
-            var mirrorKnownVersions = new List<AuroraVersion>(AuroraVersions);
+            var allKnownVersions = new List<AuroraVersion>(AuroraVersions);
             foreach (var mirror in mirrors)
             {
-                mirror.UpdateKnownAuroraVersions();
-                try
+                var mirrorKnownVersions = new List<AuroraVersion>();
+                var versionsUrl = Path.Combine(mirror, "aurora_versions.ini");
+                using (var client = new WebClient())
                 {
-                    mirror.UpdateKnownAuroraVersions();
-                    foreach (var version in mirror.KnownAuroraVersions)
+                    try
                     {
-                        if (!mirrorKnownVersions.Any(existing => version.Checksum == existing.Checksum))
-                        {
-                            mirrorKnownVersions.Add(version);
-                        }
+                        var response = client.DownloadString(versionsUrl);
+                        mirrorKnownVersions.AddRange(ModConfigurationReader.AuroraVersionsFromString(response));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"Didn't find an Aurora version listing at {versionsUrl}", e);
+                        throw;
                     }
                 }
-                catch (Exception e)
+                foreach (var version in mirrorKnownVersions)
                 {
-                    Log.Error($"Failed to update known Aurora versions from {mirror.RootUrl}", e);
+                    if (!allKnownVersions.Any(existing => version.Checksum == existing.Checksum))
+                    {
+                        allKnownVersions.Add(version);
+                    }
                 }
             }
-
-            AuroraVersions = mirrorKnownVersions.Union(AuroraVersions).ToList();
+            AuroraVersions = allKnownVersions;
         }
 
         internal string GetChecksum(byte[] bytes)

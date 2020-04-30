@@ -21,7 +21,7 @@ namespace AuroraLoader
         public static List<Process> Launch(GameInstallation installation, ModRegistry registry, IList<Mod> mods, Mod executableMod = null)
         {
             Log.Debug($"Launching from {installation.InstallationPath}");
-            if (mods.Any(mod => mod.Type == ModType.EXE))
+            if (mods.Any(mod => mod.Type == ModType.EXECUTABLE))
             {
                 throw new Exception("Use the other parameter");
             }
@@ -54,7 +54,7 @@ namespace AuroraLoader
                 var process = Run(mod.ModFolder, mod.LaunchCommand);
                 processes.Add(process);
             }
-            
+
             if (executableMod != null)
             {
                 CopyToFolder(executableMod, installation.InstallationPath);
@@ -73,7 +73,7 @@ namespace AuroraLoader
         private static void CopyToFolder(Mod mod, string folder)
         {
             var dir = Path.GetDirectoryName(mod.ModFolder);
-            foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
+            foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.json")))
             {
                 File.Copy(file, Path.Combine(folder, Path.GetFileName(file)), true);
             }
