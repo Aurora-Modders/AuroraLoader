@@ -19,27 +19,26 @@ namespace AuroraLoader.Registry
         public IEnumerable<Mod> Mods { get; private set; }
 
         private readonly IConfiguration _configuration;
-        private readonly LocalModRegistry _localRegistry;
 
         public IEnumerable<ModListing> ModListings;
+        public IList<ModConfiguration> ModInstallations;
 
         public IList<Mirror> Mirrors { get; private set; }
 
-        public ModRegistry(IConfiguration configuration, LocalModRegistry localRegistry)
+        public ModRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
-            _localRegistry = localRegistry;
         }
 
         public void Update(AuroraVersion version)
         {
-            _localRegistry.Update(version);
+            UpdateModInstallationData(version);
             UpdateModListings();
 
             var mods = new List<Mod>();
 
             var installedMods = new List<ModConfiguration>();
-            foreach (var modInstallation in _localRegistry.ModInstallations)
+            foreach (var modInstallation in ModInstallations)
             {
                 installedMods.Add(modInstallation);
             }
@@ -61,7 +60,7 @@ namespace AuroraLoader.Registry
             try
             {
                 // Specially load in AuroraLoader itself
-                var auroraLoaderModInstallation = _localRegistry.ModInstallations.Single(i => i.Name == "AuroraLoader");
+                var auroraLoaderModInstallation = ModInstallations.Single(i => i.Name == "AuroraLoader");
                 Log.Debug("Installed loader: " + auroraLoaderModInstallation.Version);
                 var auroraLoaderModListing = new ModListing(auroraLoaderModInstallation.Name, auroraLoaderModInstallation.Updates);
                 mods.Add(new Mod(auroraLoaderModInstallation, auroraLoaderModListing));
@@ -137,6 +136,70 @@ namespace AuroraLoader.Registry
             ModListings = modListings;
         }
 
+        // Mods installed locally are identified by their mod.ini or mod.json file
+        // This is known as their 'mod configuration' file.
+        public void UpdateModInstallationData(AuroraVersion version)
+        {
+            var mods = new List<ModConfiguration>();
+
+            foreach (var file in Directory.EnumerateFiles(Program.ModDirectory, "mod.ini", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var newMod = ModConfigurationReader.ModConfigurationFromIni(file);
+                    if (mods.Any(mod => mod.Name == newMod.Name))
+                    {
+                        var existingMod = mods.Single(mod => mod.Name == newMod.Name);
+                        if (newMod.Version.CompareByPrecedence(existingMod.HighestInstalledVersion) > 0)
+                        {
+                            existingMod.HighestInstalledVersion = newMod.Version;
+                        }
+                    }
+
+                    if (newMod.WorksForVersion(version))
+                    {
+                        if (mods.Any(mod => mod.Name == newMod.Name))
+                        {
+                            var existingMod = mods.Single(mod => mod.Name == newMod.Name);
+                            if (newMod.Version.CompareTo(existingMod.Version) > 0)
+                            {
+                                mods.Remove(existingMod);
+                                mods.Add(newMod);
+                            }
+                        }
+                        else
+                        {
+                            mods.Add(newMod);
+                        }
+                    }
+                    else if (mods.Count(m => m.Name == newMod.Name) == 0)
+                    {
+                        mods.Add(newMod);
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to parse mod data from {file}", e);
+                }
+            }
+
+            // TODO JSON mod configurations not yet supported
+            //foreach (var file in Directory.EnumerateFiles(ModDirectory, "mod.json", SearchOption.AllDirectories))
+            //{
+            //    try
+            //    {
+            //        var jsonString = File.ReadAllText(file);
+            //        mods.Add(JsonSerializer.Deserialize<ModConfiguration>(jsonString));
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Log.Error($"Failed to parse mod data from {file}", e);
+            //    }
+            //}
+            ModInstallations = mods;
+        }
+
         // TODO I would prefer to handle caching withing LocalModRegistry
         public void InstallOrUpdate(Mod mod, AuroraVersion version)
         {
@@ -145,14 +208,14 @@ namespace AuroraLoader.Registry
                 throw new Exception($"{mod.Name} is already up to date!");
             }
 
-            Log.Debug($"Preparing caches in {_localRegistry.CacheDirectory}");
-            var zip = Path.Combine(_localRegistry.ModDirectory, "update.current");
+            Log.Debug($"Preparing caches in {Program.CacheDirectory}");
+            var zip = Path.Combine(Program.ModDirectory, "update.current");
             if (File.Exists(zip))
             {
                 File.Delete(zip);
             }
 
-            var extract_folder = Path.Combine(_localRegistry.CacheDirectory, "Extract");
+            var extract_folder = Path.Combine(Program.CacheDirectory, "Extract");
             if (Directory.Exists(extract_folder))
             {
                 Directory.Delete(extract_folder, true);
@@ -169,7 +232,7 @@ namespace AuroraLoader.Registry
 
                 ZipFile.ExtractToDirectory(zip, extract_folder);
 
-                var mod_version_folder = Path.Combine(_localRegistry.ModDirectory, mod.Name, mod.Listing.LatestVersion.ToString());
+                var mod_version_folder = Path.Combine(Program.ModDirectory, mod.Name, mod.Listing.LatestVersion.ToString());
                 if (Directory.Exists(mod_version_folder))
                 {
                     Directory.Delete(mod_version_folder, true);

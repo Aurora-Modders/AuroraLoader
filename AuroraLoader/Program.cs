@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
+using AuroraLoader.Mods;
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
 
@@ -14,6 +15,9 @@ namespace AuroraLoader
     {
 
         public static readonly string AuroraLoaderExecutableDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+        public static readonly string ModDirectory = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Mods");
+        public static readonly string CacheDirectory = Path.Combine(Path.GetTempPath(), "auroraloader_cache");
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -61,11 +65,33 @@ namespace AuroraLoader
                 .AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
+            CreateAuroraLoaderModDirectory();
+
             var auroraVersionRegistry = new AuroraVersionRegistry(configuration);
-            var localRegistry = new LocalModRegistry(configuration);
-            var modRegistry = new ModRegistry(configuration, localRegistry);
+            var modRegistry = new ModRegistry(configuration);
             Log.Debug("Launching main form");
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
+        }
+
+        public static void CreateAuroraLoaderModDirectory()
+        {
+            if (!Directory.Exists(ModDirectory))
+            {
+                Directory.CreateDirectory(ModDirectory);
+            }
+
+            // Load the mod configuration for AuroraLoader itself
+            if (File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "mod.ini")))
+            {
+                var auroraLoader = ModConfigurationReader.ModConfigurationFromIni(Path.Combine(AuroraLoaderExecutableDirectory, "mod.ini"));
+                var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString());
+                if (!Directory.Exists(auroraLoaderModDirectory))
+                {
+                    Directory.CreateDirectory(auroraLoaderModDirectory);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoaderModDirectory, "AuroraLoader.Exe"), true);
+                }
+            }
         }
 
         private static void InstallAurora()
