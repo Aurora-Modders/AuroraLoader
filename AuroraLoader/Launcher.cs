@@ -45,20 +45,20 @@ namespace AuroraLoader
             {
                 Log.Debug("Root Utility: " + mod.Name);
                 CopyToFolder(mod, installation.InstallationPath);
-                var process = Run(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), mod.Installation.ExecuteCommand);
+                var process = Run(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), mod.LaunchCommand);
                 processes.Add(process);
             }
             foreach (var mod in mods.Where(mod => mod.Type == ModType.UTILITY))
             {
                 Log.Debug("Utility: " + mod.Name);
-                var process = Run(mod.Installation.ModFolder, mod.Installation.ExecuteCommand);
+                var process = Run(mod.ModFolder, mod.LaunchCommand);
                 processes.Add(process);
             }
             
             if (executableMod != null)
             {
                 CopyToFolder(executableMod, installation.InstallationPath);
-                var process = Run(Program.AuroraLoaderExecutableDirectory, executableMod.Installation.ExecuteCommand);
+                var process = Run(Program.AuroraLoaderExecutableDirectory, executableMod.LaunchCommand);
                 processes.Insert(0, process);
             }
             else
@@ -72,7 +72,7 @@ namespace AuroraLoader
 
         private static void CopyToFolder(Mod mod, string folder)
         {
-            var dir = Path.GetDirectoryName(mod.Installation.ModFolder);
+            var dir = Path.GetDirectoryName(mod.ModFolder);
             foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.ini")))
             {
                 File.Copy(file, Path.Combine(folder, Path.GetFileName(file)), true);
@@ -128,7 +128,7 @@ namespace AuroraLoader
 
         private static void InstallThemeMod(Mod mod, GameInstallation installation)
         {
-            Program.CopyDirectory(mod.Installation.ModFolder, installation.InstallationPath);
+            Program.CopyDirectory(mod.ModFolder, installation.InstallationPath);
             Log.Debug($"Installed theme mod: {mod.Name}");
         }
 
@@ -138,9 +138,9 @@ namespace AuroraLoader
 
             foreach (var mod in installed)
             {
-                foreach (var file in Directory.EnumerateFiles(mod.Installation.ModFolder, "*.*", SearchOption.AllDirectories))
+                foreach (var file in Directory.EnumerateFiles(mod.ModFolder, "*.*", SearchOption.AllDirectories))
                 {
-                    var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(mod.Installation.ModFolder, file));
+                    var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(mod.ModFolder, file));
                     if (File.Exists(out_file))
                     {
                         File.Delete(out_file);
@@ -161,7 +161,7 @@ namespace AuroraLoader
                 var table = new SQLiteCommand(TABLE, connection);
                 table.ExecuteNonQuery();
 
-                var files = Directory.EnumerateFiles(mod.Installation.ModFolder, "*.sql").ToList();
+                var files = Directory.EnumerateFiles(mod.ModFolder, "*.sql").ToList();
                 try
                 {
                     var uninstall = files.Single(f => Path.GetFileName(f).Equals("uninstall.sql"));
@@ -230,7 +230,7 @@ namespace AuroraLoader
                     }
                     else
                     {
-                        var file = Path.Combine(mod.Installation.ModFolder, "uninstall.sql");
+                        var file = Path.Combine(mod.ModFolder, "uninstall.sql");
                         if (!File.Exists(file))
                         {
                             throw new Exception($"Db mod {name} uninstall.sql not found");

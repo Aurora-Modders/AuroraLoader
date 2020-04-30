@@ -1,13 +1,16 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
 using AuroraLoader.Mods;
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
+using Semver;
 
 namespace AuroraLoader
 {
@@ -68,7 +71,7 @@ namespace AuroraLoader
             CreateAuroraLoaderModDirectory();
 
             var auroraVersionRegistry = new AuroraVersionRegistry(configuration);
-            var modRegistry = new ModRegistry(configuration, auroraVersionRegistry);
+            var modRegistry = new ModRegistry(configuration);
             Log.Debug("Launching main form");
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
@@ -81,14 +84,18 @@ namespace AuroraLoader
             }
 
             // Load the mod configuration for AuroraLoader itself
-            if (File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "mod.ini")))
+            if (File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json")))
             {
-                var auroraLoader = ModConfigurationReader.ModConfigurationFromIni(Path.Combine(AuroraLoaderExecutableDirectory, "mod.ini"));
-                var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.Version.ToString());
+                var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
+                var auroraLoader = JsonSerializer.Deserialize<Mod>(raw, new JsonSerializerOptions()
+                {
+                    ReadCommentHandling = JsonCommentHandling.Skip
+                });
+                var auroraLoaderModDirectory = Path.Combine(ModDirectory, auroraLoader.Name, auroraLoader.LatestVersion.ToString());
                 if (!Directory.Exists(auroraLoaderModDirectory))
                 {
                     Directory.CreateDirectory(auroraLoaderModDirectory);
-                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.ini"), Path.Combine(auroraLoaderModDirectory, "mod.ini"), true);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"), Path.Combine(auroraLoaderModDirectory, "mod.json"), true);
                     File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoaderModDirectory, "AuroraLoader.Exe"), true);
                 }
             }

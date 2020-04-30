@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Windows.Forms;
+using System.Text.Json;
 using AuroraLoader.Mods;
 using Microsoft.Extensions.Configuration;
 
@@ -19,26 +17,25 @@ namespace AuroraLoader.Registry
         public IEnumerable<Mod> Mods { get; private set; }
 
         private readonly IConfiguration _configuration;
-        private readonly AuroraVersionRegistry _auroraVersionRegistry;
 
         public IEnumerable<ModListing> ModListings;
         public IList<ModConfiguration> ModInstallations;
 
         public IList<Mirror> Mirrors { get; private set; }
 
-        public ModRegistry(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry)
+        public ModRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
-            _auroraVersionRegistry = auroraVersionRegistry;
+            Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
         }
 
         public void Update()
         {
-            UpdateModInstallationData();
-            UpdateModListings();
+            var localMods = GetLocalMods();
+            var remoteMods = UpdateModListings();
 
             var mods = new List<Mod>();
-
+            /////
             var installedMods = new List<ModConfiguration>();
             foreach (var modInstallation in ModInstallations)
             {
@@ -59,27 +56,44 @@ namespace AuroraLoader.Registry
                 }
             }
 
-            try
-            {
-                // Specially load in AuroraLoader itself
-                var auroraLoaderModInstallation = ModInstallations.Single(i => i.Name == "AuroraLoader");
-                Log.Debug("Installed loader: " + auroraLoaderModInstallation.Version);
-                var auroraLoaderModListing = new ModListing(auroraLoaderModInstallation.Name, auroraLoaderModInstallation.Updates);
-                mods.Add(new Mod(auroraLoaderModInstallation, auroraLoaderModListing));
-                installedMods.Remove(auroraLoaderModInstallation);
-            }
-            catch (Exception exc)
-            {
-                Log.Error($"Failed while loading AuroraLoader installation", exc);
-            }
-
-
             // Handle mods we couldn't find a listing for in the registry
             foreach (var installedMod in installedMods)
             {
                 mods.Add(new Mod(installedMod, null));
             }
             Mods = mods;
+        }
+
+        // Mods installed locally are identified by their mod.ini or mod.json file
+        // This is known as their 'mod configuration' file.
+        private IList<Mod> GetLocalMods()
+        {
+            var mods = new List<Mod>();
+            foreach (var file in Directory.EnumerateFiles(Program.ModDirectory, "mod.json", SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var rawString = File.ReadAllText(file);
+                    var newMod = JsonSerializer.Deserialize<Mod>(rawString);
+
+                    if (mods.Any(mod => mod.Name == newMod.Name))
+                    {
+                        var existingMod = mods.Single(mod => mod.Name == newMod.Name);
+                        var updatedDownloadList = existingMod.Downloads.ToList();
+                        updatedDownloadList.AddRange(newMod.Downloads.Where(nd => !existingMod.Downloads.Any(ed => ed.Version == nd.Version)));
+                        existingMod.Downloads = updatedDownloadList;
+                    }
+                    else
+                    {
+                        mods.Add(newMod);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to parse mod data from {file}", e);
+                }
+            }
+            return mods;
         }
 
         public void UpdateAuroraLoader()
@@ -92,7 +106,7 @@ namespace AuroraLoader.Registry
 
             auroraLoaderMod.InstallOrUpdate();
             auroraLoaderMod = Mods.Single(mod => mod.Name == "AuroraLoader");
-            File.Copy(Path.Combine(auroraLoaderMod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
+            File.Copy(Path.Combine(auroraLoaderMod.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
             foreach (var file in new string[]
             {
                 "mod.ini",
@@ -102,7 +116,7 @@ namespace AuroraLoader.Registry
             {
                 try
                 {
-                    File.Copy(Path.Combine(auroraLoaderMod.Installation.ModFolder, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
+                    File.Copy(Path.Combine(auroraLoaderMod.ModFolder, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
                 }
                 catch (Exception e)
                 {
@@ -111,9 +125,8 @@ namespace AuroraLoader.Registry
             }
         }
 
-        private void UpdateModListings()
+        private IList<ModListing> UpdateModListings()
         {
-            Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
             var modListings = new List<ModListing>();
             foreach (var mirror in Mirrors)
             {
@@ -136,72 +149,7 @@ namespace AuroraLoader.Registry
                     }
                 }
             }
-            ModListings = modListings;
-        }
-
-        // Mods installed locally are identified by their mod.ini or mod.json file
-        // This is known as their 'mod configuration' file.
-        private void UpdateModInstallationData()
-        {
-            var mods = new List<ModConfiguration>();
-
-            foreach (var file in Directory.EnumerateFiles(Program.ModDirectory, "mod.ini", SearchOption.AllDirectories))
-            {
-                try
-                {
-                    var newMod = ModConfigurationReader.ModConfigurationFromIni(file);
-                    if (mods.Any(mod => mod.Name == newMod.Name))
-                    {
-                        var existingMod = mods.Single(mod => mod.Name == newMod.Name);
-                        if (newMod.Version.CompareByPrecedence(existingMod.HighestInstalledVersion) > 0)
-                        {
-                            existingMod.HighestInstalledVersion = newMod.Version;
-                        }
-                    }
-
-                    // TODO get rid of this dependency
-                    if (newMod.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
-                    {
-                        if (mods.Any(mod => mod.Name == newMod.Name))
-                        {
-                            var existingMod = mods.Single(mod => mod.Name == newMod.Name);
-                            if (newMod.Version.CompareTo(existingMod.Version) > 0)
-                            {
-                                mods.Remove(existingMod);
-                                mods.Add(newMod);
-                            }
-                        }
-                        else
-                        {
-                            mods.Add(newMod);
-                        }
-                    }
-                    else if (mods.Count(m => m.Name == newMod.Name) == 0)
-                    {
-                        mods.Add(newMod);
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to parse mod data from {file}", e);
-                }
-            }
-
-            // TODO JSON mod configurations not yet supported
-            //foreach (var file in Directory.EnumerateFiles(ModDirectory, "mod.json", SearchOption.AllDirectories))
-            //{
-            //    try
-            //    {
-            //        var jsonString = File.ReadAllText(file);
-            //        mods.Add(JsonSerializer.Deserialize<ModConfiguration>(jsonString));
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Log.Error($"Failed to parse mod data from {file}", e);
-            //    }
-            //}
-            ModInstallations = mods;
+            return modListings;
         }
     }
 }

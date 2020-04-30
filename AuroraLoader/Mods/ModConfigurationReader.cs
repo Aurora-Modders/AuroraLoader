@@ -11,55 +11,6 @@ namespace AuroraLoader.Mods
 {
     public static class ModConfigurationReader
     {
-        public static ModConfiguration ModConfigurationFromIni(string modIniPath)
-        {
-            if (!File.Exists(modIniPath) || Path.GetFileName(modIniPath) != "mod.ini")
-            {
-                throw new Exception($"Path {modIniPath} not a valid mod.ini file");
-            }
-            var settings = FromKeyValueString(File.ReadAllText(modIniPath));
-
-            var mod = new ModConfiguration(Path.GetDirectoryName(modIniPath));
-
-            // Required
-            if (settings.ContainsKey("Name"))
-            {
-                mod.Name = settings["Name"];
-            }
-            if (settings.ContainsKey("Type"))
-            {
-                mod.Type = Enum.Parse<ModType>(settings["Type"], true);
-            }
-            if (settings.ContainsKey("Status"))
-            {
-                mod.Status = Enum.Parse<ModStatus>(settings["Status"], true);
-            }
-            if (settings.ContainsKey("Version"))
-            {
-                mod.Version = SemVersion.Parse(settings["Version"], false);
-            }
-            if (settings.ContainsKey("AuroraVersion"))
-            {
-                mod.TargetAuroraVersion = new ModCompabitilityVersion(settings["AuroraVersion"]);
-            }
-
-            // Optional at least some of the time
-            if (settings.ContainsKey("Executable"))
-            {
-                mod.ExecuteCommand = settings["Executable"];
-            }
-            else if (settings.ContainsKey("Exe"))
-            {
-                mod.ExecuteCommand = settings["Exe"];
-            }
-            mod.Updates = settings.ContainsKey("Updates") ? settings["Updates"] : null;
-            mod.ModInternalConfigFile = settings.ContainsKey("Config") ? settings["Config"] : null;
-
-            mod.HighestInstalledVersion = mod.Version;
-
-            return mod;
-        }
-
         public static IEnumerable<AuroraVersion> AuroraVersionsFromString(string versionChecksums)
         {
             var settings = FromKeyValueString(versionChecksums);

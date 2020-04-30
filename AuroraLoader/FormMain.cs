@@ -196,7 +196,7 @@ namespace AuroraLoader
             ListDatabaseMods.Items.Clear();
             ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
                 mod => mod.Installed
-                && GetAllowedModStatuses().Contains(mod.Installation.Status)
+                && GetAllowedModStatuses().Contains(mod.Status)
                 && mod.Type == ModType.DATABASE
                 && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion))
                 .Select(mod => mod.Name).ToArray());
@@ -206,7 +206,7 @@ namespace AuroraLoader
 
             foreach (var mod in _modRegistry.Mods.Where(
                 mod => mod.Installed
-                && GetAllowedModStatuses().Contains(mod.Installation.Status)
+                && GetAllowedModStatuses().Contains(mod.Status)
                 && mod.Type == ModType.EXE
                 && mod.Name != "AuroraLoader"
                 && mod.Installation.WorksForVersion(_auroraVersionRegistry.CurrentAuroraVersion)))
@@ -300,9 +300,9 @@ namespace AuroraLoader
                     var li = new ListViewItem(new string[] {
                         mod.Name,
                         mod.Type.ToString(),
-                        mod.Installation?.TargetAuroraVersion.ToString() == "1" ? "Any" : mod.Installation?.TargetAuroraVersion.ToString(),
-                        mod.Installation?.HighestInstalledVersion.ToString(),
-                        mod.Listing?.LatestVersion.ToString() ?? "Not found"
+                        mod.LatestInstalledVersion.TargetCompatibilityVersion.ToString() == "1" ? "Any" : mod.LatestInstalledVersion.TargetCompatibilityVersion.ToString(),
+                        mod.LatestInstalledVersion.Version.ToString(),
+                        mod.LatestVersion.ToString() ?? "Not found"
                     });
                     ListManageMods.Items.Add(li);
                 }
@@ -330,7 +330,7 @@ namespace AuroraLoader
                     {
                         ButtonInstallOrUpdateMod.Enabled = true;
                     }
-                    if (selected.Installation.ModInternalConfigFile != null)
+                    if (selected.ConfigurationFile != null)
                     {
                         ButtonConfigureMod.Enabled = true;
                     }
@@ -366,12 +366,12 @@ namespace AuroraLoader
             try
             {
                 var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-                if (mod.Installation == null || mod.Installation.ModFolder == null || mod.Installation.ModInternalConfigFile == null)
+                if (mod.ModFolder == null || mod.ConfigurationFile == null)
                 {
                     throw new Exception("Invalid mod selected for configuration");
                 }
 
-                var pieces = mod.Installation.ModInternalConfigFile.Split(' ');
+                var pieces = mod.ConfigurationFile.Split(' ');
                 var exe = pieces[0];
                 var args = "";
                 if (pieces.Length > 1)
@@ -384,15 +384,15 @@ namespace AuroraLoader
                     args = args.Substring(1);
                 }
 
-                Log.Debug($"{mod.Name} config file: run {exe} in {mod.Installation.ModFolder} with args {args}");
-                if (!File.Exists(Path.Combine(mod.Installation.ModFolder, exe)))
+                Log.Debug($"{mod.Name} config file: run {exe} in {mod.ModFolder} with args {args}");
+                if (!File.Exists(Path.Combine(mod.ModFolder, exe)))
                 {
-                    MessageBox.Show($"Couldn't launch {Path.Combine(mod.Installation.ModFolder, exe)} - make sure {Path.Combine(mod.Installation.ModFolder, "mod.ini")} is correctly configured.");
+                    MessageBox.Show($"Couldn't launch {Path.Combine(mod.ModFolder, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.ini")} is correctly configured.");
                     return;
                 }
                 var info = new ProcessStartInfo()
                 {
-                    WorkingDirectory = mod.Installation.ModFolder,
+                    WorkingDirectory = mod.ModFolder,
                     FileName = exe,
                     Arguments = args,
                     UseShellExecute = true,
