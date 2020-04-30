@@ -44,7 +44,7 @@ namespace AuroraLoader
             foreach (var mod in mods.Where(mod => mod.Type == ModType.ROOTUTILITY))
             {
                 Log.Debug("Root Utility: " + mod.Name);
-                CopyToFolder(mod, installation.InstallationPath);
+                CopyToFolder(mod.LatestInstalledVersionCompatibleWith(installation.InstalledVersion), installation.InstallationPath);
                 var process = Run(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), mod.LaunchCommand);
                 processes.Add(process);
             }
@@ -57,7 +57,7 @@ namespace AuroraLoader
 
             if (executableMod != null)
             {
-                CopyToFolder(executableMod, installation.InstallationPath);
+                CopyToFolder(executableMod.LatestInstalledVersionCompatibleWith(installation.InstalledVersion), installation.InstallationPath);
                 var process = Run(Program.AuroraLoaderExecutableDirectory, executableMod.LaunchCommand);
                 processes.Insert(0, process);
             }
@@ -70,10 +70,9 @@ namespace AuroraLoader
             return processes;
         }
 
-        private static void CopyToFolder(Mod mod, string folder)
+        private static void CopyToFolder(ModVersion mod, string folder)
         {
-            var dir = Path.GetDirectoryName(mod.ModFolder);
-            foreach (var file in Directory.EnumerateFiles(dir, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.json")))
+            foreach (var file in Directory.EnumerateFiles(mod.InstallationPath, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.json")))
             {
                 File.Copy(file, Path.Combine(folder, Path.GetFileName(file)), true);
             }
