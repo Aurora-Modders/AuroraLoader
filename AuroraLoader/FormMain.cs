@@ -517,7 +517,7 @@ namespace AuroraLoader
 
         private void EndGame()
         {
-            MessageBox.Show("Game ended.");
+            MessageBox.Show("Game ended. Those filthy xenos never saw you coming.");
             ButtonSinglePlayer.Enabled = true;
             RefreshAuroraInstallData();
             ButtonInstallOrUpdateMod.Enabled = true;
