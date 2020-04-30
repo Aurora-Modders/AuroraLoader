@@ -12,7 +12,7 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class AuroraVersionRegistry : IRegistry
+    public class AuroraVersionRegistry
     {
         public IList<AuroraVersion> AuroraVersions { get; private set; } = new List<AuroraVersion>();
 
@@ -23,11 +23,6 @@ namespace AuroraLoader.Registry
         public AuroraVersionRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
-        }
-
-        public void Update(AuroraVersion version)
-        {
-            Update(version, null);
         }
 
         public void Update(AuroraVersion version, IList<Mirror> mirrors = null)

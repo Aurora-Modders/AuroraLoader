@@ -13,7 +13,7 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class ModRegistry : IRegistry
+    public class ModRegistry
     {
         // TODO ensure that the list is unique
         public IEnumerable<Mod> Mods { get; private set; }

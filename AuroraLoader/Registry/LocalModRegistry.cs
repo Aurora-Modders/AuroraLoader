@@ -10,7 +10,7 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class LocalModRegistry : IRegistry
+    public class LocalModRegistry
     {
         public IList<ModConfiguration> ModInstallations { get; private set; }
 
