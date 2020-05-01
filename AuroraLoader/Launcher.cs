@@ -170,6 +170,8 @@ namespace AuroraLoader
                 catch (Exception)
                 {
                     Log.Debug($"No uninstall for db mod: {mod.Name}");
+                    connection.Close();
+                    throw new Exception($"No uninstall for db mod: {mod.Name}");
                 }
 
                 foreach (var file in files)
