@@ -16,7 +16,7 @@ namespace AuroraLoader
     {
 
         public static readonly string AuroraLoaderExecutableDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-        public static readonly string ModDirectory = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Mods");
+        public static readonly string ModDirectory = Path.Combine(AuroraLoaderExecutableDirectory, "Mods");
         public static readonly string CacheDirectory = Path.Combine(Path.GetTempPath(), "auroraloader_cache");
 
         /// <summary>
@@ -86,36 +86,27 @@ namespace AuroraLoader
             {
                 var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
                 var auroraLoader = Mod.LoadMod(raw);
-                if (!Directory.Exists(auroraLoader.LatestVersion.InstallationPath))
+                if (!Directory.Exists(auroraLoader.LatestVersion.DownloadPath))
                 {
-                    Directory.CreateDirectory(auroraLoader.LatestVersion.InstallationPath);
+                    Directory.CreateDirectory(auroraLoader.LatestVersion.DownloadPath);
                     File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"), Path.Combine(auroraLoader.ModFolder, "mod.json"), true);
-                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoader.LatestVersion.InstallationPath, "AuroraLoader.Exe"), true);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoader.LatestVersion.DownloadPath, "AuroraLoader.Exe"), true);
                 }
             }
         }
 
         private static void InstallAurora()
         {
-            var installation = new GameInstallation(new AuroraVersion("0.0.0", ""), Program.AuroraLoaderExecutableDirectory);
+            var installation = new AuroraInstallation(new AuroraVersion("0.0.0", ""), AuroraLoaderExecutableDirectory);
             var thread = new Thread(() =>
             {
                 var aurora_files = Installer.GetLatestAuroraFiles();
-                Installer.DownloadAuroraPieces(Program.AuroraLoaderExecutableDirectory, aurora_files);
+                Installer.DownloadAuroraPieces(AuroraLoaderExecutableDirectory, aurora_files);
             });
             thread.Start();
 
             var progress = new FormProgress(thread) { Text = "Installing Aurora" };
             progress.ShowDialog();
-        }
-
-        public static string GetChecksum(byte[] bytes)
-        {
-            using var sha = SHA256.Create();
-            var hash = sha.ComputeHash(bytes);
-            var str = Convert.ToBase64String(hash);
-
-            return str.Replace("/", "").Replace("+", "").Replace("=", "").Substring(0, 6);
         }
 
         public static void OpenBrowser(string url)

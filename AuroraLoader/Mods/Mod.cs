@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -42,10 +44,10 @@ namespace AuroraLoader.Mods
 
         [JsonIgnore]
         public ModVersion LatestInstalledVersion => Downloads.OrderByDescending(v => v.Version)
-            .Where(v => v.Installed)
+            .Where(v => v.Downloaded)
             .FirstOrDefault();
         public ModVersion LatestInstalledVersionCompatibleWith(AuroraVersion auroraVersion) => Downloads.OrderByDescending(v => v.Version)
-            .Where(v => v.Installed && auroraVersion.CompatibleWith(v.TargetAuroraVersion))
+            .Where(v => v.Downloaded && auroraVersion.CompatibleWith(v.TargetAuroraVersion))
             .FirstOrDefault();
 
         public bool Installed => LatestInstalledVersion != null;
@@ -75,9 +77,9 @@ namespace AuroraLoader.Mods
             foreach (var modVersion in mod.Downloads)
             {
                 modVersion.Mod = mod;
-                if (Directory.Exists(modVersion.InstallationPath))
+                if (Directory.Exists(modVersion.DownloadPath))
                 {
-                    modVersion.Installed = true;
+                    modVersion.Downloaded = true;
                 }
             }
             return mod;

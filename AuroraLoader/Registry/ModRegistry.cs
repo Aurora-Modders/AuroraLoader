@@ -135,9 +135,9 @@ namespace AuroraLoader.Registry
             {
                 throw new Exception("AuroraLoader mod not loaded");
             }
-            AuroraLoaderMod.LatestVersion.Install();
+            AuroraLoaderMod.LatestVersion.Download();
 
-            File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.InstallationPath, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
+            File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.DownloadPath, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
             foreach (var file in new string[]
             {
                 "mod.json",
@@ -147,7 +147,7 @@ namespace AuroraLoader.Registry
             {
                 try
                 {
-                    File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.InstallationPath, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
+                    File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.DownloadPath, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
                 }
                 catch (Exception e)
                 {

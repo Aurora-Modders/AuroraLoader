@@ -72,7 +72,7 @@ namespace AuroraLoader
 
             try
             {
-                var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
+                var installation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
                 Installer.BackupAurora(installation);
                 var thread = new Thread(() =>
                 {
@@ -364,7 +364,7 @@ namespace AuroraLoader
         {
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            mod.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Install();
+            mod.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Download();
             UpdateManageModsListView();
             UpdateListViews();
             Cursor = Cursors.Default;
@@ -397,15 +397,15 @@ namespace AuroraLoader
                 }
 
                 var modVersion = mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion);
-                Log.Debug($"{mod.Name} config file: run {exe} in {modVersion.InstallationPath} with args {args}");
-                if (!File.Exists(Path.Combine(modVersion.InstallationPath, exe)))
+                Log.Debug($"{mod.Name} config file: run {exe} in {modVersion.DownloadPath} with args {args}");
+                if (!File.Exists(Path.Combine(modVersion.DownloadPath, exe)))
                 {
-                    MessageBox.Show($"Couldn't launch {Path.Combine(modVersion.InstallationPath, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.json")} is correctly configured.");
+                    MessageBox.Show($"Couldn't launch {Path.Combine(modVersion.DownloadPath, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.json")} is correctly configured.");
                     return;
                 }
                 var info = new ProcessStartInfo()
                 {
-                    WorkingDirectory = modVersion.InstallationPath,
+                    WorkingDirectory = modVersion.DownloadPath,
                     FileName = exe,
                     Arguments = args,
                     UseShellExecute = true,
@@ -453,9 +453,9 @@ namespace AuroraLoader
             {
                 executableMod = null;
             }
-            var installation = new GameInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
-            var process = Launcher.Launch(installation, _modRegistry, mods, executableMod)[0];
 
+            var installation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
+            var process = installation.Launch(mods, executableMod)[0];
             AuroraThread = new Thread(() => RunGame(process))
             {
                 IsBackground = true
