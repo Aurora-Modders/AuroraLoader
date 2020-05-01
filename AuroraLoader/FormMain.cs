@@ -18,7 +18,8 @@ namespace AuroraLoader
     {
         private readonly IConfiguration _configuration;
 
-        private Thread AuroraThread { get; set; } = null;
+        private Thread auroraThread { get; set; } = null;
+        private AuroraInstallation auroraInstallation;
 
         private readonly AuroraVersionRegistry _auroraVersionRegistry;
         private readonly ModRegistry _modRegistry;
@@ -54,6 +55,8 @@ namespace AuroraLoader
 
             // Only check mirrors for new versions at app startup
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
+            auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
+
             _modRegistry.Update(true);
             RefreshAuroraInstallData();
             UpdateListViews();
@@ -72,12 +75,12 @@ namespace AuroraLoader
 
             try
             {
-                var installation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
-                Installer.BackupAurora(installation);
+                // TODO teach this to AuroraInstallation?
+                auroraInstallation.CreateBackup();
                 var thread = new Thread(() =>
                 {
                     var aurora_files = Installer.GetLatestAuroraFiles();
-                    Installer.UpdateAurora(installation, aurora_files);
+                    auroraInstallation.UpdateAurora(aurora_files);
                 });
                 thread.Start();
 
@@ -430,7 +433,7 @@ namespace AuroraLoader
         {
             lock (this)
             {
-                if (AuroraThread != null)
+                if (auroraThread != null)
                 {
                     MessageBox.Show("Already running Aurora.");
                     return;
@@ -444,24 +447,24 @@ namespace AuroraLoader
             (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
             || (ListUtilities.CheckedItems != null && ListUtilities.CheckedItems.Contains(mod.Name))).ToList();
 
-            Mod executableMod;
-            if (ComboSelectExecutableMod.SelectedItem != null && (string)ComboSelectExecutableMod.SelectedItem != "Base game")
+            foreach (var mod in mods)
             {
-                executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem);
-            }
-            else
-            {
-                executableMod = null;
+                auroraInstallation.SelectModVersion(mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion));
             }
 
-            var installation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
-            var process = installation.Launch(mods, executableMod)[0];
-            AuroraThread = new Thread(() => RunGame(process))
+            if (ComboSelectExecutableMod.SelectedItem != null && (string)ComboSelectExecutableMod.SelectedItem != "Base game")
+            {
+                var executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem);
+                auroraInstallation.SelectModVersion(executableMod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion));
+            }
+
+            var process = auroraInstallation.Launch();
+            auroraThread = new Thread(() => RunGame(process))
             {
                 IsBackground = true
             };
 
-            AuroraThread.Start();
+            auroraThread.Start();
         }
 
         private void RunGame(Process process)
@@ -521,7 +524,7 @@ namespace AuroraLoader
 
             lock (this)
             {
-                AuroraThread = null;
+                auroraThread = null;
             }
         }
 

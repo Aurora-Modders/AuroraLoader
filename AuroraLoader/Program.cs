@@ -2,8 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
 using AuroraLoader.Mods;
@@ -97,7 +95,6 @@ namespace AuroraLoader
 
         private static void InstallAurora()
         {
-            var installation = new AuroraInstallation(new AuroraVersion("0.0.0", ""), AuroraLoaderExecutableDirectory);
             var thread = new Thread(() =>
             {
                 var aurora_files = Installer.GetLatestAuroraFiles();

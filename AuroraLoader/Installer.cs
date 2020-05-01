@@ -43,47 +43,6 @@ namespace AuroraLoader
             Program.CopyDirectory(clean, folder);
         }
 
-        public static void BackupAurora(AuroraInstallation current)
-        {
-            Directory.CreateDirectory(current.VersionedDirectory);
-            File.Copy(Path.Combine(current.InstallationPath, "Aurora.exe"), Path.Combine(current.VersionedDirectory, "Aurora.exe"), true);
-            File.Copy(Path.Combine(current.InstallationPath, "AuroraDB.db"), Path.Combine(current.VersionedDirectory, "AuroraDB.db"), true);
-        }
-
-        public static void UpdateAurora(AuroraInstallation current, Dictionary<string, string> aurora_files)
-        {
-            var update = SemVersion.Parse(aurora_files["Version"]);
-
-            if (current.InstalledVersion.Version.Major == update.Major)
-            {
-                aurora_files.Remove("Major");
-
-                if (current.InstalledVersion.Version.Minor == update.Minor)
-                {
-                    aurora_files.Remove("Minor");
-
-                    if (current.InstalledVersion.Version.Patch == update.Patch)
-                    {
-                        aurora_files.Remove("Patch");
-                        aurora_files.Remove("Rev"); // deprecated
-                    }
-                }
-            }
-
-            foreach (var piece in aurora_files.Keys.ToList())
-            {
-                if (!piece.Equals("Major") && !piece.Equals("Minor") && !piece.Equals("Patch") && !piece.Equals("Rev"))
-                {
-                    aurora_files.Remove(piece);
-                }
-            }
-
-            if (aurora_files.Count > 0)
-            {
-                DownloadAuroraPieces(current.InstallationPath, aurora_files);
-            }
-        }
-
         public static void DownloadAuroraPieces(string folder, Dictionary<string, string> aurora_files)
         {
             aurora_files.Remove("Version");

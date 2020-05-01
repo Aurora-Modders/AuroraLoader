@@ -67,17 +67,5 @@ namespace AuroraLoader.Mods
 
             return result;
         }
-
-        public static string ToString(Dictionary<string, string> values)
-        {
-            var sb = new StringBuilder();
-
-            foreach (var kvp in values)
-            {
-                sb.AppendLine(kvp.Key + "=" + kvp.Value);
-            }
-
-            return sb.ToString();
-        }
     }
 }
