@@ -1,28 +1,10 @@
-﻿using Semver;
-
-namespace AuroraLoader.Mods
+﻿namespace AuroraLoader.Mods
 {
     public class ModCompabitilityVersion
     {
         public int Major { get; } = -1;
         public int Minor { get; } = -1;
         public int Patch { get; } = -1;
-
-        public override string ToString()
-        {
-            var str = Major.ToString();
-            if (Minor != -1)
-            {
-                str += "." + Minor;
-            }
-            if (Patch != -1)
-            {
-                str += "." + Patch;
-            }
-
-            return str;
-        }
-
 
         public ModCompabitilityVersion(string raw)
         {
@@ -40,24 +22,20 @@ namespace AuroraLoader.Mods
                 Patch = int.Parse(pieces[2]);
             }
         }
-        public bool WorksForVersion(SemVersion version)
+
+        public override string ToString()
         {
-            if (Major != -1 && version.Major != Major)
+            var str = Major.ToString();
+            if (Minor != -1)
             {
-                return false;
+                str += "." + Minor;
             }
-            else if (Minor != -1 && version.Minor != Minor)
+            if (Patch != -1)
             {
-                return false;
+                str += "." + Patch;
             }
-            else if (Patch != -1 && version.Patch != Patch)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+
+            return str;
         }
     }
 }

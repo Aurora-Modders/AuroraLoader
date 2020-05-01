@@ -16,7 +16,7 @@ namespace AuroraLoader.Mods
 
         [JsonPropertyName("target_aurora_version")]
         [JsonConverter(typeof(ModCompatibilityVersionJsonConverter))]
-        public ModCompabitilityVersion TargetCompatibilityVersion { get; set; }
+        public ModCompabitilityVersion TargetAuroraVersion { get; set; }
 
         [JsonPropertyName("download_url")]
         public string DownloadUrl { get; set; }
@@ -30,7 +30,6 @@ namespace AuroraLoader.Mods
         [JsonIgnore]
         public Mod Mod { get; set; }
 
-        public bool WorksForVersion(AuroraVersion auroraVersion) => TargetCompatibilityVersion.WorksForVersion(auroraVersion.Version);
 
         public void Install()
         {

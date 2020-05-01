@@ -284,10 +284,9 @@ namespace AuroraLoader
             ListManageMods.Columns.Add("Name");
             ListManageMods.Columns.Add("Status");
             ListManageMods.Columns.Add("Type");
-            ListManageMods.Columns.Add("Aurora Version");
-            ListManageMods.Columns.Add("Installed");
+            ListManageMods.Columns.Add("Current");
             ListManageMods.Columns.Add("Latest");
-
+            ListManageMods.Columns.Add("Aurora Compatibility");
 
             foreach (var mod in _modRegistry.Mods)
             {
@@ -297,13 +296,18 @@ namespace AuroraLoader
                         mod.Name,
                         mod.Status.ToString(),
                         mod.Type.ToString(),
-                        mod.Installed ? mod.LatestInstalledVersion.TargetCompatibilityVersion.ToString() == "1" ? "Any" : mod.LatestInstalledVersion?.TargetCompatibilityVersion?.ToString() : mod.LatestVersion.TargetCompatibilityVersion.ToString(),
-                        mod.LatestInstalledVersion?.Version.ToString() ?? "",
-                        mod.LatestVersion?.Version.ToString() ?? "Not found"
+                        mod.LatestInstalledVersion?.Version?.ToString() ?? "Not Installed",
+                        mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion)?.Version == mod.LatestVersion?.Version
+                            ? "Up to date"
+                            : mod.LatestVersion?.Version?.ToString()
+                            ?? "-",
+                        // Aurora version compatibility
+                        mod.LatestVersion.Version == "1" ? "Any" : mod.LatestVersion?.Version?.ToString()
                     });
                     ListManageMods.Items.Add(li);
                 }
             }
+
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
             ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
             ListManageMods.EndUpdate();
@@ -336,6 +340,11 @@ namespace AuroraLoader
                 {
                     ButtonInstallOrUpdateMod.Text = "Install";
                     ButtonInstallOrUpdateMod.Enabled = true;
+                }
+                else if (selected.LatestVersion != null && !_auroraVersionRegistry.CurrentAuroraVersion.CompatibleWith(selected.LatestVersion.TargetAuroraVersion))
+                {
+                    ButtonInstallOrUpdateMod.Text = "Incompatible";
+                    ButtonInstallOrUpdateMod.Enabled = false;
                 }
                 else
                 {

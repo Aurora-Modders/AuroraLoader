@@ -37,7 +37,7 @@ namespace AuroraLoader.Mods
         [JsonIgnore]
         public ModVersion LatestVersion => Downloads.OrderByDescending(v => v.Version).FirstOrDefault();
         public ModVersion LatestVersionCompatibleWith(AuroraVersion auroraVersion) => Downloads.OrderByDescending(v => v.Version)
-            .Where(v => v.WorksForVersion(auroraVersion))
+            .Where(v => auroraVersion.CompatibleWith(v.TargetAuroraVersion))
             .FirstOrDefault();
 
         [JsonIgnore]
@@ -45,7 +45,7 @@ namespace AuroraLoader.Mods
             .Where(v => v.Installed)
             .FirstOrDefault();
         public ModVersion LatestInstalledVersionCompatibleWith(AuroraVersion auroraVersion) => Downloads.OrderByDescending(v => v.Version)
-            .Where(v => v.Installed && v.WorksForVersion(auroraVersion))
+            .Where(v => v.Installed && auroraVersion.CompatibleWith(v.TargetAuroraVersion))
             .FirstOrDefault();
 
         public bool Installed => LatestInstalledVersion != null;
