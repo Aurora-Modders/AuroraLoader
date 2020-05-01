@@ -287,6 +287,7 @@ namespace AuroraLoader
             ListManageMods.Columns.Add("Current");
             ListManageMods.Columns.Add("Latest");
             ListManageMods.Columns.Add("Aurora Compatibility");
+            ListManageMods.Columns.Add("Description");
 
             foreach (var mod in _modRegistry.Mods)
             {
@@ -301,7 +302,8 @@ namespace AuroraLoader
                             ? "Up to date"
                             : mod.LatestVersion?.Version?.ToString()
                             ?? "-",
-                        mod.LatestVersion.TargetAuroraVersion?.Pretty()
+                        mod.LatestVersion.TargetAuroraVersion?.Pretty(),
+                        mod.Description
                     });
                     ListManageMods.Items.Add(li);
                 }
@@ -394,16 +396,16 @@ namespace AuroraLoader
                     args = args.Substring(1);
                 }
 
-                Log.Debug($"{mod.Name} config file: run {exe} in {mod.ModFolder} with args {args}");
-                if (!File.Exists(Path.Combine(mod.ModFolder,
-                    mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Version.ToString(), exe)))
+                var modVersion = mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion);
+                Log.Debug($"{mod.Name} config file: run {exe} in {modVersion.InstallationPath} with args {args}");
+                if (!File.Exists(Path.Combine(modVersion.InstallationPath, exe)))
                 {
-                    MessageBox.Show($"Couldn't launch {Path.Combine(mod.ModFolder, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.json")} is correctly configured.");
+                    MessageBox.Show($"Couldn't launch {Path.Combine(modVersion.InstallationPath, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.json")} is correctly configured.");
                     return;
                 }
                 var info = new ProcessStartInfo()
                 {
-                    WorkingDirectory = mod.ModFolder,
+                    WorkingDirectory = modVersion.InstallationPath,
                     FileName = exe,
                     Arguments = args,
                     UseShellExecute = true,
