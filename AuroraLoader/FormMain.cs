@@ -126,7 +126,7 @@ namespace AuroraLoader
             {
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
                 {
-                    LabelAuroraVersion.Text = $"Aurora.exe checksum ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
+                    LabelAuroraVersion.Text = $"Aurora.exe ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
                 }
                 else
                 {
@@ -301,8 +301,7 @@ namespace AuroraLoader
                             ? "Up to date"
                             : mod.LatestVersion?.Version?.ToString()
                             ?? "-",
-                        // Aurora version compatibility
-                        mod.LatestVersion.Version == "1" ? "Any" : mod.LatestVersion?.Version?.ToString()
+                        mod.LatestVersion.TargetAuroraVersion?.Pretty()
                     });
                     ListManageMods.Items.Add(li);
                 }

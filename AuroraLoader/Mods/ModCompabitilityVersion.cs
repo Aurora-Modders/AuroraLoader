@@ -37,5 +37,10 @@
 
             return str;
         }
+
+        public string Pretty()
+        {
+            return $"{(Major == -1 ? "*" : Major.ToString())}.{(Minor == -1 ? "*" : Minor.ToString())}.{(Patch == -1 ? "*" : Patch.ToString())}";
+        }
     }
 }
