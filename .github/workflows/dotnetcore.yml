@@ -43,6 +43,8 @@ jobs:
           name: AuroraLoader
       - uses: ncipollo/release-action@v1
         with:
+          release_name: AuroraLoader ${{ github.ref }}
+          tag: ${{ github.ref }}
           artifacts: "AuroraLoader.zip"
           artifactContentType: application/zip
           prerelease: true
