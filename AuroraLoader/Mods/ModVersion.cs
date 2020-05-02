@@ -292,6 +292,11 @@ namespace AuroraLoader.Mods
             };
 
             var process = Process.Start(processStartInfo);
+            if (process == null)
+            {
+                throw new Exception($"Failed to launch {processStartInfo.FileName} in {processStartInfo.WorkingDirectory}");
+            }
+
             return process;
         }
     }

@@ -32,7 +32,8 @@ namespace AuroraLoader
 
             if (!Directory.Exists(VersionedDirectory))
             {
-                Directory.CreateDirectory(VersionedDirectory);
+                // Create backup immediately on launch if one doesn't exist
+                CreateBackup();
             }
         }
 
@@ -44,16 +45,17 @@ namespace AuroraLoader
             // Install selected mods (including executable, if provided)
             foreach (var modVersion in modVersions)
             {
-                modVersion.Uninstall(this);
-                modVersion.Install(this);
-                var process = modVersion.Run();
-                if (process != null)
+                try
                 {
-                    processes.Add(process);
+                    modVersion.Uninstall(this);
+                    modVersion.Install(this);
+                    processes.Add(modVersion.Run());
                 }
-                else
+                catch (Exception e)
                 {
-                    MessageBox.Show($"Failed to launch {modVersion.Mod.Name} {modVersion.Version}");
+                    var message = $"Failed to launch {modVersion.Mod.Name} {modVersion.Version}";
+                    Log.Error(message, e);
+                    MessageBox.Show(message);
                 }
             }
 
