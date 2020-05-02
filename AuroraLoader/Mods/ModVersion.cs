@@ -11,7 +11,7 @@ using Semver;
 
 namespace AuroraLoader.Mods
 {
-    public class ModVersion
+    public class ModVersion : IModVersion
     {
         [JsonPropertyName("version")]
         [JsonConverter(typeof(SemVersionJsonConverter))]
@@ -25,10 +25,10 @@ namespace AuroraLoader.Mods
         public string DownloadUrl { get; set; }
 
         [JsonIgnore]
-        public bool Downloaded { get; set; } = false;
+        public string DownloadPath => Path.Combine(Mod.ModFolder, Version.ToString());
 
         [JsonIgnore]
-        public string DownloadPath => Path.Combine(Mod.ModFolder, Version.ToString());
+        public bool Downloaded => Directory.Exists(DownloadPath);
 
         [JsonIgnore]
         public Mod Mod { get; set; }
@@ -73,7 +73,6 @@ namespace AuroraLoader.Mods
 
                 ZipFile.ExtractToDirectory(zip, DownloadPath);
 
-                Downloaded = true;
                 Mod.UpdateCache();
             }
             catch (Exception e)
@@ -112,6 +111,22 @@ namespace AuroraLoader.Mods
             else if (Mod.Type == ModType.DATABASE)
             {
                 UninstallDbMod(installation);
+            }
+        }
+
+        public Process Run()
+        {
+            if (Mod.Type == ModType.UTILITY)
+            {
+                return Run(DownloadPath, Mod.LaunchCommand);
+            }
+            else if (Mod.Type == ModType.ROOTUTILITY || Mod.Type == ModType.EXECUTABLE)
+            {
+                return Run(Program.AuroraLoaderExecutableDirectory, Mod.LaunchCommand);
+            }
+            else
+            {
+                throw new InvalidOperationException($"{Mod.Type} does not support being run");
             }
         }
 
@@ -240,22 +255,6 @@ namespace AuroraLoader.Mods
             }
         }
 
-        public Process Run()
-        {
-            if (Mod.Type == ModType.UTILITY)
-            {
-                return Run(DownloadPath, Mod.LaunchCommand);
-            }
-            else if (Mod.Type == ModType.ROOTUTILITY || Mod.Type == ModType.EXECUTABLE)
-            {
-                return Run(Program.AuroraLoaderExecutableDirectory, Mod.LaunchCommand);
-            }
-            else
-            {
-                throw new InvalidOperationException($"{Mod.Type} does not support being run");
-            }
-        }
-
         private static Process Run(string folder, string command)
         {
             if (!Directory.Exists(folder))
@@ -281,11 +280,6 @@ namespace AuroraLoader.Mods
             if (!exe.ToLower().Equals("java"))
             {
                 exe = Path.Combine(folder, exe);
-            }
-
-            if (!File.Exists(exe))
-            {
-                throw new FileNotFoundException(exe);
             }
 
             var processStartInfo = new ProcessStartInfo()

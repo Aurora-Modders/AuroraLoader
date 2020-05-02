@@ -77,10 +77,6 @@ namespace AuroraLoader.Mods
             foreach (var modVersion in mod.Downloads)
             {
                 modVersion.Mod = mod;
-                if (Directory.Exists(modVersion.DownloadPath))
-                {
-                    modVersion.Downloaded = true;
-                }
             }
             return mod;
         }
