@@ -83,6 +83,7 @@ namespace AuroraLoader
 
         public void CreateBackup()
         {
+            Log.Debug($"Creating backup at {VersionedDirectory}");
             Directory.CreateDirectory(VersionedDirectory);
             File.Copy(Path.Combine(InstallationPath, "Aurora.exe"), Path.Combine(VersionedDirectory, "Aurora.exe"), true);
             File.Copy(Path.Combine(InstallationPath, "AuroraDB.db"), Path.Combine(VersionedDirectory, "AuroraDB.db"), true);

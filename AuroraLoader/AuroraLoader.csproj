@@ -13,8 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Releases\**" />
     <Compile Remove="TestUpdates\**" />
+    <EmbeddedResource Remove="Releases\**" />
     <EmbeddedResource Remove="TestUpdates\**" />
+    <None Remove="Releases\**" />
     <None Remove="TestUpdates\**" />
   </ItemGroup>
 
@@ -29,6 +32,7 @@
     </Content>
     <Content Include="mod.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
 

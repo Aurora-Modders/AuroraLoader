@@ -31,6 +31,8 @@ namespace AuroraLoader.Registry
 
         public void Update(bool updateRemote = false, bool updateCache = false)
         {
+            Log.Debug($"Updating mod registry, updateRemote={updateRemote} updateCache={updateCache}");
+
             var mods = GetLocalMods();
             IList<Mod> remote = new List<Mod>();
             if (updateRemote)

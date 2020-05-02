@@ -33,26 +33,31 @@ namespace AuroraLoader.Registry
             {
                 UpdateKnownAuroraVersionsFromMirrors(mirrors);
                 // Update cache
+                var versions = AuroraVersions.Select(v => $"{v.Version}={v.Checksum}");
+
+                Log.Debug($"Updating cache with {String.Join("\n\r", versions)}");
                 File.WriteAllLines(
                     Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"),
                     AuroraVersions.Select(v => $"{v.Version}={v.Checksum}"));
             }
 
             var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora.exe")));
+            Log.Debug($"Identified checksum {checksum}");
             try
             {
                 CurrentAuroraVersion = AuroraVersions.Single(v => v.Checksum.Equals(checksum));
-
             }
             catch (Exception e)
             {
                 Log.Error($"Couldn't find Aurora version associated with checksum {checksum}", e);
                 CurrentAuroraVersion = new AuroraVersion(SemVersion.Parse("1.0.0"), checksum);
             }
+            Log.Debug($"Running Aurora {CurrentAuroraVersion.Version}");
         }
 
         internal void UpdateKnownVersionsFromCache()
         {
+            Log.Debug($"Loading Aurora versions from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini")}");
             try
             {
                 var rawFileContents = File.ReadAllText(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"));
@@ -69,6 +74,7 @@ namespace AuroraLoader.Registry
             var allKnownVersions = new List<AuroraVersion>(AuroraVersions);
             foreach (var mirror in mirrors)
             {
+                Log.Debug($"Retrieving version information from {mirror} if available");
                 var mirrorKnownVersions = new List<AuroraVersion>();
                 var versionsUrl = Path.Combine(mirror, "aurora_versions.ini");
                 using (var client = new WebClient())

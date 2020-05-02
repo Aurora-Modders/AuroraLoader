@@ -11,6 +11,11 @@ namespace AuroraLoader
 
         public AuroraVersion(SemVersion version, string checksum)
         {
+            if (version == null || checksum == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             Version = version;
             Checksum = checksum;
         }
