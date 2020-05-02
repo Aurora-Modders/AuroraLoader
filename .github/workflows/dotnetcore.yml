@@ -24,26 +24,28 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Publish
-      run: dotnet publish AuroraLoader -c Release -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-restore --no-build
+      run: dotnet publish AuroraLoader -c Release -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-restore --no-build --self-contained false --nologo
     - name: "Zip"
-      run: Compress-Archive -Path ./Release -DestinationPath AuroraLoader.zip
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: Compress-Archive -Path ./Release/* -DestinationPath AuroraLoader.zip
+    - name: Upload AuroraLoader artifact
+      uses: actions/upload-artifact@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: AuroraLoader ${{ github.ref }}
-        draft: false
-        prerelease: true
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-        asset_path: ./AuroraLoader.zip
-        asset_name: AuroraLoader.zip
-        asset_content_type: application/zip
+        name: AuroraLoader
+        path: ./AuroraLoader.zip
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: AuroraLoader
+      - uses: ncipollo/release-action@v1
+        with:
+          artifacts: "AuroraLoader.zip"
+          artifactContentType: application/zip
+          prerelease: true
+          allowUpdates: true
+          commit: $GITHUB_SHA
+          tag: "AuroraLoader-$GITHUB_REF"
+          token: ${{ secrets.GITHUB_TOKEN }}
