@@ -26,9 +26,7 @@ jobs:
     - name: Publish
       run: dotnet publish AuroraLoader -c Release -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-restore --no-build
     - name: "Zip"
-      uses: montudor/action-zip@v0.1.0
-      with:
-        args: zip -qq -r ./AuroraLoader.zip ./Release
+      run: Compress-Archive -Path ./Release -DestinationPath AuroraLoader.zip
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
