@@ -47,6 +47,4 @@ jobs:
           artifactContentType: application/zip
           prerelease: true
           allowUpdates: true
-          commit: $GITHUB_REF
-          tag: "release_candidate"
           token: ${{ secrets.GITHUB_TOKEN }}
