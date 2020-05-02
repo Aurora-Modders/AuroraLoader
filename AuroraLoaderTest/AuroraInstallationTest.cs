@@ -82,7 +82,7 @@ namespace AuroraLoaderTest
         public void UpdateAurora_NullFiles_ThrowsArgumentNullException()
         {
             var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            Assert.Throws<ArgumentException>(delegate { defaultAuroraInstallation.UpdateAurora(null); });
+            Assert.Throws<ArgumentNullException>(delegate { defaultAuroraInstallation.UpdateAurora(null); });
         }
 
         [Test]

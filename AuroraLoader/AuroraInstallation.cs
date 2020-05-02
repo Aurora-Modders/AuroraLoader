@@ -99,6 +99,10 @@ namespace AuroraLoader
             {
                 throw new ArgumentNullException();
             }
+            if (!aurora_files.Any())
+            {
+                throw new ArgumentException("aurora_files");
+            }
 
             var update = SemVersion.Parse(aurora_files["Version"]);
 
