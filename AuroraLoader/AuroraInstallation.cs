@@ -17,8 +17,6 @@ namespace AuroraLoader
         public readonly string InstallationPath;
         public string ConnectionString => $"Data Source={Path.Combine(InstallationPath, "AuroraDB.db")};Version=3;New=False;Compress=True;";
 
-        internal readonly IList<ModVersion> selectedModVersions = new List<ModVersion>();
-
         // e.g. <install dir>/Aurora/1.8.0
         public string VersionedDirectory => Path.Combine(InstallationPath, "Aurora", InstalledVersion.Version.ToString());
 
@@ -41,11 +39,6 @@ namespace AuroraLoader
         public Process Launch(IList<ModVersion> modVersions, ModVersion executableMod = null)
         {
             Log.Debug($"Launching from {InstallationPath}");
-            if (selectedModVersions.Any(mv => mv.Mod.Type == ModType.EXECUTABLE))
-            {
-                throw new Exception("Use the executableMod parameter");
-            }
-
             var processes = new List<Process>();
 
             // Install selected mods (including executable, if provided)
