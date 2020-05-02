@@ -42,9 +42,22 @@ jobs:
         with:
           name: AuroraLoader
       - uses: ncipollo/release-action@v1
+        if: github.event_name == 'pull_request'
         with:
           name: AuroraLoader ${{ github.event.pull_request.head.ref }}
           tag: ${{ github.event.pull_request.head.ref }}
+          commit: ${{ github.sha }}
+          artifacts: "AuroraLoader.zip"
+          artifactContentType: application/zip
+          prerelease: true
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ncipollo/release-action@v1
+        if: github.event_name != 'pull_request'
+        with:
+          name: AuroraLoader
+          tag: ${{ github.ref }}
+          commit: ${{ github.sha }}
           artifacts: "AuroraLoader.zip"
           artifactContentType: application/zip
           prerelease: true
