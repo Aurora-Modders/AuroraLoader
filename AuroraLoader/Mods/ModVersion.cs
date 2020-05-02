@@ -262,7 +262,6 @@ namespace AuroraLoader.Mods
             {
                 throw new FileNotFoundException(folder);
             }
-            //var java = Environment.GetEnvironmentVariable("PROGRAMFILES(X86)") + @"\Common Files\Oracle\Java\javapath";
 
             Log.Debug($"Running command: {command} in folder: {folder}");
             var pieces = command.Split(' ');
@@ -284,27 +283,22 @@ namespace AuroraLoader.Mods
                 exe = Path.Combine(folder, exe);
             }
 
+            if (!File.Exists(exe))
+            {
+                throw new FileNotFoundException(exe);
+            }
+
             var processStartInfo = new ProcessStartInfo()
             {
                 WorkingDirectory = folder,
                 FileName = exe,
                 Arguments = args,
-                UseShellExecute = true,
+                UseShellExecute = false,
                 CreateNoWindow = true
             };
-            //info.EnvironmentVariables["PATH"] = java + ";" + Environment.GetEnvironmentVariable("PATH");
 
-            try
-            {
-                var process = Process.Start(processStartInfo);
-                return process;
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed to run {command}", e);
-                return null;
-            }
-
+            var process = Process.Start(processStartInfo);
+            return process;
         }
     }
 }

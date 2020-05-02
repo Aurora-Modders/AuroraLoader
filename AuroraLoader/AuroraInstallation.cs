@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using AuroraLoader.Mods;
 using Semver;
 [assembly: InternalsVisibleTo("AuroraLoaderTest")]
@@ -40,9 +41,9 @@ namespace AuroraLoader
         public Process Launch(IList<ModVersion> modVersions, ModVersion executableMod = null)
         {
             Log.Debug($"Launching from {InstallationPath}");
-            if (selectedModVersions.Count(mv => mv.Mod.Type == ModType.EXECUTABLE) > 1)
+            if (selectedModVersions.Any(mv => mv.Mod.Type == ModType.EXECUTABLE))
             {
-                throw new Exception("More than one executable mod selected");
+                throw new Exception("Use the executableMod parameter");
             }
 
             var processes = new List<Process>();
@@ -52,19 +53,23 @@ namespace AuroraLoader
             {
                 modVersion.Uninstall(this);
                 modVersion.Install(this);
-            }
-
-            foreach (var modVersion in selectedModVersions.Where(modVersion => modVersion.Mod.Type == ModType.ROOTUTILITY || modVersion.Mod.Type == ModType.UTILITY))
-            {
                 var process = modVersion.Run();
-                processes.Add(process);
+                if (process != null)
+                {
+                    processes.Add(process);
+                }
+                else
+                {
+                    MessageBox.Show($"Failed to launch {modVersion.Mod.Name} {modVersion.Version}");
+                }
             }
 
             if (executableMod != null)
             {
                 executableMod.Uninstall(this);
                 executableMod.Install(this);
-                processes.Insert(0, executableMod.Run());
+                var process = executableMod.Run();
+                processes.Insert(0, process);
             }
             else
             {

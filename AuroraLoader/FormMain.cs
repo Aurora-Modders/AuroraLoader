@@ -57,7 +57,7 @@ namespace AuroraLoader
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
             auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
 
-            _modRegistry.Update(true);
+            _modRegistry.Update(true, true);
             RefreshAuroraInstallData();
             UpdateListViews();
             UpdateManageModsListView();
@@ -187,6 +187,7 @@ namespace AuroraLoader
         /// </summary>
         private void UpdateListViews()
         {
+            // TODO retain checked state
             ListUtilities.Items.Clear();
             ListUtilities.Items.AddRange(_modRegistry.Mods.Where(mod =>
                 (mod.Type == ModType.UTILITY || mod.Type == ModType.ROOTUTILITY)

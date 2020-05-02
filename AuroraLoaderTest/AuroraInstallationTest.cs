@@ -6,7 +6,6 @@ using AuroraLoader;
 using AuroraLoader.Mods;
 using NUnit.Framework;
 using Semver;
-using Moq;
 
 namespace AuroraLoaderTest
 {
