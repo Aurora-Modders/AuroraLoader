@@ -63,7 +63,7 @@ namespace AuroraLoader.Registry
             }
             else if (updateCache && !updateRemote)
             {
-                throw new Exception("Updating cache without updating remote does nothing");
+                throw new ArgumentException("Updating cache without updating remote does nothing");
             }
         }
 
@@ -76,7 +76,7 @@ namespace AuroraLoader.Registry
             {
                 try
                 {
-                    mods.Add(Mod.LoadMod(File.ReadAllText(modJsonFile)));
+                    mods.Add(Mod.DeserializeMod(File.ReadAllText(modJsonFile)));
                 }
                 catch (Exception e)
                 {
@@ -117,7 +117,7 @@ namespace AuroraLoader.Registry
                     try
                     {
                         var response = client.DownloadString(modJsonUrl);
-                        modsAtMirror.Add(Mod.LoadMod(response));
+                        modsAtMirror.Add(Mod.DeserializeMod(response));
                     }
                     catch (Exception e)
                     {

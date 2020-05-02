@@ -32,16 +32,17 @@ namespace AuroraLoader.Registry
             if (mirrors != null)
             {
                 UpdateKnownAuroraVersionsFromMirrors(mirrors);
+                // Update cache
+                File.WriteAllLines(
+                    Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"),
+                    AuroraVersions.Select(v => $"{v.Version}={v.Checksum}"));
             }
 
             var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora.exe")));
             try
             {
                 CurrentAuroraVersion = AuroraVersions.Single(v => v.Checksum.Equals(checksum));
-                // Update cache
-                File.WriteAllLines(
-                    Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"),
-                    AuroraVersions.Select(v => $"{v.Version}={v.Checksum}"));
+
             }
             catch (Exception e)
             {

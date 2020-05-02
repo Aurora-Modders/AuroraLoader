@@ -12,7 +12,6 @@ namespace AuroraLoader
 {
     static class Program
     {
-
         public static readonly string AuroraLoaderExecutableDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
         public static readonly string ModDirectory = Path.Combine(AuroraLoaderExecutableDirectory, "Mods");
         public static readonly string CacheDirectory = Path.Combine(Path.GetTempPath(), "auroraloader_cache");
@@ -44,53 +43,18 @@ namespace AuroraLoader
                 }
             }
 
-            // Grab ourselves a copy of the existing SQLite interops. If it's good enough for Aurora, it's good enough for us...
-            try
-            {
-                Log.Debug("Copying SQLite interop dlls");
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86"));
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"));
-                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
-                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
-            }
-            catch (Exception exc)
-            {
-                Log.Error("Failure while copying SQLite interop DLLs", exc);
-            }
+            CopySqlInteropAssemblies();
+            PrepareModDirectory();
 
             // TODO would love to set up dependency injection
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
-
-            CreateAuroraLoaderModDirectory();
-
             var auroraVersionRegistry = new AuroraVersionRegistry(configuration);
             var modRegistry = new ModRegistry(configuration);
             Log.Debug("Launching main form");
             Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
-        }
-
-        public static void CreateAuroraLoaderModDirectory()
-        {
-            if (!Directory.Exists(ModDirectory))
-            {
-                Directory.CreateDirectory(ModDirectory);
-            }
-
-            // Load the mod configuration for AuroraLoader itself
-            if (File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json")))
-            {
-                var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
-                var auroraLoader = Mod.LoadMod(raw);
-                if (!Directory.Exists(auroraLoader.LatestVersion.DownloadPath))
-                {
-                    Directory.CreateDirectory(auroraLoader.LatestVersion.DownloadPath);
-                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"), Path.Combine(auroraLoader.ModFolder, "mod.json"), true);
-                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoader.LatestVersion.DownloadPath, "AuroraLoader.Exe"), true);
-                }
-            }
         }
 
         private static void InstallAurora()
@@ -105,6 +69,46 @@ namespace AuroraLoader
             var progress = new FormProgress(thread) { Text = "Installing Aurora" };
             progress.ShowDialog();
         }
+
+        internal static void CopySqlInteropAssemblies()
+        {
+            // Grab ourselves a copy of the existing SQLite interops. If it's good enough for Aurora, it's good enough for us...
+            try
+            {
+                Log.Debug("Copying SQLite interop dlls");
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86"));
+                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"));
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
+            }
+            catch (Exception exc)
+            {
+                Log.Error("Failure while copying SQLite interop DLLs", exc);
+            }
+        }
+
+        internal static void PrepareModDirectory()
+        {
+            if (!Directory.Exists(ModDirectory))
+            {
+                Directory.CreateDirectory(ModDirectory);
+            }
+
+            // Load the mod configuration for AuroraLoader itself
+            if (File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json")))
+            {
+                var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
+                var auroraLoader = Mod.DeserializeMod(raw);
+                if (!Directory.Exists(auroraLoader.LatestVersion.DownloadPath))
+                {
+                    Directory.CreateDirectory(auroraLoader.LatestVersion.DownloadPath);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"), Path.Combine(auroraLoader.ModFolder, "mod.json"), true);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoader.LatestVersion.DownloadPath, "AuroraLoader.Exe"), true);
+                }
+            }
+        }
+
+
 
         public static void OpenBrowser(string url)
         {
@@ -132,31 +136,6 @@ namespace AuroraLoader
                 {
                     throw;
                 }
-            }
-        }
-
-        public static void CopyDirectory(string source, string target)
-        {
-            CopyAll(new DirectoryInfo(source), new DirectoryInfo(target));
-        }
-
-        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
-        {
-            Directory.CreateDirectory(target.FullName);
-
-            // Copy each file into the new directory.
-            foreach (FileInfo fi in source.GetFiles())
-            {
-                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
-                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
-            }
-
-            // Copy each subdirectory using recursion.
-            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
-            {
-                DirectoryInfo nextTargetSubDir =
-                    target.CreateSubdirectory(diSourceSubDir.Name);
-                CopyAll(diSourceSubDir, nextTargetSubDir);
             }
         }
     }

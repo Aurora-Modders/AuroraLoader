@@ -18,7 +18,7 @@ namespace AuroraLoader
     {
         private readonly IConfiguration _configuration;
 
-        private Thread auroraThread { get; set; } = null;
+        private Thread auroraThread = null;
         private AuroraInstallation auroraInstallation;
 
         private readonly AuroraVersionRegistry _auroraVersionRegistry;
@@ -75,7 +75,6 @@ namespace AuroraLoader
 
             try
             {
-                // TODO teach this to AuroraInstallation?
                 auroraInstallation.CreateBackup();
                 var thread = new Thread(() =>
                 {
@@ -440,25 +439,35 @@ namespace AuroraLoader
                 }
             }
 
+            if (CheckEnableMusic.Checked && !Directory.Exists(Path.Combine(auroraInstallation.InstallationPath, "Music")))
+            {
+                var thread = new Thread(() =>
+                {
+                    Log.Debug("Installing music");
+                    var aurora_files = Installer.GetLatestAuroraFiles();
+                    Installer.DownloadAuroraPieces(auroraInstallation.InstallationPath, new Dictionary<string, string> { { "Music", aurora_files["Music"] } });
+                });
+                thread.Start();
+
+                var progress = new FormProgress(thread) { Text = "Installing music" };
+                progress.ShowDialog();
+            }
+
             ButtonSinglePlayer.Enabled = false;
             ButtonUpdateAurora.Enabled = false;
 
-            var mods = _modRegistry.Mods.Where(mod =>
+            var modVersions = _modRegistry.Mods.Where(mod =>
             (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
-            || (ListUtilities.CheckedItems != null && ListUtilities.CheckedItems.Contains(mod.Name))).ToList();
+            || (ListUtilities.CheckedItems != null && ListUtilities.CheckedItems.Contains(mod.Name)))
+                .Select(mod => mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion)).ToList();
 
-            foreach (var mod in mods)
-            {
-                auroraInstallation.SelectModVersion(mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion));
-            }
-
+            ModVersion executableModVersion = null;
             if (ComboSelectExecutableMod.SelectedItem != null && (string)ComboSelectExecutableMod.SelectedItem != "Base game")
             {
-                var executableMod = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem);
-                auroraInstallation.SelectModVersion(executableMod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion));
+                executableModVersion = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem).LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion);
             }
 
-            var process = auroraInstallation.Launch();
+            var process = auroraInstallation.Launch(modVersions, executableModVersion);
             auroraThread = new Thread(() => RunGame(process))
             {
                 IsBackground = true
@@ -470,7 +479,7 @@ namespace AuroraLoader
         private void RunGame(Process process)
         {
             var songs = new List<Song>();
-            var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Music");
+            var folder = Path.Combine(auroraInstallation.InstallationPath, "Music");
             if (Directory.Exists(folder))
             {
                 foreach (var mp3 in Directory.EnumerateFiles(folder, "*.mp3", SearchOption.AllDirectories))
@@ -533,7 +542,6 @@ namespace AuroraLoader
             MessageBox.Show("Game ended. Those filthy xenos never saw you coming.");
             ButtonSinglePlayer.Enabled = true;
             RefreshAuroraInstallData();
-            ButtonInstallOrUpdateMod.Enabled = true;
         }
 
         private void ButtonReadme_Click(object sender, EventArgs e)

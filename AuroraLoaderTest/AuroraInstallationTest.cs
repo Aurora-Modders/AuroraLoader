@@ -12,10 +12,11 @@ namespace AuroraLoaderTest
 {
     public class AuroraInstallationTest
     {
-        string auroraVersionString = "1.8.1";
+        readonly string auroraVersionString = "1.8.1";
+        readonly string checksum = "aurora";
+
         string installationPath;
         AuroraVersion auroraVersion = null;
-        string checksum = "aurora";
         ModVersion defaultModVersion;
 
         [SetUp]
@@ -76,37 +77,6 @@ namespace AuroraLoaderTest
             Directory.Delete(defaultAuroraInstallation.VersionedDirectory, true);
             _ = new AuroraInstallation(auroraVersion, installationPath);
             Assert.That(Directory.Exists(defaultAuroraInstallation.VersionedDirectory));
-        }
-
-        [Test]
-        public void SelectModVersion_DefaultModVersion_IsSelected()
-        {
-            var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            defaultAuroraInstallation.SelectModVersion(defaultModVersion);
-            Assert.That(defaultAuroraInstallation.selectedModVersions.Single(), Is.EqualTo(defaultModVersion));
-        }
-
-        [Test]
-        public void SelectModVersion_AddDuplicateModVersion_ArgumentExceptionThrown()
-        {
-            var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            defaultAuroraInstallation.SelectModVersion(defaultModVersion);
-            Assert.Throws<ArgumentException>(delegate { defaultAuroraInstallation.SelectModVersion(defaultModVersion); });
-        }
-
-        [Test]
-        public void DeselectModVersion_DefaultModVersion_CanBeRemoved()
-        {
-            var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            defaultAuroraInstallation.SelectModVersion(defaultModVersion);
-            Assert.DoesNotThrow(delegate { defaultAuroraInstallation.DeselectModVersion(defaultModVersion); });
-        }
-
-        [Test]
-        public void DeselectModVersion_NotSelectedModVersion_ThrowsArgumentException()
-        {
-            var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            Assert.Throws<ArgumentException>(delegate { defaultAuroraInstallation.DeselectModVersion(defaultModVersion); });
         }
 
         [Test]

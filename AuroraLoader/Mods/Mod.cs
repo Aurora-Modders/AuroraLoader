@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -33,6 +31,8 @@ namespace AuroraLoader.Mods
 
         [JsonPropertyName("downloads")]
         public IList<ModVersion> Downloads { get; set; } = new List<ModVersion>();
+
+        internal Mod() { }
 
 
         // Helper props
@@ -67,7 +67,7 @@ namespace AuroraLoader.Mods
             }));
         }
 
-        public static Mod LoadMod(string rawJson)
+        public static Mod DeserializeMod(string rawJson)
         {
             var mod = JsonSerializer.Deserialize<Mod>(rawJson, new JsonSerializerOptions()
             {

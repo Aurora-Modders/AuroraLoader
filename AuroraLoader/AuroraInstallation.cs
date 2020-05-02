@@ -37,36 +37,7 @@ namespace AuroraLoader
             }
         }
 
-        public void SelectModVersion(ModVersion modVersion)
-        {
-            if (modVersion == null)
-            {
-                // TODO should really use reflection for this
-                throw new ArgumentNullException("modVersion");
-            }
-
-            if (selectedModVersions.Any(mv => mv.Mod.Name == modVersion.Mod.Name))
-            {
-                throw new ArgumentException($"{modVersion.Mod.Name} already selected");
-            }
-            selectedModVersions.Add(modVersion);
-        }
-
-        public void DeselectModVersion(ModVersion modVersion)
-        {
-            if (modVersion == null)
-            {
-                throw new ArgumentNullException("modVersion");
-            }
-
-            if (!selectedModVersions.Remove(modVersion))
-            {
-                // Just to smoke out UI issues - we'll catch it on the other end
-                throw new ArgumentException($"{modVersion.Mod.Name} not selected");
-            }
-        }
-
-        public Process Launch()
+        public Process Launch(IList<ModVersion> modVersions, ModVersion executableMod = null)
         {
             Log.Debug($"Launching from {InstallationPath}");
             if (selectedModVersions.Count(mv => mv.Mod.Type == ModType.EXECUTABLE) > 1)
@@ -77,7 +48,7 @@ namespace AuroraLoader
             var processes = new List<Process>();
 
             // Install selected mods (including executable, if provided)
-            foreach (var modVersion in selectedModVersions)
+            foreach (var modVersion in modVersions)
             {
                 modVersion.Uninstall(this);
                 modVersion.Install(this);
@@ -89,9 +60,10 @@ namespace AuroraLoader
                 processes.Add(process);
             }
 
-            var executableMod = selectedModVersions.SingleOrDefault(mv => mv.Mod.Type == ModType.EXECUTABLE);
             if (executableMod != null)
             {
+                executableMod.Uninstall(this);
+                executableMod.Install(this);
                 processes.Insert(0, executableMod.Run());
             }
             else
@@ -100,7 +72,7 @@ namespace AuroraLoader
                 {
                     WorkingDirectory = InstallationPath,
                     FileName = "Aurora.exe",
-                    UseShellExecute = false,
+                    UseShellExecute = true,
                     CreateNoWindow = true
                 };
                 processes.Insert(0, Process.Start(processStartInfo));
