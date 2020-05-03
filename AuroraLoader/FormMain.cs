@@ -57,7 +57,7 @@ namespace AuroraLoader
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
             auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
 
-            _modRegistry.Update(true, true);
+            _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, true);
             RefreshAuroraInstallData();
             UpdateListViews();
             UpdateManageModsListView();
@@ -103,6 +103,7 @@ namespace AuroraLoader
                 thread.Start();
                 var progress = new FormProgress(thread);
                 progress.ShowDialog();
+                _modRegistry.AuroraLoaderMod.UpdateCache();
                 Process.Start(Path.Combine(Program.AuroraLoaderExecutableDirectory, "update_loader.bat"));
                 Application.Exit();
                 return;
@@ -140,7 +141,7 @@ namespace AuroraLoader
                     LabelAuroraLoaderVersion.Text = $"Loader v{_modRegistry.AuroraLoaderMod.LatestInstalledVersion.Version}";
                 }
 
-                if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
+                if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max()?.Version) < 0)
                 {
                     ButtonUpdateAurora.Text = $"Update to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
                     ButtonUpdateAurora.ForeColor = Color.Green;
@@ -157,7 +158,7 @@ namespace AuroraLoader
             try
             {
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
-                if (auroraLoaderMod.CanBeUpdated)
+                if (auroraLoaderMod.CanBeUpdated(auroraInstallation.InstalledVersion))
                 {
                     ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.LatestVersion.Version}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
@@ -292,7 +293,7 @@ namespace AuroraLoader
             ListManageMods.Columns.Add("Status");
             ListManageMods.Columns.Add("Type");
             ListManageMods.Columns.Add("Current");
-            ListManageMods.Columns.Add("Latest");
+            ListManageMods.Columns.Add("Latest Compatible");
             ListManageMods.Columns.Add("Aurora Compatibility");
             ListManageMods.Columns.Add("Description");
 
@@ -304,7 +305,7 @@ namespace AuroraLoader
                         mod.Name,
                         mod.Status.ToString(),
                         mod.Type.ToString(),
-                        mod.LatestInstalledVersion?.Version?.ToString() ?? "Not Installed",
+                        mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion)?.Version?.ToString() ?? "Not Installed",
                         mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion)?.Version == mod.LatestVersion?.Version
                             ? "Up to date"
                             : mod.LatestVersion?.Version?.ToString()
@@ -335,7 +336,7 @@ namespace AuroraLoader
                 if (selected.Installed)
                 {
                     ButtonInstallOrUpdateMod.Text = "Update";
-                    if (selected.CanBeUpdated)
+                    if (selected.CanBeUpdated(auroraInstallation.InstalledVersion))
                     {
                         ButtonInstallOrUpdateMod.Enabled = true;
                     }
@@ -372,6 +373,7 @@ namespace AuroraLoader
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
             mod.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Download();
+            mod.UpdateCache();
             UpdateManageModsListView();
             UpdateListViews();
             Cursor = Cursors.Default;

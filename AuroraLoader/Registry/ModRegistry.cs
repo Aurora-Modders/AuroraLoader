@@ -29,7 +29,7 @@ namespace AuroraLoader.Registry
             Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
         }
 
-        public void Update(bool updateRemote = false, bool updateCache = false)
+        public void Update(AuroraVersion version, bool updateRemote = false, bool updateCache = false)
         {
             Log.Debug($"Updating mod registry, updateRemote={updateRemote} updateCache={updateCache}");
 
@@ -47,13 +47,25 @@ namespace AuroraLoader.Registry
                 {
                     var updatedDownloadList = existingMod.Downloads.ToList();
                     updatedDownloadList.AddRange(remoteMod.Downloads.Where(nd => !existingMod.Downloads.Any(ed => ed.Version == nd.Version)));
-                    existingMod.Downloads = updatedDownloadList;
+                    remoteMod.Downloads = updatedDownloadList;
+                    mods.Remove(existingMod);
+                    mods.Add(remoteMod);
                 }
                 else
                 {
                     mods.Add(remoteMod);
                 }
             }
+
+            foreach (var mod in mods.ToList())
+            {
+                mod.Downloads.RemoveAll(d => !version.CompatibleWith(d.TargetAuroraVersion));
+                if (mod.Downloads.Count == 0)
+                {
+                    mods.Remove(mod);
+                }
+            }
+
             Mods = mods;
 
             if (updateRemote && updateCache)
@@ -73,15 +85,21 @@ namespace AuroraLoader.Registry
         private IList<Mod> GetLocalMods()
         {
             var mods = new List<Mod>();
-            foreach (var modJsonFile in Directory.EnumerateFiles(Program.ModDirectory, "mod.json"))
+            foreach (var modDirectory in Directory.EnumerateDirectories(Program.ModDirectory))
             {
-                try
+                if (File.Exists(Path.Combine(modDirectory, "mod.json")))
                 {
-                    mods.Add(Mod.DeserializeMod(File.ReadAllText(modJsonFile)));
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to parse mod data from {modJsonFile}", e);
+                    var modJsonFile = Path.Combine(modDirectory, "mod.json");
+                    Log.Debug($"Loading local mod from {modJsonFile}");
+
+                    try
+                    {
+                        mods.Add(Mod.DeserializeMod(File.ReadAllText(modJsonFile)));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"Failed to parse mod data from {modJsonFile}", e);
+                    }
                 }
             }
             return mods;

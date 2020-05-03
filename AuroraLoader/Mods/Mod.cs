@@ -30,7 +30,7 @@ namespace AuroraLoader.Mods
         public string ConfigurationFile { get; set; }
 
         [JsonPropertyName("downloads")]
-        public IList<ModVersion> Downloads { get; set; } = new List<ModVersion>();
+        public List<ModVersion> Downloads { get; set; } = new List<ModVersion>();
 
         internal Mod() { }
 
@@ -51,9 +51,9 @@ namespace AuroraLoader.Mods
             .FirstOrDefault();
 
         public bool Installed => LatestInstalledVersion != null;
-        public bool CanBeUpdated => LatestVersion != null
+        public bool CanBeUpdated(AuroraVersion auroraVersion) => LatestVersion != null
                 && LatestInstalledVersion != null
-                && LatestVersion.Version.CompareByPrecedence(LatestInstalledVersion.Version) > 0;
+                && LatestInstalledVersionCompatibleWith(auroraVersion).Version.CompareByPrecedence(LatestVersionCompatibleWith(auroraVersion).Version) < 0;
 
         public string ModFolder => Path.Combine(Program.ModDirectory, Name);
 
