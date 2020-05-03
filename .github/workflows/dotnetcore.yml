@@ -30,8 +30,7 @@ jobs:
     - name: Upload AuroraLoader artifact
       uses: actions/upload-artifact@v1
       with:
-        name: AuroraLoader
-        path: ./AuroraLoader.zip
+        path: ./AuroraLoader-${{ github.head_ref }}.zip
 
   release:
     runs-on: ubuntu-latest
@@ -47,7 +46,7 @@ jobs:
           name: AuroraLoader ${{ github.head_ref }}
           tag: ${{ github.head_ref }}
           commit: ${{ github.event.after }}
-          artifacts: AuroraLoader.zip
+          artifacts: AuroraLoader-${{ github.head_ref }}.zip
           artifactContentType: application/zip
           prerelease: true
           allowUpdates: true
@@ -58,7 +57,7 @@ jobs:
           name: AuroraLoader
           tag: ${{ github.ref }}
           commit: ${{ github.sha }}
-          artifacts: "AuroraLoader.zip"
+          artifacts: AuroraLoader-${{ github.head_ref }}.zip
           artifactContentType: application/zip
           prerelease: true
           allowUpdates: true
