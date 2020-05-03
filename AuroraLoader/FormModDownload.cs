@@ -34,7 +34,7 @@ namespace AuroraLoader
         private void FormModDownload_Load(object sender, EventArgs e)
         {
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
-            _modRegistry.Update(true, true);
+            _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, true);
             UpdateManageModsListView();
         }
 
@@ -50,7 +50,7 @@ namespace AuroraLoader
                 if (selected.Installed)
                 {
                     ButtonGetMod.Text = "Update";
-                    if (selected.CanBeUpdated)
+                    if (selected.CanBeUpdated(_auroraVersionRegistry.CurrentAuroraVersion))
                     {
                         ButtonGetMod.Enabled = true;
                     }
