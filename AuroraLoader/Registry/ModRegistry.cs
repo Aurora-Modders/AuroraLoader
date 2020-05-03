@@ -45,7 +45,11 @@ namespace AuroraLoader.Registry
                 var existingMod = mods.SingleOrDefault(mod => mod.Name == remoteMod.Name);
                 if (existingMod != null)
                 {
-                    existingMod = remoteMod;
+                    var updatedDownloadList = existingMod.Downloads.ToList();
+                    updatedDownloadList.AddRange(remoteMod.Downloads.Where(nd => !existingMod.Downloads.Any(ed => ed.Version == nd.Version)));
+                    remoteMod.Downloads = updatedDownloadList;
+                    mods.Remove(existingMod);
+                    mods.Add(remoteMod);
                 }
                 else
                 {
@@ -71,15 +75,21 @@ namespace AuroraLoader.Registry
         private IList<Mod> GetLocalMods()
         {
             var mods = new List<Mod>();
-            foreach (var modJsonFile in Directory.EnumerateFiles(Program.ModDirectory, "mod.json"))
+            foreach (var modDirectory in Directory.EnumerateDirectories(Program.ModDirectory))
             {
-                try
+                if (File.Exists(Path.Combine(modDirectory, "mod.json")))
                 {
-                    mods.Add(Mod.DeserializeMod(File.ReadAllText(modJsonFile)));
-                }
-                catch (Exception e)
-                {
-                    Log.Error($"Failed to parse mod data from {modJsonFile}", e);
+                    var modJsonFile = Path.Combine(modDirectory, "mod.json");
+                    Log.Debug($"Loading local mod from {modJsonFile}");
+
+                    try
+                    {
+                        mods.Add(Mod.DeserializeMod(File.ReadAllText(modJsonFile)));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error($"Failed to parse mod data from {modJsonFile}", e);
+                    }
                 }
             }
             return mods;
