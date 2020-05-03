@@ -47,9 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="FormMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="FormMain.cs" />
     <Compile Update="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
