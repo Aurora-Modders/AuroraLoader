@@ -32,6 +32,7 @@
             this.ListViewRegistryMods = new System.Windows.Forms.ListView();
             this.ButtonGetMod = new System.Windows.Forms.Button();
             this.ButtonConfigMod = new System.Windows.Forms.Button();
+            this.RichTextBoxDescription = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // ManageModslabel
@@ -48,14 +49,14 @@
             this.ListViewRegistryMods.HideSelection = false;
             this.ListViewRegistryMods.Location = new System.Drawing.Point(12, 27);
             this.ListViewRegistryMods.Name = "ListViewRegistryMods";
-            this.ListViewRegistryMods.Size = new System.Drawing.Size(561, 239);
+            this.ListViewRegistryMods.Size = new System.Drawing.Size(561, 196);
             this.ListViewRegistryMods.TabIndex = 32;
             this.ListViewRegistryMods.UseCompatibleStateImageBehavior = false;
             this.ListViewRegistryMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
             // 
             // ButtonGetMod
             // 
-            this.ButtonGetMod.Location = new System.Drawing.Point(12, 272);
+            this.ButtonGetMod.Location = new System.Drawing.Point(12, 307);
             this.ButtonGetMod.Name = "ButtonGetMod";
             this.ButtonGetMod.Size = new System.Drawing.Size(94, 27);
             this.ButtonGetMod.TabIndex = 29;
@@ -65,7 +66,7 @@
             // 
             // ButtonConfigMod
             // 
-            this.ButtonConfigMod.Location = new System.Drawing.Point(112, 272);
+            this.ButtonConfigMod.Location = new System.Drawing.Point(112, 307);
             this.ButtonConfigMod.Name = "ButtonConfigMod";
             this.ButtonConfigMod.Size = new System.Drawing.Size(94, 27);
             this.ButtonConfigMod.TabIndex = 30;
@@ -73,11 +74,20 @@
             this.ButtonConfigMod.UseVisualStyleBackColor = true;
             this.ButtonConfigMod.Click += new System.EventHandler(this.ButtonConfigMod_Click);
             // 
+            // RichTextBoxDescription
+            // 
+            this.RichTextBoxDescription.Location = new System.Drawing.Point(12, 229);
+            this.RichTextBoxDescription.Name = "RichTextBoxDescription";
+            this.RichTextBoxDescription.Size = new System.Drawing.Size(561, 72);
+            this.RichTextBoxDescription.TabIndex = 41;
+            this.RichTextBoxDescription.Text = "";
+            // 
             // FormModDownload
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(614, 313);
+            this.ClientSize = new System.Drawing.Size(614, 346);
+            this.Controls.Add(this.RichTextBoxDescription);
             this.Controls.Add(this.ButtonConfigMod);
             this.Controls.Add(this.ButtonGetMod);
             this.Controls.Add(this.ListViewRegistryMods);
@@ -96,5 +106,6 @@
         private System.Windows.Forms.ListView ListViewRegistryMods;
         private System.Windows.Forms.Button ButtonGetMod;
         private System.Windows.Forms.Button ButtonConfigMod;
+        private System.Windows.Forms.RichTextBox RichTextBoxDescription;
     }
 }

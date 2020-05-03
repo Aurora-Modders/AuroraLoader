@@ -46,6 +46,7 @@ namespace AuroraLoader
             if (ListViewRegistryMods.SelectedItems.Count > 0)
             {
                 var selected = _modRegistry.Mods.Single(mod => mod.Name == ListViewRegistryMods.SelectedItems[0].Text);
+                RichTextBoxDescription.Text = selected.Description;
                 if (selected.Installed)
                 {
                     ButtonGetMod.Text = "Update";
@@ -103,7 +104,7 @@ namespace AuroraLoader
             ListViewRegistryMods.Columns.Add("Current");
             ListViewRegistryMods.Columns.Add("Latest");
             ListViewRegistryMods.Columns.Add("Aurora Compatibility");
-            ListViewRegistryMods.Columns.Add("Description");
+            ///ListViewRegistryMods.Columns.Add("Description");
 
             foreach (var mod in _modRegistry.Mods)
             {
@@ -119,7 +120,7 @@ namespace AuroraLoader
                             : mod.LatestVersion?.Version?.ToString()
                             ?? "-",
                         mod.LatestVersion.TargetAuroraVersion?.Pretty(),
-                        mod.Description
+                        //mod.Description
                     });
                     ListViewRegistryMods.Items.Add(li);
                 }
