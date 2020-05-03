@@ -60,10 +60,10 @@ namespace AuroraLoader
             // 
             // ButtonSinglePlayer
             // 
-            this.ButtonSinglePlayer.Location = new System.Drawing.Point(40, 45);
-            this.ButtonSinglePlayer.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.ButtonSinglePlayer.Location = new System.Drawing.Point(28, 27);
+            this.ButtonSinglePlayer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ButtonSinglePlayer.Name = "ButtonSinglePlayer";
-            this.ButtonSinglePlayer.Size = new System.Drawing.Size(120, 40);
+            this.ButtonSinglePlayer.Size = new System.Drawing.Size(84, 24);
             this.ButtonSinglePlayer.TabIndex = 2;
             this.ButtonSinglePlayer.Text = "Play";
             this.ButtonSinglePlayer.UseVisualStyleBackColor = true;
@@ -72,10 +72,10 @@ namespace AuroraLoader
             // LabelAuroraVersion
             // 
             this.LabelAuroraVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraVersion.Location = new System.Drawing.Point(684, 969);
-            this.LabelAuroraVersion.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.LabelAuroraVersion.Location = new System.Drawing.Point(479, 581);
+            this.LabelAuroraVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraVersion.Name = "LabelAuroraVersion";
-            this.LabelAuroraVersion.Size = new System.Drawing.Size(190, 25);
+            this.LabelAuroraVersion.Size = new System.Drawing.Size(133, 15);
             this.LabelAuroraVersion.TabIndex = 7;
             this.LabelAuroraVersion.Text = "Aurora v#.##.#";
             this.LabelAuroraVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -83,10 +83,10 @@ namespace AuroraLoader
             // ButtonUpdateAurora
             // 
             this.ButtonUpdateAurora.Enabled = false;
-            this.ButtonUpdateAurora.Location = new System.Drawing.Point(605, 897);
-            this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.ButtonUpdateAurora.Location = new System.Drawing.Point(424, 538);
+            this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
-            this.ButtonUpdateAurora.Size = new System.Drawing.Size(235, 45);
+            this.ButtonUpdateAurora.Size = new System.Drawing.Size(164, 27);
             this.ButtonUpdateAurora.TabIndex = 12;
             this.ButtonUpdateAurora.Text = "Update Aurora";
             this.ButtonUpdateAurora.UseVisualStyleBackColor = true;
@@ -96,20 +96,20 @@ namespace AuroraLoader
             // 
             this.TrackMusicVolume.Enabled = false;
             this.TrackMusicVolume.LargeChange = 1;
-            this.TrackMusicVolume.Location = new System.Drawing.Point(378, 99);
-            this.TrackMusicVolume.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.TrackMusicVolume.Location = new System.Drawing.Point(265, 59);
+            this.TrackMusicVolume.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.TrackMusicVolume.Name = "TrackMusicVolume";
-            this.TrackMusicVolume.Size = new System.Drawing.Size(231, 69);
+            this.TrackMusicVolume.Size = new System.Drawing.Size(162, 45);
             this.TrackMusicVolume.TabIndex = 20;
             this.TrackMusicVolume.Value = 4;
             // 
             // CheckEnableMusic
             // 
             this.CheckEnableMusic.AutoSize = true;
-            this.CheckEnableMusic.Location = new System.Drawing.Point(209, 99);
-            this.CheckEnableMusic.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.CheckEnableMusic.Location = new System.Drawing.Point(146, 59);
+            this.CheckEnableMusic.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.CheckEnableMusic.Name = "CheckEnableMusic";
-            this.CheckEnableMusic.Size = new System.Drawing.Size(157, 29);
+            this.CheckEnableMusic.Size = new System.Drawing.Size(107, 19);
             this.CheckEnableMusic.TabIndex = 2;
             this.CheckEnableMusic.Text = "In-Game Music";
             this.CheckEnableMusic.UseVisualStyleBackColor = true;
@@ -117,10 +117,10 @@ namespace AuroraLoader
             // 
             // ButtonUpdateAuroraLoader
             // 
-            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(358, 897);
-            this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(251, 538);
+            this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
-            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(235, 45);
+            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(164, 27);
             this.ButtonUpdateAuroraLoader.TabIndex = 12;
             this.ButtonUpdateAuroraLoader.Text = "Update Loader";
             this.ButtonUpdateAuroraLoader.UseVisualStyleBackColor = true;
@@ -128,10 +128,10 @@ namespace AuroraLoader
             // 
             // ButtonReadme
             // 
-            this.ButtonReadme.Location = new System.Drawing.Point(720, 45);
-            this.ButtonReadme.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.ButtonReadme.Location = new System.Drawing.Point(504, 27);
+            this.ButtonReadme.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ButtonReadme.Name = "ButtonReadme";
-            this.ButtonReadme.Size = new System.Drawing.Size(120, 40);
+            this.ButtonReadme.Size = new System.Drawing.Size(84, 24);
             this.ButtonReadme.TabIndex = 13;
             this.ButtonReadme.Text = "Readme";
             this.ButtonReadme.UseVisualStyleBackColor = true;
@@ -140,10 +140,10 @@ namespace AuroraLoader
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(684, 944);
-            this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(479, 566);
+            this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
-            this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(190, 25);
+            this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(133, 15);
             this.LabelAuroraLoaderVersion.TabIndex = 7;
             this.LabelAuroraLoaderVersion.Text = "Loader v#.##.#";
             this.LabelAuroraLoaderVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -152,10 +152,9 @@ namespace AuroraLoader
             // CheckEnableMods
             // 
             this.CheckEnableMods.AutoSize = true;
-            this.CheckEnableMods.Location = new System.Drawing.Point(40, 181);
-            this.CheckEnableMods.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.CheckEnableMods.Location = new System.Drawing.Point(28, 109);
             this.CheckEnableMods.Name = "CheckEnableMods";
-            this.CheckEnableMods.Size = new System.Drawing.Size(141, 29);
+            this.CheckEnableMods.Size = new System.Drawing.Size(94, 19);
             this.CheckEnableMods.TabIndex = 21;
             this.CheckEnableMods.Text = "Enable Mods";
             this.CheckEnableMods.UseVisualStyleBackColor = true;
@@ -164,10 +163,9 @@ namespace AuroraLoader
             // CheckEnablePoweruserMods
             // 
             this.CheckEnablePoweruserMods.AutoSize = true;
-            this.CheckEnablePoweruserMods.Location = new System.Drawing.Point(209, 181);
-            this.CheckEnablePoweruserMods.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.CheckEnablePoweruserMods.Location = new System.Drawing.Point(146, 109);
             this.CheckEnablePoweruserMods.Name = "CheckEnablePoweruserMods";
-            this.CheckEnablePoweruserMods.Size = new System.Drawing.Size(227, 29);
+            this.CheckEnablePoweruserMods.Size = new System.Drawing.Size(152, 19);
             this.CheckEnablePoweruserMods.TabIndex = 23;
             this.CheckEnablePoweruserMods.Text = "Enable Poweruser Mods";
             this.CheckEnablePoweruserMods.UseVisualStyleBackColor = true;
@@ -177,37 +175,33 @@ namespace AuroraLoader
             // 
             this.ComboSelectExecutableMod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboSelectExecutableMod.FormattingEnabled = true;
-            this.ComboSelectExecutableMod.Location = new System.Drawing.Point(209, 45);
-            this.ComboSelectExecutableMod.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ComboSelectExecutableMod.Location = new System.Drawing.Point(146, 27);
             this.ComboSelectExecutableMod.Name = "ComboSelectExecutableMod";
-            this.ComboSelectExecutableMod.Size = new System.Drawing.Size(343, 33);
+            this.ComboSelectExecutableMod.Size = new System.Drawing.Size(241, 23);
             this.ComboSelectExecutableMod.TabIndex = 25;
             // 
             // ListDatabaseMods
             // 
             this.ListDatabaseMods.FormattingEnabled = true;
-            this.ListDatabaseMods.Location = new System.Drawing.Point(465, 278);
-            this.ListDatabaseMods.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ListDatabaseMods.Location = new System.Drawing.Point(326, 167);
             this.ListDatabaseMods.Name = "ListDatabaseMods";
-            this.ListDatabaseMods.Size = new System.Drawing.Size(375, 144);
+            this.ListDatabaseMods.Size = new System.Drawing.Size(264, 76);
             this.ListDatabaseMods.TabIndex = 26;
             // 
             // ListUtilities
             // 
             this.ListUtilities.FormattingEnabled = true;
-            this.ListUtilities.Location = new System.Drawing.Point(40, 278);
-            this.ListUtilities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ListUtilities.Location = new System.Drawing.Point(28, 167);
             this.ListUtilities.Name = "ListUtilities";
-            this.ListUtilities.Size = new System.Drawing.Size(375, 144);
+            this.ListUtilities.Size = new System.Drawing.Size(264, 76);
             this.ListUtilities.TabIndex = 27;
             this.ListUtilities.SelectedIndexChanged += new System.EventHandler(this.ListUtilityMods_SelectedIndexChanged);
             // 
             // ButtonInstallOrUpdateMod
             // 
-            this.ButtonInstallOrUpdateMod.Location = new System.Drawing.Point(40, 895);
-            this.ButtonInstallOrUpdateMod.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ButtonInstallOrUpdateMod.Location = new System.Drawing.Point(28, 537);
             this.ButtonInstallOrUpdateMod.Name = "ButtonInstallOrUpdateMod";
-            this.ButtonInstallOrUpdateMod.Size = new System.Drawing.Size(135, 45);
+            this.ButtonInstallOrUpdateMod.Size = new System.Drawing.Size(94, 27);
             this.ButtonInstallOrUpdateMod.TabIndex = 29;
             this.ButtonInstallOrUpdateMod.Text = "Install";
             this.ButtonInstallOrUpdateMod.UseVisualStyleBackColor = true;
@@ -215,10 +209,9 @@ namespace AuroraLoader
             // 
             // ButtonConfigureMod
             // 
-            this.ButtonConfigureMod.Location = new System.Drawing.Point(183, 895);
-            this.ButtonConfigureMod.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ButtonConfigureMod.Location = new System.Drawing.Point(128, 537);
             this.ButtonConfigureMod.Name = "ButtonConfigureMod";
-            this.ButtonConfigureMod.Size = new System.Drawing.Size(135, 45);
+            this.ButtonConfigureMod.Size = new System.Drawing.Size(94, 27);
             this.ButtonConfigureMod.TabIndex = 30;
             this.ButtonConfigureMod.Text = "Configure";
             this.ButtonConfigureMod.UseVisualStyleBackColor = true;
@@ -227,10 +220,9 @@ namespace AuroraLoader
             // ListManageMods
             // 
             this.ListManageMods.HideSelection = false;
-            this.ListManageMods.Location = new System.Drawing.Point(40, 489);
-            this.ListManageMods.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ListManageMods.Location = new System.Drawing.Point(28, 293);
             this.ListManageMods.Name = "ListManageMods";
-            this.ListManageMods.Size = new System.Drawing.Size(800, 396);
+            this.ListManageMods.Size = new System.Drawing.Size(561, 239);
             this.ListManageMods.TabIndex = 32;
             this.ListManageMods.UseCompatibleStateImageBehavior = false;
             this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
@@ -238,10 +230,9 @@ namespace AuroraLoader
             // LinkForums
             // 
             this.LinkForums.AutoSize = true;
-            this.LinkForums.Location = new System.Drawing.Point(708, 85);
-            this.LinkForums.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LinkForums.Location = new System.Drawing.Point(496, 51);
             this.LinkForums.Name = "LinkForums";
-            this.LinkForums.Size = new System.Drawing.Size(132, 25);
+            this.LinkForums.Size = new System.Drawing.Size(88, 15);
             this.LinkForums.TabIndex = 33;
             this.LinkForums.TabStop = true;
             this.LinkForums.Text = "Official Forums";
@@ -250,10 +241,9 @@ namespace AuroraLoader
             // LinkReportBug
             // 
             this.LinkReportBug.AutoSize = true;
-            this.LinkReportBug.Location = new System.Drawing.Point(725, 185);
-            this.LinkReportBug.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LinkReportBug.Location = new System.Drawing.Point(508, 111);
             this.LinkReportBug.Name = "LinkReportBug";
-            this.LinkReportBug.Size = new System.Drawing.Size(115, 25);
+            this.LinkReportBug.Size = new System.Drawing.Size(75, 15);
             this.LinkReportBug.TabIndex = 34;
             this.LinkReportBug.TabStop = true;
             this.LinkReportBug.Text = "Report a Bug";
@@ -262,10 +252,9 @@ namespace AuroraLoader
             // LinkSubreddit
             // 
             this.LinkSubreddit.AutoSize = true;
-            this.LinkSubreddit.Location = new System.Drawing.Point(691, 110);
-            this.LinkSubreddit.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LinkSubreddit.Location = new System.Drawing.Point(484, 66);
             this.LinkSubreddit.Name = "LinkSubreddit";
-            this.LinkSubreddit.Size = new System.Drawing.Size(149, 25);
+            this.LinkSubreddit.Size = new System.Drawing.Size(97, 15);
             this.LinkSubreddit.TabIndex = 35;
             this.LinkSubreddit.TabStop = true;
             this.LinkSubreddit.Text = "Aurora Subreddit";
@@ -274,10 +263,9 @@ namespace AuroraLoader
             // LinkDiscord
             // 
             this.LinkDiscord.AutoSize = true;
-            this.LinkDiscord.Location = new System.Drawing.Point(767, 160);
-            this.LinkDiscord.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LinkDiscord.Location = new System.Drawing.Point(537, 96);
             this.LinkDiscord.Name = "LinkDiscord";
-            this.LinkDiscord.Size = new System.Drawing.Size(73, 25);
+            this.LinkDiscord.Size = new System.Drawing.Size(47, 15);
             this.LinkDiscord.TabIndex = 36;
             this.LinkDiscord.TabStop = true;
             this.LinkDiscord.Text = "Discord";
@@ -286,40 +274,36 @@ namespace AuroraLoader
             // LabelUtilities
             // 
             this.LabelUtilities.AutoSize = true;
-            this.LabelUtilities.Location = new System.Drawing.Point(40, 248);
-            this.LabelUtilities.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LabelUtilities.Location = new System.Drawing.Point(28, 149);
             this.LabelUtilities.Name = "LabelUtilities";
-            this.LabelUtilities.Size = new System.Drawing.Size(272, 25);
+            this.LabelUtilities.Size = new System.Drawing.Size(183, 15);
             this.LabelUtilities.TabIndex = 38;
             this.LabelUtilities.Text = "Launch utilities alongside Aurora:";
             // 
             // LabelDatabaseMods
             // 
             this.LabelDatabaseMods.AutoSize = true;
-            this.LabelDatabaseMods.Location = new System.Drawing.Point(465, 248);
-            this.LabelDatabaseMods.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LabelDatabaseMods.Location = new System.Drawing.Point(326, 149);
             this.LabelDatabaseMods.Name = "LabelDatabaseMods";
-            this.LabelDatabaseMods.Size = new System.Drawing.Size(191, 25);
+            this.LabelDatabaseMods.Size = new System.Drawing.Size(124, 15);
             this.LabelDatabaseMods.TabIndex = 39;
             this.LabelDatabaseMods.Text = "Apply database mods:";
             // 
             // ManageMods
             // 
             this.ManageMods.AutoSize = true;
-            this.ManageMods.Location = new System.Drawing.Point(40, 459);
-            this.ManageMods.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.ManageMods.Location = new System.Drawing.Point(28, 275);
             this.ManageMods.Name = "ManageMods";
-            this.ManageMods.Size = new System.Drawing.Size(131, 25);
+            this.ManageMods.Size = new System.Drawing.Size(86, 15);
             this.ManageMods.TabIndex = 40;
             this.ManageMods.Text = "Manage mods:";
             // 
             // LinkModSubreddit
             // 
             this.LinkModSubreddit.AutoSize = true;
-            this.LinkModSubreddit.Location = new System.Drawing.Point(707, 135);
-            this.LinkModSubreddit.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.LinkModSubreddit.Location = new System.Drawing.Point(495, 81);
             this.LinkModSubreddit.Name = "LinkModSubreddit";
-            this.LinkModSubreddit.Size = new System.Drawing.Size(133, 25);
+            this.LinkModSubreddit.Size = new System.Drawing.Size(86, 15);
             this.LinkModSubreddit.TabIndex = 35;
             this.LinkModSubreddit.TabStop = true;
             this.LinkModSubreddit.Text = "Mod Subreddit";
@@ -327,10 +311,10 @@ namespace AuroraLoader
             // 
             // ButtonMultiplayer
             // 
-            this.ButtonMultiplayer.Location = new System.Drawing.Point(40, 99);
-            this.ButtonMultiplayer.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.ButtonMultiplayer.Location = new System.Drawing.Point(28, 59);
+            this.ButtonMultiplayer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ButtonMultiplayer.Name = "ButtonMultiplayer";
-            this.ButtonMultiplayer.Size = new System.Drawing.Size(150, 40);
+            this.ButtonMultiplayer.Size = new System.Drawing.Size(105, 24);
             this.ButtonMultiplayer.TabIndex = 2;
             this.ButtonMultiplayer.Text = "Play Multiplayer";
             this.ButtonMultiplayer.UseVisualStyleBackColor = true;
@@ -338,9 +322,9 @@ namespace AuroraLoader
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(878, 994);
+            this.ClientSize = new System.Drawing.Size(619, 607);
             this.Controls.Add(this.ButtonMultiplayer);
             this.Controls.Add(this.LinkModSubreddit);
             this.Controls.Add(this.ManageMods);
@@ -366,8 +350,8 @@ namespace AuroraLoader
             this.Controls.Add(this.ButtonUpdateAurora);
             this.Controls.Add(this.LabelAuroraVersion);
             this.Controls.Add(this.ButtonSinglePlayer);
-            this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
-            this.MinimumSize = new System.Drawing.Size(900, 1050);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(635, 646);
             this.Name = "FormMain";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
