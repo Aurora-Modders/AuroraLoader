@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>AuroraLoader.Program</StartupObject>
     <ApplicationIcon>Aurora.ico</ApplicationIcon>
