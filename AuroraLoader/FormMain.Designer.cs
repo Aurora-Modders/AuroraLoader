@@ -69,7 +69,7 @@ namespace AuroraLoader
             // LabelAuroraVersion
             // 
             this.LabelAuroraVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraVersion.Location = new System.Drawing.Point(479, 581);
+            this.LabelAuroraVersion.Location = new System.Drawing.Point(501, 292);
             this.LabelAuroraVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraVersion.Name = "LabelAuroraVersion";
             this.LabelAuroraVersion.Size = new System.Drawing.Size(133, 15);
@@ -80,7 +80,7 @@ namespace AuroraLoader
             // ButtonUpdateAurora
             // 
             this.ButtonUpdateAurora.Enabled = false;
-            this.ButtonUpdateAurora.Location = new System.Drawing.Point(424, 538);
+            this.ButtonUpdateAurora.Location = new System.Drawing.Point(200, 283);
             this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
             this.ButtonUpdateAurora.Size = new System.Drawing.Size(164, 27);
@@ -114,7 +114,7 @@ namespace AuroraLoader
             // 
             // ButtonUpdateAuroraLoader
             // 
-            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(251, 538);
+            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(28, 283);
             this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
             this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(164, 27);
@@ -137,7 +137,7 @@ namespace AuroraLoader
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(479, 566);
+            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(501, 277);
             this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
             this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(133, 15);
@@ -280,7 +280,7 @@ namespace AuroraLoader
             // 
             // ButtonManageMods
             // 
-            this.ButtonManageMods.Location = new System.Drawing.Point(80, 538);
+            this.ButtonManageMods.Location = new System.Drawing.Point(28, 249);
             this.ButtonManageMods.Name = "ButtonManageMods";
             this.ButtonManageMods.Size = new System.Drawing.Size(164, 27);
             this.ButtonManageMods.TabIndex = 41;
@@ -292,7 +292,7 @@ namespace AuroraLoader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(619, 607);
+            this.ClientSize = new System.Drawing.Size(641, 318);
             this.Controls.Add(this.ButtonManageMods);
             this.Controls.Add(this.ButtonMultiplayer);
             this.Controls.Add(this.LinkModSubreddit);
@@ -316,7 +316,7 @@ namespace AuroraLoader
             this.Controls.Add(this.LabelAuroraVersion);
             this.Controls.Add(this.ButtonSinglePlayer);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.MinimumSize = new System.Drawing.Size(635, 646);
+            this.MinimumSize = new System.Drawing.Size(635, 346);
             this.Name = "FormMain";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
