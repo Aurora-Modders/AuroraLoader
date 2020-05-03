@@ -45,9 +45,7 @@ namespace AuroraLoader.Registry
                 var existingMod = mods.SingleOrDefault(mod => mod.Name == remoteMod.Name);
                 if (existingMod != null)
                 {
-                    var updatedDownloadList = existingMod.Downloads.ToList();
-                    updatedDownloadList.AddRange(remoteMod.Downloads.Where(nd => !existingMod.Downloads.Any(ed => ed.Version == nd.Version)));
-                    existingMod.Downloads = updatedDownloadList;
+                    existingMod = remoteMod;
                 }
                 else
                 {
