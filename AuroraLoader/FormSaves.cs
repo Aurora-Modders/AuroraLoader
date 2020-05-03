@@ -19,5 +19,20 @@ namespace AuroraLoader
         {
 
         }
+
+        private void ListViewSaves_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonLoadSaves_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ButtonResetSaves_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

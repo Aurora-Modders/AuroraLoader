@@ -28,20 +28,73 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.ListViewSaves = new System.Windows.Forms.ListView();
+            this.LabelSave = new System.Windows.Forms.Label();
+            this.ButtonLoadSaves = new System.Windows.Forms.Button();
+            this.ButtonResetSaves = new System.Windows.Forms.Button();
             this.SuspendLayout();
+            // 
+            // ListViewSaves
+            // 
+            this.ListViewSaves.HideSelection = false;
+            this.ListViewSaves.Location = new System.Drawing.Point(12, 27);
+            this.ListViewSaves.Name = "ListViewSaves";
+            this.ListViewSaves.Size = new System.Drawing.Size(389, 199);
+            this.ListViewSaves.TabIndex = 0;
+            this.ListViewSaves.UseCompatibleStateImageBehavior = false;
+            this.ListViewSaves.SelectedIndexChanged += new System.EventHandler(this.ListViewSaves_SelectedIndexChanged);
+            // 
+            // LabelSave
+            // 
+            this.LabelSave.AutoSize = true;
+            this.LabelSave.Location = new System.Drawing.Point(12, 9);
+            this.LabelSave.Name = "LabelSave";
+            this.LabelSave.Size = new System.Drawing.Size(65, 15);
+            this.LabelSave.TabIndex = 1;
+            this.LabelSave.Text = "Select Save";
+            // 
+            // ButtonLoadSaves
+            // 
+            this.ButtonLoadSaves.Location = new System.Drawing.Point(12, 232);
+            this.ButtonLoadSaves.Name = "ButtonLoadSaves";
+            this.ButtonLoadSaves.Size = new System.Drawing.Size(75, 23);
+            this.ButtonLoadSaves.TabIndex = 2;
+            this.ButtonLoadSaves.Text = "Load";
+            this.ButtonLoadSaves.UseVisualStyleBackColor = true;
+            this.ButtonLoadSaves.Click += new System.EventHandler(this.ButtonLoadSaves_Click);
+            // 
+            // ButtonResetSaves
+            // 
+            this.ButtonResetSaves.Location = new System.Drawing.Point(93, 232);
+            this.ButtonResetSaves.Name = "ButtonResetSaves";
+            this.ButtonResetSaves.Size = new System.Drawing.Size(75, 23);
+            this.ButtonResetSaves.TabIndex = 3;
+            this.ButtonResetSaves.Text = "Reset";
+            this.ButtonResetSaves.UseVisualStyleBackColor = true;
+            this.ButtonResetSaves.Click += new System.EventHandler(this.ButtonResetSaves_Click);
             // 
             // FormSaves
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(434, 268);
+            this.Controls.Add(this.ButtonResetSaves);
+            this.Controls.Add(this.ButtonLoadSaves);
+            this.Controls.Add(this.LabelSave);
+            this.Controls.Add(this.ListViewSaves);
             this.Name = "FormSaves";
             this.Text = "FormSaves";
             this.Load += new System.EventHandler(this.FormSaves_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
+
+        private System.Windows.Forms.ListView ListViewSaves;
+        private System.Windows.Forms.Label LabelSave;
+        private System.Windows.Forms.Button ButtonLoadSaves;
+        private System.Windows.Forms.Button ButtonResetSaves;
     }
 }
