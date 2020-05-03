@@ -57,9 +57,13 @@ namespace AuroraLoader.Registry
                 }
             }
 
-            foreach (var mod in mods)
+            foreach (var mod in mods.ToList())
             {
                 mod.Downloads.RemoveAll(d => !version.CompatibleWith(d.TargetAuroraVersion));
+                if (mod.Downloads.Count == 0)
+                {
+                    mods.Remove(mod);
+                }
             }
 
             Mods = mods;
