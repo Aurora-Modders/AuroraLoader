@@ -20,6 +20,7 @@ namespace AuroraLoader.Registry
         public AuroraVersion CurrentAuroraVersion { get; private set; }
 
         private readonly IConfiguration _configuration;
+        private readonly string _versionCachePath = Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini");
 
         public AuroraVersionRegistry(IConfiguration configuration)
         {
@@ -28,17 +29,17 @@ namespace AuroraLoader.Registry
 
         public void Update(IList<string> mirrors = null)
         {
-            UpdateKnownVersionsFromCache();
-            if (mirrors != null)
+            if (!File.Exists(_versionCachePath) && mirrors == null)
+            {
+                throw new Exception($"Aurora version cache not found at {_versionCachePath} and no mirrors provided");
+            }
+            else if (File.Exists(_versionCachePath) && mirrors == null)
+            {
+                UpdateKnownVersionsFromCache();
+            }
+            else if (mirrors != null)
             {
                 UpdateKnownAuroraVersionsFromMirrors(mirrors);
-                // Update cache
-                var versions = AuroraVersions.Select(v => $"{v.Version}={v.Checksum}");
-
-                Log.Debug($"Updating cache with {String.Join("\n\r", versions)}");
-                File.WriteAllLines(
-                    Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"),
-                    AuroraVersions.Select(v => $"{v.Version}={v.Checksum}"));
             }
 
             var checksum = GetChecksum(File.ReadAllBytes(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora.exe")));
@@ -98,6 +99,19 @@ namespace AuroraLoader.Registry
                 }
             }
             AuroraVersions = allKnownVersions;
+
+            UpdateCache();
+        }
+
+        internal void UpdateCache()
+        {
+            // Update cache
+            var versions = AuroraVersions.Select(v => $"{v.Version}={v.Checksum}");
+
+            Log.Debug($"Updating cache with {String.Join("\n\r", versions)}");
+            File.WriteAllLines(
+                Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"),
+                AuroraVersions.Select(v => $"{v.Version}={v.Checksum}"));
         }
 
         internal string GetChecksum(byte[] bytes)

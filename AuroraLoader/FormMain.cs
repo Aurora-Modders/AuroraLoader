@@ -61,7 +61,7 @@ namespace AuroraLoader
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
             auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
 
-            _modRegistry.Update(true, true);
+            _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, true);
             RefreshAuroraInstallData();
             UpdateListViews();
 
@@ -106,6 +106,7 @@ namespace AuroraLoader
                 thread.Start();
                 var progress = new FormProgress(thread);
                 progress.ShowDialog();
+                _modRegistry.AuroraLoaderMod.UpdateCache();
                 Process.Start(Path.Combine(Program.AuroraLoaderExecutableDirectory, "update_loader.bat"));
                 Application.Exit();
                 return;
@@ -143,7 +144,7 @@ namespace AuroraLoader
                     LabelAuroraLoaderVersion.Text = $"Loader v{_modRegistry.AuroraLoaderMod.LatestInstalledVersion.Version}";
                 }
 
-                if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
+                if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max()?.Version) < 0)
                 {
                     ButtonUpdateAurora.Text = $"Update to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
                     ButtonUpdateAurora.ForeColor = Color.Green;
@@ -160,7 +161,7 @@ namespace AuroraLoader
             try
             {
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
-                if (auroraLoaderMod.CanBeUpdated)
+                if (auroraLoaderMod.CanBeUpdated(auroraInstallation.InstalledVersion))
                 {
                     ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.LatestVersion.Version}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
@@ -280,10 +281,6 @@ namespace AuroraLoader
             UpdateListViews();
         }
 
-        /// <summary>
-        /// Call this to update the list of mods in the Manage tab
-        /// Note that this implies a mod registry update
-        /// </summary>
 
 
 
