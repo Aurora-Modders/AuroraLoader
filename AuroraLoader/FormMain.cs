@@ -141,7 +141,7 @@ namespace AuroraLoader
                     LabelAuroraLoaderVersion.Text = $"Loader v{_modRegistry.AuroraLoaderMod.LatestInstalledVersion.Version}";
                 }
 
-                if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max().Version) < 0)
+                if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max()?.Version) < 0)
                 {
                     ButtonUpdateAurora.Text = $"Update to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
                     ButtonUpdateAurora.ForeColor = Color.Green;
