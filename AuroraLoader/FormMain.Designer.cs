@@ -366,7 +366,9 @@ namespace AuroraLoader
             this.Controls.Add(this.LabelAuroraVersion);
             this.Controls.Add(this.ButtonSinglePlayer);
             this.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
+            this.MinimumSize = new System.Drawing.Size(900, 1024);
             this.Name = "FormMain";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aurora Loader";
             this.Load += new System.EventHandler(this.FormMain_Load);
