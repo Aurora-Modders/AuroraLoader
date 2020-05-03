@@ -52,6 +52,8 @@ namespace AuroraLoader
             this.LinkModSubreddit = new System.Windows.Forms.LinkLabel();
             this.ButtonMultiplayer = new System.Windows.Forms.Button();
             this.ButtonManageMods = new System.Windows.Forms.Button();
+            this.SelectedSavelabel = new System.Windows.Forms.Label();
+            this.ButtonMangeSaves = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.TrackMusicVolume)).BeginInit();
             this.SuspendLayout();
             // 
@@ -172,7 +174,7 @@ namespace AuroraLoader
             // 
             this.ComboSelectExecutableMod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboSelectExecutableMod.FormattingEnabled = true;
-            this.ComboSelectExecutableMod.Location = new System.Drawing.Point(146, 27);
+            this.ComboSelectExecutableMod.Location = new System.Drawing.Point(256, 27);
             this.ComboSelectExecutableMod.Name = "ComboSelectExecutableMod";
             this.ComboSelectExecutableMod.Size = new System.Drawing.Size(241, 23);
             this.ComboSelectExecutableMod.TabIndex = 25;
@@ -288,11 +290,32 @@ namespace AuroraLoader
             this.ButtonManageMods.UseVisualStyleBackColor = true;
             this.ButtonManageMods.Click += new System.EventHandler(this.ButtonManageMods_Click);
             // 
+            // SelectedSavelabel
+            // 
+            this.SelectedSavelabel.AutoSize = true;
+            this.SelectedSavelabel.Location = new System.Drawing.Point(119, 32);
+            this.SelectedSavelabel.Name = "SelectedSavelabel";
+            this.SelectedSavelabel.Size = new System.Drawing.Size(65, 15);
+            this.SelectedSavelabel.TabIndex = 42;
+            this.SelectedSavelabel.Text = "Save: XXXX";
+            // 
+            // ButtonMangeSaves
+            // 
+            this.ButtonMangeSaves.Location = new System.Drawing.Point(200, 249);
+            this.ButtonMangeSaves.Name = "ButtonMangeSaves";
+            this.ButtonMangeSaves.Size = new System.Drawing.Size(164, 27);
+            this.ButtonMangeSaves.TabIndex = 41;
+            this.ButtonMangeSaves.Text = "Select Save";
+            this.ButtonMangeSaves.UseVisualStyleBackColor = true;
+            this.ButtonMangeSaves.Click += new System.EventHandler(this.ButtonManageMods_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(641, 318);
+            this.Controls.Add(this.ButtonMangeSaves);
+            this.Controls.Add(this.SelectedSavelabel);
             this.Controls.Add(this.ButtonManageMods);
             this.Controls.Add(this.ButtonMultiplayer);
             this.Controls.Add(this.LinkModSubreddit);
@@ -351,6 +374,8 @@ namespace AuroraLoader
         private LinkLabel LinkModSubreddit;
         private Button ButtonMultiplayer;
         private Button ButtonManageMods;
+        private Label SelectedSavelabel;
+        private Button ButtonMangeSaves;
     }
 }
 
