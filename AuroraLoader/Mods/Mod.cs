@@ -53,7 +53,7 @@ namespace AuroraLoader.Mods
         public bool Installed => LatestInstalledVersion != null;
         public bool CanBeUpdated(AuroraVersion auroraVersion) => LatestVersion != null
                 && LatestInstalledVersion != null
-                && LatestInstalledVersionCompatibleWith(auroraVersion).Version.CompareByPrecedence(LatestInstalledVersion.Version) > 0;
+                && LatestInstalledVersionCompatibleWith(auroraVersion).Version.CompareByPrecedence(LatestVersionCompatibleWith(auroraVersion).Version) < 0;
 
         public string ModFolder => Path.Combine(Program.ModDirectory, Name);
 

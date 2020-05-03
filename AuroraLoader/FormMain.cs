@@ -293,7 +293,7 @@ namespace AuroraLoader
             ListManageMods.Columns.Add("Status");
             ListManageMods.Columns.Add("Type");
             ListManageMods.Columns.Add("Current");
-            ListManageMods.Columns.Add("Latest");
+            ListManageMods.Columns.Add("Latest Compatible");
             ListManageMods.Columns.Add("Aurora Compatibility");
             ListManageMods.Columns.Add("Description");
 
@@ -305,7 +305,7 @@ namespace AuroraLoader
                         mod.Name,
                         mod.Status.ToString(),
                         mod.Type.ToString(),
-                        mod.LatestInstalledVersion?.Version?.ToString() ?? "Not Installed",
+                        mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion)?.Version?.ToString() ?? "Not Installed",
                         mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion)?.Version == mod.LatestVersion?.Version
                             ? "Up to date"
                             : mod.LatestVersion?.Version?.ToString()
