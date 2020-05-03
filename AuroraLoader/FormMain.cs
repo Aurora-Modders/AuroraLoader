@@ -57,7 +57,7 @@ namespace AuroraLoader
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
             auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
 
-            _modRegistry.Update(true);
+            _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, true);
             RefreshAuroraInstallData();
             UpdateListViews();
             UpdateManageModsListView();

@@ -30,7 +30,7 @@ namespace AuroraLoader.Mods
         public string ConfigurationFile { get; set; }
 
         [JsonPropertyName("downloads")]
-        public IList<ModVersion> Downloads { get; set; } = new List<ModVersion>();
+        public List<ModVersion> Downloads { get; set; } = new List<ModVersion>();
 
         internal Mod() { }
 

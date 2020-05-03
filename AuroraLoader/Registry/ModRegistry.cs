@@ -29,7 +29,7 @@ namespace AuroraLoader.Registry
             Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
         }
 
-        public void Update(bool updateRemote = false, bool updateCache = false)
+        public void Update(AuroraVersion version, bool updateRemote = false, bool updateCache = false)
         {
             Log.Debug($"Updating mod registry, updateRemote={updateRemote} updateCache={updateCache}");
 
@@ -56,6 +56,12 @@ namespace AuroraLoader.Registry
                     mods.Add(remoteMod);
                 }
             }
+
+            foreach (var mod in mods)
+            {
+                mod.Downloads.RemoveAll(d => !version.CompatibleWith(d.TargetAuroraVersion));
+            }
+
             Mods = mods;
 
             if (updateRemote && updateCache)
