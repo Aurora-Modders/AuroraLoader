@@ -158,7 +158,7 @@ namespace AuroraLoader
             try
             {
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
-                if (auroraLoaderMod.CanBeUpdated)
+                if (auroraLoaderMod.CanBeUpdated(auroraInstallation.InstalledVersion))
                 {
                     ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.LatestVersion.Version}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
@@ -336,7 +336,7 @@ namespace AuroraLoader
                 if (selected.Installed)
                 {
                     ButtonInstallOrUpdateMod.Text = "Update";
-                    if (selected.CanBeUpdated)
+                    if (selected.CanBeUpdated(auroraInstallation.InstalledVersion))
                     {
                         ButtonInstallOrUpdateMod.Enabled = true;
                     }
