@@ -57,7 +57,7 @@ namespace AuroraLoader
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
             auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
 
-            _modRegistry.Update(true, true);
+            _modRegistry.Update(true);
             RefreshAuroraInstallData();
             UpdateListViews();
             UpdateManageModsListView();
@@ -103,6 +103,7 @@ namespace AuroraLoader
                 thread.Start();
                 var progress = new FormProgress(thread);
                 progress.ShowDialog();
+                _modRegistry.AuroraLoaderMod.UpdateCache();
                 Process.Start(Path.Combine(Program.AuroraLoaderExecutableDirectory, "update_loader.bat"));
                 Application.Exit();
                 return;
@@ -372,6 +373,7 @@ namespace AuroraLoader
             Cursor = Cursors.WaitCursor;
             var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
             mod.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Download();
+            mod.UpdateCache();
             UpdateManageModsListView();
             UpdateListViews();
             Cursor = Cursors.Default;
