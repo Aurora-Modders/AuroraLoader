@@ -43,16 +43,12 @@ namespace AuroraLoader
             this.ComboSelectExecutableMod = new System.Windows.Forms.ComboBox();
             this.ListDatabaseMods = new System.Windows.Forms.CheckedListBox();
             this.ListUtilities = new System.Windows.Forms.CheckedListBox();
-            this.ButtonInstallOrUpdateMod = new System.Windows.Forms.Button();
-            this.ButtonConfigureMod = new System.Windows.Forms.Button();
-            this.ListManageMods = new System.Windows.Forms.ListView();
             this.LinkForums = new System.Windows.Forms.LinkLabel();
             this.LinkReportBug = new System.Windows.Forms.LinkLabel();
             this.LinkSubreddit = new System.Windows.Forms.LinkLabel();
             this.LinkDiscord = new System.Windows.Forms.LinkLabel();
             this.LabelUtilities = new System.Windows.Forms.Label();
             this.LabelDatabaseMods = new System.Windows.Forms.Label();
-            this.ManageMods = new System.Windows.Forms.Label();
             this.LinkModSubreddit = new System.Windows.Forms.LinkLabel();
             this.ButtonMultiplayer = new System.Windows.Forms.Button();
             this.ButtonManageMods = new System.Windows.Forms.Button();
@@ -198,36 +194,6 @@ namespace AuroraLoader
             this.ListUtilities.TabIndex = 27;
             this.ListUtilities.SelectedIndexChanged += new System.EventHandler(this.ListUtilityMods_SelectedIndexChanged);
             // 
-            // ButtonInstallOrUpdateMod
-            // 
-            this.ButtonInstallOrUpdateMod.Location = new System.Drawing.Point(28, 433);
-            this.ButtonInstallOrUpdateMod.Name = "ButtonInstallOrUpdateMod";
-            this.ButtonInstallOrUpdateMod.Size = new System.Drawing.Size(94, 27);
-            this.ButtonInstallOrUpdateMod.TabIndex = 29;
-            this.ButtonInstallOrUpdateMod.Text = "Install";
-            this.ButtonInstallOrUpdateMod.UseVisualStyleBackColor = true;
-            this.ButtonInstallOrUpdateMod.Click += new System.EventHandler(this.ButtonInstallOrUpdateMods_Click);
-            // 
-            // ButtonConfigureMod
-            // 
-            this.ButtonConfigureMod.Location = new System.Drawing.Point(128, 433);
-            this.ButtonConfigureMod.Name = "ButtonConfigureMod";
-            this.ButtonConfigureMod.Size = new System.Drawing.Size(94, 27);
-            this.ButtonConfigureMod.TabIndex = 30;
-            this.ButtonConfigureMod.Text = "Configure";
-            this.ButtonConfigureMod.UseVisualStyleBackColor = true;
-            this.ButtonConfigureMod.Click += new System.EventHandler(this.ButtonConfigureMod_Click);
-            // 
-            // ListManageMods
-            // 
-            this.ListManageMods.HideSelection = false;
-            this.ListManageMods.Location = new System.Drawing.Point(28, 293);
-            this.ListManageMods.Name = "ListManageMods";
-            this.ListManageMods.Size = new System.Drawing.Size(562, 134);
-            this.ListManageMods.TabIndex = 32;
-            this.ListManageMods.UseCompatibleStateImageBehavior = false;
-            this.ListManageMods.SelectedIndexChanged += new System.EventHandler(this.ListManageMods_SelectedIndexChanged);
-            // 
             // LinkForums
             // 
             this.LinkForums.AutoSize = true;
@@ -290,15 +256,6 @@ namespace AuroraLoader
             this.LabelDatabaseMods.TabIndex = 39;
             this.LabelDatabaseMods.Text = "Apply database mods:";
             // 
-            // ManageMods
-            // 
-            this.ManageMods.AutoSize = true;
-            this.ManageMods.Location = new System.Drawing.Point(28, 275);
-            this.ManageMods.Name = "ManageMods";
-            this.ManageMods.Size = new System.Drawing.Size(86, 15);
-            this.ManageMods.TabIndex = 40;
-            this.ManageMods.Text = "Manage mods:";
-            // 
             // LinkModSubreddit
             // 
             this.LinkModSubreddit.AutoSize = true;
@@ -339,16 +296,12 @@ namespace AuroraLoader
             this.Controls.Add(this.ButtonManageMods);
             this.Controls.Add(this.ButtonMultiplayer);
             this.Controls.Add(this.LinkModSubreddit);
-            this.Controls.Add(this.ManageMods);
             this.Controls.Add(this.LabelDatabaseMods);
             this.Controls.Add(this.LabelUtilities);
             this.Controls.Add(this.LinkDiscord);
             this.Controls.Add(this.LinkSubreddit);
             this.Controls.Add(this.LinkReportBug);
             this.Controls.Add(this.LinkForums);
-            this.Controls.Add(this.ListManageMods);
-            this.Controls.Add(this.ButtonConfigureMod);
-            this.Controls.Add(this.ButtonInstallOrUpdateMod);
             this.Controls.Add(this.ListUtilities);
             this.Controls.Add(this.ListDatabaseMods);
             this.Controls.Add(this.ComboSelectExecutableMod);
@@ -389,16 +342,12 @@ namespace AuroraLoader
         private System.Windows.Forms.ComboBox ComboSelectExecutableMod;
         private System.Windows.Forms.CheckedListBox ListDatabaseMods;
         private System.Windows.Forms.CheckedListBox ListUtilities;
-        private System.Windows.Forms.Button ButtonInstallOrUpdateMod;
-        private System.Windows.Forms.Button ButtonConfigureMod;
-        private System.Windows.Forms.ListView ListManageMods;
         private System.Windows.Forms.LinkLabel LinkForums;
         private System.Windows.Forms.LinkLabel LinkReportBug;
         private System.Windows.Forms.LinkLabel LinkSubreddit;
         private System.Windows.Forms.LinkLabel LinkDiscord;
         private System.Windows.Forms.Label LabelUtilities;
         private System.Windows.Forms.Label LabelDatabaseMods;
-        private System.Windows.Forms.Label ManageMods;
         private LinkLabel LinkModSubreddit;
         private Button ButtonMultiplayer;
         private Button ButtonManageMods;
