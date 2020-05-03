@@ -83,10 +83,10 @@ namespace AuroraLoader
             // ButtonUpdateAurora
             // 
             this.ButtonUpdateAurora.Enabled = false;
-            this.ButtonUpdateAurora.Location = new System.Drawing.Point(625, 897);
+            this.ButtonUpdateAurora.Location = new System.Drawing.Point(605, 897);
             this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
-            this.ButtonUpdateAurora.Size = new System.Drawing.Size(215, 45);
+            this.ButtonUpdateAurora.Size = new System.Drawing.Size(235, 45);
             this.ButtonUpdateAurora.TabIndex = 12;
             this.ButtonUpdateAurora.Text = "Update Aurora";
             this.ButtonUpdateAurora.UseVisualStyleBackColor = true;
@@ -117,10 +117,10 @@ namespace AuroraLoader
             // 
             // ButtonUpdateAuroraLoader
             // 
-            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(394, 897);
+            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(358, 897);
             this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(6, 7, 6, 7);
             this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
-            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(215, 45);
+            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(235, 45);
             this.ButtonUpdateAuroraLoader.TabIndex = 12;
             this.ButtonUpdateAuroraLoader.Text = "Update Loader";
             this.ButtonUpdateAuroraLoader.UseVisualStyleBackColor = true;
