@@ -84,6 +84,7 @@
             this.Controls.Add(this.ManageModslabel);
             this.Name = "FormModDownload";
             this.Text = "FormModDownload";
+            this.Load += new System.EventHandler(this.FormModDownload_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

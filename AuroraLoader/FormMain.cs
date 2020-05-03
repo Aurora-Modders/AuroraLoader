@@ -16,13 +16,16 @@ namespace AuroraLoader
 {
     public partial class FormMain : Form
     {
-        private readonly IConfiguration _configuration;
+
 
         private Thread auroraThread = null;
         private AuroraInstallation auroraInstallation;
 
+        private readonly IConfiguration _configuration;
         private readonly AuroraVersionRegistry _auroraVersionRegistry;
         private readonly ModRegistry _modRegistry;
+
+        private FormModDownload _modMangementWindow;
 
         public FormMain(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry, ModRegistry modRegistry)
         {
@@ -618,6 +621,13 @@ namespace AuroraLoader
         private void LabelAuroraLoaderVersion_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ButtonManageMods_Click(object sender, EventArgs e)
+        {
+            UpdateListViews();
+            _modMangementWindow = new FormModDownload(_configuration);
+            _modMangementWindow.Show();
         }
     }
 }
