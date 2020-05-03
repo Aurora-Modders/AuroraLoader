@@ -96,7 +96,7 @@ namespace AuroraLoader
 
         private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e)
         {
-            MessageBox.Show($"Installing AuroraLoader {_modRegistry.AuroraLoaderMod.LatestVersion}");
+            MessageBox.Show($"Installing AuroraLoader {_modRegistry.AuroraLoaderMod.LatestVersion.Version}");
             try
             {
                 var thread = new Thread(() => _modRegistry.UpdateAuroraLoader());
@@ -159,7 +159,7 @@ namespace AuroraLoader
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
                 if (auroraLoaderMod.CanBeUpdated)
                 {
-                    ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.LatestVersion}";
+                    ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.LatestVersion.Version}";
                     ButtonUpdateAuroraLoader.ForeColor = Color.Green;
                     ButtonUpdateAuroraLoader.Enabled = true;
 
@@ -613,6 +613,11 @@ namespace AuroraLoader
         private void LinkDiscord_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Program.OpenBrowser(@"https://discordapp.com/channels/314031775892373504/701885084646506628");
+        }
+
+        private void LabelAuroraLoaderVersion_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

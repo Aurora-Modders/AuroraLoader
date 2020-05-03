@@ -69,12 +69,11 @@ namespace AuroraLoader.Registry
             }
         }
 
-        // Mods installed locally are identified by their mod.ini or mod.json file
-        // This is known as their 'mod configuration' file.
+        // Mods installed locally are identified by mod.json file in <root>/Mods/<ModName>
         private IList<Mod> GetLocalMods()
         {
             var mods = new List<Mod>();
-            foreach (var modJsonFile in Directory.EnumerateFiles(Program.ModDirectory, "mod.json", SearchOption.AllDirectories))
+            foreach (var modJsonFile in Directory.EnumerateFiles(Program.ModDirectory, "mod.json"))
             {
                 try
                 {

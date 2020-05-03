@@ -87,7 +87,6 @@ namespace AuroraLoader.Registry
                     catch (Exception e)
                     {
                         Log.Error($"Didn't find an Aurora version listing at {versionsUrl}", e);
-                        throw;
                     }
                 }
                 foreach (var version in mirrorKnownVersions)
