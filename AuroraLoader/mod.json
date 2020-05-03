@@ -47,7 +47,7 @@
             "target_aurora_version": "1",
 
             // Required
-            "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.24.0/AuroraLoader-0.24.0.zip"
+            "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.24.0/AuroraLoader.zip"
         },
         {
             "version": "0.23.5",
