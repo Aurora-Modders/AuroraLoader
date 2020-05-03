@@ -14,5 +14,10 @@ namespace AuroraLoader
         {
             InitializeComponent();
         }
+
+        private void FormSaves_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

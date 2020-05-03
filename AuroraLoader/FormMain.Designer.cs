@@ -307,7 +307,7 @@ namespace AuroraLoader
             this.ButtonMangeSaves.TabIndex = 41;
             this.ButtonMangeSaves.Text = "Select Save";
             this.ButtonMangeSaves.UseVisualStyleBackColor = true;
-            this.ButtonMangeSaves.Click += new System.EventHandler(this.ButtonManageMods_Click);
+            this.ButtonMangeSaves.Click += new System.EventHandler(this.ButtonMangeSaves_Click);
             // 
             // FormMain
             // 

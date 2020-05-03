@@ -26,6 +26,7 @@ namespace AuroraLoader
         private readonly ModRegistry _modRegistry;
 
         private FormModDownload _modMangementWindow;
+        private FormSaves _saveMangementWindow;
 
         public FormMain(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry, ModRegistry modRegistry)
         {
@@ -481,8 +482,23 @@ namespace AuroraLoader
         private void ButtonManageMods_Click(object sender, EventArgs e)
         {
             UpdateListViews();
+            if(_modMangementWindow != null) 
+            {
+                _modMangementWindow.Close();
+            }
             _modMangementWindow = new FormModDownload(_configuration);
             _modMangementWindow.Show();
+        }
+
+        private void ButtonMangeSaves_Click(object sender, EventArgs e)
+        {
+            UpdateListViews();
+            if (_saveMangementWindow != null)
+            {
+                _saveMangementWindow.Close();
+            }
+            _saveMangementWindow = new FormSaves();
+            _saveMangementWindow.Show();
         }
     }
 }
