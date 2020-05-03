@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
+using AuroraLoader.Mods;
 using AuroraLoader.Registry;
 using Microsoft.Extensions.Configuration;
 
@@ -12,8 +12,10 @@ namespace AuroraLoader
 {
     static class Program
     {
-
         public static readonly string AuroraLoaderExecutableDirectory = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+        public static readonly string ModDirectory = Path.Combine(AuroraLoaderExecutableDirectory, "Mods");
+        public static readonly string CacheDirectory = Path.Combine(Path.GetTempPath(), "auroraloader_cache");
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -41,6 +43,35 @@ namespace AuroraLoader
                 }
             }
 
+            CopySqlInteropAssemblies();
+            PrepareModDirectory();
+
+            // TODO would love to set up dependency injection
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+            var auroraVersionRegistry = new AuroraVersionRegistry(configuration);
+            var modRegistry = new ModRegistry(configuration);
+            Log.Debug("Launching main form");
+            Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
+        }
+
+        private static void InstallAurora()
+        {
+            var thread = new Thread(() =>
+            {
+                var aurora_files = Installer.GetLatestAuroraFiles();
+                Installer.DownloadAuroraPieces(AuroraLoaderExecutableDirectory, aurora_files);
+            });
+            thread.Start();
+
+            var progress = new FormProgress(thread) { Text = "Installing Aurora" };
+            progress.ShowDialog();
+        }
+
+        internal static void CopySqlInteropAssemblies()
+        {
             // Grab ourselves a copy of the existing SQLite interops. If it's good enough for Aurora, it's good enough for us...
             try
             {
@@ -54,44 +85,30 @@ namespace AuroraLoader
             {
                 Log.Error("Failure while copying SQLite interop DLLs", exc);
             }
-
-            // TODO would love to set up dependency injection
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(path: "appsettings.json", optional: true, reloadOnChange: true)
-                .Build();
-
-            var mirrorRegistry = new MirrorRegistry(configuration);
-            var auroraVersionRegistry = new AuroraVersionRegistry(configuration, mirrorRegistry);
-            var localRegistry = new LocalModRegistry(configuration);
-            var remoteRegistry = new RemoteModRegistry(configuration, mirrorRegistry);
-            var modRegistry = new ModRegistry(configuration, localRegistry, remoteRegistry);
-            Log.Debug("Launching main form");
-            Application.Run(new FormMain(configuration, auroraVersionRegistry, modRegistry));
         }
 
-        private static void InstallAurora()
+        internal static void PrepareModDirectory()
         {
-            var installation = new GameInstallation(new AuroraVersion("0.0.0", ""), Program.AuroraLoaderExecutableDirectory);
-            var thread = new Thread(() =>
+            if (!Directory.Exists(ModDirectory))
             {
-                var aurora_files = Installer.GetLatestAuroraFiles();
-                Installer.DownloadAuroraPieces(Program.AuroraLoaderExecutableDirectory, aurora_files);
-            });
-            thread.Start();
+                Directory.CreateDirectory(ModDirectory);
+            }
 
-            var progress = new FormProgress(thread) { Text = "Installing Aurora" };
-            progress.ShowDialog();
+            // Load the mod configuration for AuroraLoader itself
+            if (File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json")))
+            {
+                var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
+                var auroraLoader = Mod.DeserializeMod(raw);
+                if (!Directory.Exists(auroraLoader.LatestVersion.DownloadPath))
+                {
+                    Directory.CreateDirectory(auroraLoader.LatestVersion.DownloadPath);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"), Path.Combine(auroraLoader.ModFolder, "mod.json"), true);
+                    File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "AuroraLoader.exe"), Path.Combine(auroraLoader.LatestVersion.DownloadPath, "AuroraLoader.Exe"), true);
+                }
+            }
         }
 
-        public static string GetChecksum(byte[] bytes)
-        {
-            using var sha = SHA256.Create();
-            var hash = sha.ComputeHash(bytes);
-            var str = Convert.ToBase64String(hash);
 
-            return str.Replace("/", "").Replace("+", "").Replace("=", "").Substring(0, 6);
-        }
 
         public static void OpenBrowser(string url)
         {
@@ -119,31 +136,6 @@ namespace AuroraLoader
                 {
                     throw;
                 }
-            }
-        }
-
-        public static void CopyDirectory(string source, string target)
-        {
-            CopyAll(new DirectoryInfo(source), new DirectoryInfo(target));
-        }
-
-        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
-        {
-            Directory.CreateDirectory(target.FullName);
-
-            // Copy each file into the new directory.
-            foreach (FileInfo fi in source.GetFiles())
-            {
-                Console.WriteLine(@"Copying {0}\{1}", target.FullName, fi.Name);
-                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
-            }
-
-            // Copy each subdirectory using recursion.
-            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
-            {
-                DirectoryInfo nextTargetSubDir =
-                    target.CreateSubdirectory(diSourceSubDir.Name);
-                CopyAll(diSourceSubDir, nextTargetSubDir);
             }
         }
     }

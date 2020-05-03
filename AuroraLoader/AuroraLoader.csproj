@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <UseWindowsForms>true</UseWindowsForms>
     <StartupObject>AuroraLoader.Program</StartupObject>
     <ApplicationIcon>Aurora.ico</ApplicationIcon>
@@ -13,18 +14,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Releases\**" />
     <Compile Remove="TestUpdates\**" />
+    <EmbeddedResource Remove="Releases\**" />
     <EmbeddedResource Remove="TestUpdates\**" />
+    <None Remove="Releases\**" />
     <None Remove="TestUpdates\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Aurora.ico" />
+    <None Remove="mod.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Aurora.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="mod.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
   </ItemGroup>
 
@@ -94,10 +103,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="mirrors.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </None>
-    <None Update="mod.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>

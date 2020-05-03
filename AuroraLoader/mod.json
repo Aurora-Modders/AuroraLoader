@@ -1,0 +1,65 @@
+﻿// Lines starting with // are comments and ignored
+// Feel free to delete these comments after use
+{
+    // Required
+    // Human-readable names with casing, punctuation, etc. are encouraged
+    "name": "AuroraLoader",
+
+    // Optional (but highly encouraged)
+    "description": "A tool for discovering and safely installing content for Aurora",
+
+    // Required
+    // Approved, Public, or Poweruser
+    // Casing does not matter
+    "status": "approved",
+
+    // Required
+    // Executable, Database, RootUtility, or Utility
+    // Casing does not matter
+    "type": "rootutility",
+
+    // Required for Executable, RootUtility, and Utility mods
+    // The command used to launch or apply the mod
+    "launch_command": "AuroraLoader.exe",
+
+    // Optional
+    // The command used to configure the mod
+    // Generally just the filename of a readme or config file
+    "configuration_file": "mod.json",
+
+    // Optional
+    // Not yet implemented
+    "changelog_file": "",
+
+    // Optional
+    // Point to your mod's repository, forum, AAR, etc
+    "url": "https://github.com/Aurora-Modders/AuroraLoader",
+
+    "downloads": 
+    [
+        {
+            // Required
+            // SemVer. Version of the mod.
+            "version": "0.24.0",
+
+            // Optional (but highly encouraged)
+            // Target Aurora version. May be imprecise, i.e. '1.8' targets '1.8.*'
+            "target_aurora_version": "1",
+
+            // Required
+            "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.24.0/AuroraLoader-0.24.0.zip"
+        },
+        {
+            "version": "0.23.5",
+            "target_aurora_version": "1",
+            "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.23.5/AuroraLoader-0.23.5.zip"
+        },
+
+        // Order is not important
+        {
+            "version": "0.23.4",
+            "target_aurora_version": "1",
+            "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.23.5/AuroraLoader-0.23.5.zip"
+        }
+    ]
+}

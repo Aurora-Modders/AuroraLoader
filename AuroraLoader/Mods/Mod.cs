@@ -1,25 +1,84 @@
-﻿namespace AuroraLoader.Mods
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace AuroraLoader.Mods
 {
     public class Mod
     {
-        public string Name => Listing?.ModName ?? Installation.Name;
-        public ModType Type => Listing?.Type ?? Installation?.Type ?? ModType.EXE;
-        public bool Installed => Installation != null;
-        public bool CanBeUpdated => Listing != null && Installed && Listing.LatestVersion.CompareByPrecedence(Installation.HighestInstalledVersion) > 0;
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
 
-        public bool Configurable => Installation?.ModInternalConfigFile != null;
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
 
-        public ModConfiguration Installation { get; }
-        public ModListing Listing { get; }
+        [JsonPropertyName("status")]
+        public ModStatus Status { get; set; }
 
-        // TODO this is nasty but I'm lazy
-        public string InstallText => $"Install {Name} {Listing?.LatestVersion} ({Type})";
-        public string UpdateText => $"Update {Name} {Installation?.Version} ({Type}) to {Listing?.LatestVersion}";
+        [JsonPropertyName("type")]
+        public ModType Type { get; set; }
 
-        public Mod(ModConfiguration modInstallation, ModListing modListing)
+        [JsonPropertyName("url")]
+        public string Url { get; set; }
+
+        [JsonPropertyName("launch_command")]
+        public string LaunchCommand { get; set; }
+
+        [JsonPropertyName("configuration_file")]
+        public string ConfigurationFile { get; set; }
+
+        [JsonPropertyName("downloads")]
+        public IList<ModVersion> Downloads { get; set; } = new List<ModVersion>();
+
+        internal Mod() { }
+
+
+        // Helper props
+        [JsonIgnore]
+        public ModVersion LatestVersion => Downloads.OrderByDescending(v => v.Version).FirstOrDefault();
+        public ModVersion LatestVersionCompatibleWith(AuroraVersion auroraVersion) => Downloads.OrderByDescending(v => v.Version)
+            .Where(v => auroraVersion.CompatibleWith(v.TargetAuroraVersion))
+            .FirstOrDefault();
+
+        [JsonIgnore]
+        public ModVersion LatestInstalledVersion => Downloads.OrderByDescending(v => v.Version)
+            .Where(v => v.Downloaded)
+            .FirstOrDefault();
+        public ModVersion LatestInstalledVersionCompatibleWith(AuroraVersion auroraVersion) => Downloads.OrderByDescending(v => v.Version)
+            .Where(v => v.Downloaded && auroraVersion.CompatibleWith(v.TargetAuroraVersion))
+            .FirstOrDefault();
+
+        public bool Installed => LatestInstalledVersion != null;
+        public bool CanBeUpdated => LatestVersion != null
+                && LatestInstalledVersion != null
+                && LatestVersion.Version.CompareByPrecedence(LatestInstalledVersion.Version) > 0;
+
+        public string ModFolder => Path.Combine(Program.ModDirectory, Name);
+
+        public void UpdateCache()
         {
-            Installation = modInstallation;
-            Listing = modListing;
+            Directory.CreateDirectory(ModFolder);
+            File.WriteAllText(Path.Combine(ModFolder, "mod.json"), JsonSerializer.Serialize(this, new JsonSerializerOptions()
+            {
+                IgnoreNullValues = true,
+                WriteIndented = true
+            }));
+        }
+
+        public static Mod DeserializeMod(string rawJson)
+        {
+            var mod = JsonSerializer.Deserialize<Mod>(rawJson, new JsonSerializerOptions()
+            {
+                ReadCommentHandling = JsonCommentHandling.Skip,
+                PropertyNameCaseInsensitive = true
+            });
+            foreach (var modVersion in mod.Downloads)
+            {
+                modVersion.Mod = mod;
+            }
+            return mod;
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Windows.Forms;
+using System.Text.Json;
 using AuroraLoader.Mods;
 using Microsoft.Extensions.Configuration;
 
@@ -13,155 +12,151 @@ namespace AuroraLoader.Registry
     /// <summary>
     /// Must be initialized by calling Update()
     /// </summary>
-    public class ModRegistry : IRegistry
+    public class ModRegistry
     {
         // TODO ensure that the list is unique
         public IEnumerable<Mod> Mods { get; private set; }
 
-        private readonly IConfiguration _configuration;
-        private readonly LocalModRegistry _localRegistry;
-        private readonly RemoteModRegistry _remoteRegistry;
+        public Mod AuroraLoaderMod => Mods.SingleOrDefault(mod => mod.Name == "AuroraLoader");
 
-        public ModRegistry(IConfiguration configuration, LocalModRegistry localRegistry, RemoteModRegistry remoteRegistry)
+        private readonly IConfiguration _configuration;
+
+        public IList<string> Mirrors { get; private set; }
+
+        public ModRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
-            _localRegistry = localRegistry;
-            _remoteRegistry = remoteRegistry;
+            Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
         }
 
-        public void Update(AuroraVersion version)
+        public void Update(bool updateRemote = false, bool updateCache = false)
         {
-            _localRegistry.Update(version);
-            _remoteRegistry.Update(version);
+            Log.Debug($"Updating mod registry, updateRemote={updateRemote} updateCache={updateCache}");
 
-            var mods = new List<Mod>();
-
-            var installedMods = new List<ModConfiguration>();
-            foreach (var modInstallation in _localRegistry.ModInstallations)
+            var mods = GetLocalMods();
+            IList<Mod> remote = new List<Mod>();
+            if (updateRemote)
             {
-                installedMods.Add(modInstallation);
+                remote = GetModsFromMirrors();
             }
 
-            foreach (var modListing in _remoteRegistry.ModListings)
+            foreach (var remoteMod in remote)
             {
-                var installedMod = installedMods.FirstOrDefault(mod => mod.Name == modListing.ModName);
-                if (installedMod != null)
+                var existingMod = mods.SingleOrDefault(mod => mod.Name == remoteMod.Name);
+                if (existingMod != null)
                 {
-                    mods.Add(new Mod(installedMod, modListing));
-                    installedMods.Remove(installedMod);
+                    var updatedDownloadList = existingMod.Downloads.ToList();
+                    updatedDownloadList.AddRange(remoteMod.Downloads.Where(nd => !existingMod.Downloads.Any(ed => ed.Version == nd.Version)));
+                    existingMod.Downloads = updatedDownloadList;
                 }
                 else
                 {
-                    mods.Add(new Mod(null, modListing));
+                    mods.Add(remoteMod);
                 }
             }
-
-            try
-            {
-                // Specially load in AuroraLoader itself
-                var auroraLoaderModInstallation = _localRegistry.ModInstallations.Single(i => i.Name == "AuroraLoader");
-                Log.Debug("Installed loader: " + auroraLoaderModInstallation.Version);
-                var auroraLoaderModListing = new ModListing(auroraLoaderModInstallation.Name, auroraLoaderModInstallation.Updates);
-                mods.Add(new Mod(auroraLoaderModInstallation, auroraLoaderModListing));
-                installedMods.Remove(auroraLoaderModInstallation);
-            }
-            catch (Exception exc)
-            {
-                Log.Error($"Failed while loading AuroraLoader installation", exc);
-            }
-
-
-            // Handle mods we couldn't find a listing for in the registry
-            foreach (var installedMod in installedMods)
-            {
-                mods.Add(new Mod(installedMod, null));
-            }
             Mods = mods;
+
+            if (updateRemote && updateCache)
+            {
+                foreach (var mod in Mods.Where(mod => mod.Installed))
+                {
+                    mod.UpdateCache();
+                }
+            }
+            else if (updateCache && !updateRemote)
+            {
+                throw new ArgumentException("Updating cache without updating remote does nothing");
+            }
         }
 
-        public void UpdateAuroraLoader(Mod mod, AuroraVersion version)
+        // Mods installed locally are identified by their mod.ini or mod.json file
+        // This is known as their 'mod configuration' file.
+        private IList<Mod> GetLocalMods()
         {
-            if (mod.Name != "AuroraLoader")
+            var mods = new List<Mod>();
+            foreach (var modJsonFile in Directory.EnumerateFiles(Program.ModDirectory, "mod.json", SearchOption.AllDirectories))
             {
-                throw new Exception("This method can only be used to update the mod representing AuroraLoader");
+                try
+                {
+                    mods.Add(Mod.DeserializeMod(File.ReadAllText(modJsonFile)));
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to parse mod data from {modJsonFile}", e);
+                }
             }
+            return mods;
+        }
 
-            InstallOrUpdate(mod, version);
-            mod = Mods.Single(mod => mod.Name == "AuroraLoader");
-            File.Copy(Path.Combine(mod.Installation.ModFolder, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
+        private IList<Mod> GetModsFromMirrors()
+        {
+            var remoteMods = new List<Mod>();
+            foreach (var mirror in Mirrors)
+            {
+                var modLocationsUrl = Path.Combine(mirror, "mod_locations.json");
+                try
+                {
+                    remoteMods.AddRange(GetModsAtMirror(modLocationsUrl));
+                }
+                catch (Exception e)
+                {
+                    // TODO evaluate throwing or something
+                    Log.Error($"Failed to download mod locations from {modLocationsUrl}", e);
+                }
+
+            }
+            return remoteMods;
+        }
+
+        private IList<Mod> GetModsAtMirror(string mirrorUrl)
+        {
+            var modsAtMirror = new List<Mod>();
+            using (var client = new WebClient())
+            {
+                var modJsonUrls = JsonSerializer.Deserialize<IList<string>>(client.DownloadString(mirrorUrl));
+                foreach (var modJsonUrl in modJsonUrls)
+                {
+                    try
+                    {
+                        var response = client.DownloadString(modJsonUrl);
+                        modsAtMirror.Add(Mod.DeserializeMod(response));
+                    }
+                    catch (Exception e)
+                    {
+                        // TODO evaluate throwing or something
+                        Log.Error($"Failed to download {modJsonUrl}", e);
+                    }
+                }
+            }
+            return modsAtMirror;
+        }
+
+        public void UpdateAuroraLoader()
+        {
+            if (AuroraLoaderMod == null)
+            {
+                throw new Exception("AuroraLoader mod not loaded");
+            }
+            AuroraLoaderMod.LatestVersion.Download();
+
+            File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.DownloadPath, "AuroraLoader.exe"), Path.Combine(Program.AuroraLoaderExecutableDirectory, "AuroraLoader_new.exe"), true);
             foreach (var file in new string[]
             {
-                "mod.ini",
+                "mod.json",
                 "mirrors.ini",
                 "aurora_versions.ini"
             })
             {
                 try
                 {
-                    File.Copy(Path.Combine(mod.Installation.ModFolder, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
+                    File.Copy(Path.Combine(AuroraLoaderMod.LatestVersion.DownloadPath, file), Path.Combine(Program.AuroraLoaderExecutableDirectory, file), true);
                 }
                 catch (Exception e)
                 {
                     Log.Error($"Failed to copy {file} while updating Aurora", e);
                 }
             }
-        }
-
-        // TODO I would prefer to handle caching withing LocalModRegistry
-        public void InstallOrUpdate(Mod mod, AuroraVersion version)
-        {
-            if (mod.Installed && !mod.CanBeUpdated)
-            {
-                throw new Exception($"{mod.Name} is already up to date!");
-            }
-
-            Log.Debug($"Preparing caches in {_localRegistry.CacheDirectory}");
-            var zip = Path.Combine(_localRegistry.ModDirectory, "update.current");
-            if (File.Exists(zip))
-            {
-                File.Delete(zip);
-            }
-
-            var extract_folder = Path.Combine(_localRegistry.CacheDirectory, "Extract");
-            if (Directory.Exists(extract_folder))
-            {
-                Directory.Delete(extract_folder, true);
-            }
-            Directory.CreateDirectory(extract_folder);
-
-            Log.Debug($"Downloading from {mod.Listing.LatestVersionUrl}");
-            try
-            {
-                using (var client = new WebClient())
-                {
-                    client.DownloadFile(mod.Listing.LatestVersionUrl, zip);
-                }
-
-                ZipFile.ExtractToDirectory(zip, extract_folder);
-
-                var mod_version_folder = Path.Combine(_localRegistry.ModDirectory, mod.Name, mod.Listing.LatestVersion.ToString());
-                if (Directory.Exists(mod_version_folder))
-                {
-                    Directory.Delete(mod_version_folder, true);
-                }
-                Directory.CreateDirectory(mod_version_folder);
-
-                ZipFile.ExtractToDirectory(zip, mod_version_folder);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Failed while installing or updating {mod.Name} from {mod.Listing.LatestVersionUrl}", e);
-                MessageBox.Show($"Failed to download {mod.Name} from {mod.Listing.LatestVersionUrl}!");
-            }
-            finally
-            {
-                // Cleanup
-                File.Delete(zip);
-                Directory.Delete(extract_folder, true);
-            }
-
-            // Update mod in registry
-            Update(version);
+            AuroraLoaderMod.UpdateCache();
         }
     }
 }
