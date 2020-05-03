@@ -44,10 +44,10 @@ jobs:
       - uses: ncipollo/release-action@v1
         if: github.event_name == 'pull_request'
         with:
-          name: AuroraLoader ${{ github.event.pull_request.head.ref }}
-          tag: ${{ github.event.pull_request.head.ref }}
-          commit: ${{ github.sha }}
-          artifacts: "AuroraLoader.zip"
+          name: AuroraLoader ${{ github.head_ref }}
+          tag: ${{ github.head_ref }}
+          commit: ${{ github.event.after }}
+          artifacts: AuroraLoader-${{ github.head_ref }}.zip
           artifactContentType: application/zip
           prerelease: true
           allowUpdates: true
