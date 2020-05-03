@@ -83,7 +83,7 @@
             this.Controls.Add(this.ListViewRegistryMods);
             this.Controls.Add(this.ManageModslabel);
             this.Name = "FormModDownload";
-            this.Text = "FormModDownload";
+            this.Text = "Install and Configure Mods";
             this.Load += new System.EventHandler(this.FormModDownload_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -83,7 +83,7 @@
             this.Controls.Add(this.LabelSave);
             this.Controls.Add(this.ListViewSaves);
             this.Name = "FormSaves";
-            this.Text = "FormSaves";
+            this.Text = "Manage Savegames";
             this.Load += new System.EventHandler(this.FormSaves_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
