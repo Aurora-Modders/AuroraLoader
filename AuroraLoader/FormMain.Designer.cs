@@ -33,10 +33,8 @@ namespace AuroraLoader
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.ButtonSinglePlayer = new System.Windows.Forms.Button();
             this.LabelAuroraVersion = new System.Windows.Forms.Label();
-            this.ButtonUpdateAurora = new System.Windows.Forms.Button();
             this.TrackMusicVolume = new System.Windows.Forms.TrackBar();
             this.CheckEnableMusic = new System.Windows.Forms.CheckBox();
-            this.ButtonUpdateAuroraLoader = new System.Windows.Forms.Button();
             this.ButtonReadme = new System.Windows.Forms.Button();
             this.LabelAuroraLoaderVersion = new System.Windows.Forms.Label();
             this.CheckEnableMods = new System.Windows.Forms.CheckBox();
@@ -84,18 +82,6 @@ namespace AuroraLoader
             this.LabelAuroraVersion.Text = "Aurora v#.##.#";
             this.LabelAuroraVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // ButtonUpdateAurora
-            // 
-            this.ButtonUpdateAurora.Enabled = false;
-            this.ButtonUpdateAurora.Location = new System.Drawing.Point(220, 99);
-            this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(4);
-            this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
-            this.ButtonUpdateAurora.Size = new System.Drawing.Size(104, 27);
-            this.ButtonUpdateAurora.TabIndex = 12;
-            this.ButtonUpdateAurora.Text = "Update Aurora";
-            this.ButtonUpdateAurora.UseVisualStyleBackColor = true;
-            this.ButtonUpdateAurora.Click += new System.EventHandler(this.ButtonUpdateAurora_Click);
-            // 
             // TrackMusicVolume
             // 
             this.TrackMusicVolume.Enabled = false;
@@ -118,17 +104,6 @@ namespace AuroraLoader
             this.CheckEnableMusic.Text = "In-Game Music";
             this.CheckEnableMusic.UseVisualStyleBackColor = true;
             this.CheckEnableMusic.CheckedChanged += new System.EventHandler(this.CheckMusic_CheckedChanged);
-            // 
-            // ButtonUpdateAuroraLoader
-            // 
-            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(219, 125);
-            this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(4);
-            this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
-            this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(105, 27);
-            this.ButtonUpdateAuroraLoader.TabIndex = 12;
-            this.ButtonUpdateAuroraLoader.Text = "Update Loader";
-            this.ButtonUpdateAuroraLoader.UseVisualStyleBackColor = true;
-            this.ButtonUpdateAuroraLoader.Click += new System.EventHandler(this.ButtonUpdateAuroraLoader_Click);
             // 
             // ButtonReadme
             // 
@@ -362,10 +337,8 @@ namespace AuroraLoader
             this.Controls.Add(this.CheckEnableMods);
             this.Controls.Add(this.LabelAuroraLoaderVersion);
             this.Controls.Add(this.ButtonReadme);
-            this.Controls.Add(this.ButtonUpdateAuroraLoader);
             this.Controls.Add(this.CheckEnableMusic);
             this.Controls.Add(this.TrackMusicVolume);
-            this.Controls.Add(this.ButtonUpdateAurora);
             this.Controls.Add(this.LabelAuroraVersion);
             this.Controls.Add(this.ButtonSinglePlayer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -386,10 +359,8 @@ namespace AuroraLoader
         #endregion
         private System.Windows.Forms.Button ButtonSinglePlayer;
         private System.Windows.Forms.Label LabelAuroraVersion;
-        private System.Windows.Forms.Button ButtonUpdateAurora;
         private System.Windows.Forms.TrackBar TrackMusicVolume;
         private System.Windows.Forms.CheckBox CheckEnableMusic;
-        private System.Windows.Forms.Button ButtonUpdateAuroraLoader;
         private System.Windows.Forms.Button ButtonReadme;
         private System.Windows.Forms.Label LabelAuroraLoaderVersion;
         private System.Windows.Forms.CheckBox CheckEnableMods;

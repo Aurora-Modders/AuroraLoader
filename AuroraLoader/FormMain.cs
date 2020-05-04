@@ -68,7 +68,9 @@ namespace AuroraLoader
             Cursor = Cursors.Default;
         }
 
-        private void ButtonUpdateAurora_Click(object sender, EventArgs e)
+
+
+        private void UpdateAurora()
         {
             var result = MessageBox.Show($"Most Aurora updates are not save-game compatible!{Environment.NewLine}We'll back up your database.{Environment.NewLine}Are you sure you want to continue?", "Warning!", MessageBoxButtons.OKCancel);
             if (result != DialogResult.OK)
@@ -97,7 +99,7 @@ namespace AuroraLoader
             }
         }
 
-        private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e)
+        private void UpdateLoader()
         {
             MessageBox.Show($"Installing AuroraLoader {_modRegistry.AuroraLoaderMod.LatestVersion.Version}");
             try
@@ -118,16 +120,39 @@ namespace AuroraLoader
             }
         }
 
+        private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e) { UpdateLoader(); }
+
+        private void ButtonUpdateAurora_Click(object sender, EventArgs e) { UpdateAurora(); }
+
         private void AuroraUpdateUI(bool update)
         {
             PictureBoxUpdateAurora.Enabled = update;
             PictureBoxUpdateAurora.Visible = update;
+            if (update == true)
+            {
+                var dialog = MessageBox.Show("Update for aurora avalible", "Update Aurora", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    UpdateAurora();
+                }
+                else { }
+            }
+
         }
 
         private void LoaderUpdateUI(bool update)
         {
             PictureBoxUpdateLoader.Enabled = update;
             PictureBoxUpdateLoader.Visible = update;
+            if (update == true)
+            {
+                var dialog = MessageBox.Show("Update for loader avalible", "Update Loader", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    UpdateLoader();
+                }
+                else { }
+            }
         }
 
         /// <summary>
@@ -158,15 +183,11 @@ namespace AuroraLoader
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max()?.Version) < 0)
                 {
-                    ButtonUpdateAurora.Text = $"Update to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
-                    ButtonUpdateAurora.ForeColor = Color.Green;
-                    ButtonUpdateAurora.Enabled = true;
+                    AuroraUpdateUI(true);
                 }
                 else
                 {
-                    ButtonUpdateAurora.Text = "Aurora up to date";
-                    ButtonUpdateAurora.ForeColor = Color.Black;
-                    ButtonUpdateAurora.Enabled = false;
+                    AuroraUpdateUI(false);
                 }
             }
 
@@ -175,23 +196,13 @@ namespace AuroraLoader
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
                 if (auroraLoaderMod.CanBeUpdated(auroraInstallation.InstalledVersion))
                 {
-                    ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.LatestVersion.Version}";
-                    ButtonUpdateAuroraLoader.ForeColor = Color.Green;
-                    ButtonUpdateAuroraLoader.Enabled = true;
+                    LoaderUpdateUI(true);
 
-                    // Disable 'update aurora' button if there is a loader update that should be grabbed first
-                    if (ButtonUpdateAurora.Enabled == true)
-                    {
-                        ButtonUpdateAurora.Text = "Update loader";
-                        ButtonUpdateAurora.ForeColor = Color.Black;
-                        ButtonUpdateAurora.Enabled = false;
-                    }
+                    AuroraUpdateUI(false);
                 }
                 else
                 {
-                    ButtonUpdateAuroraLoader.Text = "Loader up to date";
-                    ButtonUpdateAuroraLoader.ForeColor = Color.Black;
-                    ButtonUpdateAuroraLoader.Enabled = false;
+                    LoaderUpdateUI(false);
                 }
             }
             catch (Exception exc)
@@ -327,7 +338,8 @@ namespace AuroraLoader
             }
 
             ButtonSinglePlayer.Enabled = false;
-            ButtonUpdateAurora.Enabled = false;
+            LoaderUpdateUI(false);
+            AuroraUpdateUI(false);
 
             var modVersions = _modRegistry.Mods.Where(mod =>
             (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
