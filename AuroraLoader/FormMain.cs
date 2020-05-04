@@ -118,6 +118,18 @@ namespace AuroraLoader
             }
         }
 
+        private void AuroraUpdateUI(bool update)
+        {
+            PictureBoxUpdateAurora.Enabled = update;
+            PictureBoxUpdateAurora.Visible = update;
+        }
+
+        private void LoaderUpdateUI(bool update)
+        {
+            PictureBoxUpdateLoader.Enabled = update;
+            PictureBoxUpdateLoader.Visible = update;
+        }
+
         /// <summary>
         /// Sets current install's version and checksum, and whether the update button is enabled
         /// </summary>

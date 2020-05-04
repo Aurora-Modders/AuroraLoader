@@ -328,6 +328,7 @@ namespace AuroraLoader
             // 
             // PictureBoxUpdateLoader
             // 
+            this.PictureBoxUpdateLoader.Image = ((System.Drawing.Image)(resources.GetObject("PictureBoxUpdateLoader.Image")));
             this.PictureBoxUpdateLoader.Location = new System.Drawing.Point(371, 238);
             this.PictureBoxUpdateLoader.Name = "PictureBoxUpdateLoader";
             this.PictureBoxUpdateLoader.Size = new System.Drawing.Size(32, 32);
