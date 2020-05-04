@@ -60,6 +60,7 @@ namespace AuroraLoader
             {
                 try
                 {
+                    modVersion.Install(this);
                     processes.Add(modVersion.Run());
                 }
                 catch (Exception e)
