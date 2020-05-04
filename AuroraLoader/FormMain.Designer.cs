@@ -30,6 +30,7 @@ namespace AuroraLoader
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.ButtonSinglePlayer = new System.Windows.Forms.Button();
             this.LabelAuroraVersion = new System.Windows.Forms.Label();
             this.ButtonUpdateAurora = new System.Windows.Forms.Button();
@@ -54,7 +55,11 @@ namespace AuroraLoader
             this.ButtonManageMods = new System.Windows.Forms.Button();
             this.SelectedSavelabel = new System.Windows.Forms.Label();
             this.ButtonMangeSaves = new System.Windows.Forms.Button();
+            this.PictureBoxUpdateAurora = new System.Windows.Forms.PictureBox();
+            this.PictureBoxUpdateLoader = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.TrackMusicVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxUpdateAurora)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxUpdateLoader)).BeginInit();
             this.SuspendLayout();
             // 
             // ButtonSinglePlayer
@@ -71,7 +76,7 @@ namespace AuroraLoader
             // LabelAuroraVersion
             // 
             this.LabelAuroraVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraVersion.Location = new System.Drawing.Point(465, 258);
+            this.LabelAuroraVersion.Location = new System.Drawing.Point(410, 249);
             this.LabelAuroraVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraVersion.Name = "LabelAuroraVersion";
             this.LabelAuroraVersion.Size = new System.Drawing.Size(133, 15);
@@ -82,7 +87,7 @@ namespace AuroraLoader
             // ButtonUpdateAurora
             // 
             this.ButtonUpdateAurora.Enabled = false;
-            this.ButtonUpdateAurora.Location = new System.Drawing.Point(126, 248);
+            this.ButtonUpdateAurora.Location = new System.Drawing.Point(220, 99);
             this.ButtonUpdateAurora.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAurora.Name = "ButtonUpdateAurora";
             this.ButtonUpdateAurora.Size = new System.Drawing.Size(104, 27);
@@ -116,7 +121,7 @@ namespace AuroraLoader
             // 
             // ButtonUpdateAuroraLoader
             // 
-            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(13, 248);
+            this.ButtonUpdateAuroraLoader.Location = new System.Drawing.Point(219, 125);
             this.ButtonUpdateAuroraLoader.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonUpdateAuroraLoader.Name = "ButtonUpdateAuroraLoader";
             this.ButtonUpdateAuroraLoader.Size = new System.Drawing.Size(105, 27);
@@ -139,7 +144,7 @@ namespace AuroraLoader
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(465, 243);
+            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(231, 249);
             this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
             this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(133, 15);
@@ -271,7 +276,7 @@ namespace AuroraLoader
             // 
             // ButtonMultiplayer
             // 
-            this.ButtonMultiplayer.Location = new System.Drawing.Point(347, 248);
+            this.ButtonMultiplayer.Location = new System.Drawing.Point(122, 243);
             this.ButtonMultiplayer.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonMultiplayer.Name = "ButtonMultiplayer";
             this.ButtonMultiplayer.Size = new System.Drawing.Size(103, 27);
@@ -282,7 +287,7 @@ namespace AuroraLoader
             // 
             // ButtonManageMods
             // 
-            this.ButtonManageMods.Location = new System.Drawing.Point(237, 248);
+            this.ButtonManageMods.Location = new System.Drawing.Point(12, 243);
             this.ButtonManageMods.Name = "ButtonManageMods";
             this.ButtonManageMods.Size = new System.Drawing.Size(103, 27);
             this.ButtonManageMods.TabIndex = 41;
@@ -310,11 +315,34 @@ namespace AuroraLoader
             this.ButtonMangeSaves.UseVisualStyleBackColor = true;
             this.ButtonMangeSaves.Click += new System.EventHandler(this.ButtonMangeSaves_Click);
             // 
+            // PictureBoxUpdateAurora
+            // 
+            this.PictureBoxUpdateAurora.Image = ((System.Drawing.Image)(resources.GetObject("PictureBoxUpdateAurora.Image")));
+            this.PictureBoxUpdateAurora.Location = new System.Drawing.Point(547, 238);
+            this.PictureBoxUpdateAurora.Name = "PictureBoxUpdateAurora";
+            this.PictureBoxUpdateAurora.Size = new System.Drawing.Size(32, 32);
+            this.PictureBoxUpdateAurora.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PictureBoxUpdateAurora.TabIndex = 43;
+            this.PictureBoxUpdateAurora.TabStop = false;
+            this.PictureBoxUpdateAurora.Click += new System.EventHandler(this.ButtonUpdateAurora_Click);
+            // 
+            // PictureBoxUpdateLoader
+            // 
+            this.PictureBoxUpdateLoader.Location = new System.Drawing.Point(371, 238);
+            this.PictureBoxUpdateLoader.Name = "PictureBoxUpdateLoader";
+            this.PictureBoxUpdateLoader.Size = new System.Drawing.Size(32, 32);
+            this.PictureBoxUpdateLoader.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PictureBoxUpdateLoader.TabIndex = 43;
+            this.PictureBoxUpdateLoader.TabStop = false;
+            this.PictureBoxUpdateLoader.Click += new System.EventHandler(this.ButtonUpdateAuroraLoader_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(605, 284);
+            this.Controls.Add(this.PictureBoxUpdateLoader);
+            this.Controls.Add(this.PictureBoxUpdateAurora);
             this.Controls.Add(this.ButtonMangeSaves);
             this.Controls.Add(this.SelectedSavelabel);
             this.Controls.Add(this.ButtonManageMods);
@@ -347,6 +375,8 @@ namespace AuroraLoader
             this.Text = "Aurora Loader";
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.TrackMusicVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxUpdateAurora)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PictureBoxUpdateLoader)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,6 +407,8 @@ namespace AuroraLoader
         private Button ButtonManageMods;
         private Label SelectedSavelabel;
         private Button ButtonMangeSaves;
+        private PictureBox PictureBoxUpdateAurora;
+        private PictureBox PictureBoxUpdateLoader;
     }
 }
 
