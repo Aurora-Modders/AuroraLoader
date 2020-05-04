@@ -130,7 +130,7 @@ namespace AuroraLoader
             PictureBoxUpdateAurora.Visible = update;
             if (update == true)
             {
-                var dialog = MessageBox.Show("Update for aurora avalible", "Update Aurora", MessageBoxButtons.YesNo);
+                var dialog = MessageBox.Show("Update for aurora avalible, Update?", "Update Aurora", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
                     UpdateAurora();
@@ -146,7 +146,7 @@ namespace AuroraLoader
             PictureBoxUpdateLoader.Visible = update;
             if (update == true)
             {
-                var dialog = MessageBox.Show("Update for loader avalible", "Update Loader", MessageBoxButtons.YesNo);
+                var dialog = MessageBox.Show("Update for loader avalible, Update?", "Update Loader", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
                     UpdateLoader();
