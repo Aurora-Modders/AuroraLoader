@@ -4,13 +4,13 @@
 
 # Installation Requirements
 
-You must have the .NET Core 3.1 runtime installed - download it [here](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer). This is a system-level prerequisite similar to a Java JRE or the dependency that Aurora itself has on the .NET Framework 4.0. 
+You must have the .NET Core 3.1 x86 runtime installed - download it [here](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer). This is a system-level prerequisite similar to a Java JRE or the dependency that Aurora itself has on the .NET Framework 4.0. We decided to publish a small executable that relies on this library rather than releasing a large (>60mb) executable without that dependency for convenience, but the latter can easily be created (let us know!).
 
-Otherwise, there are no requirements to use or develop AuroraLoader - not even Aurora itself. Just download the latest release from the [Releases page](https://github.com/Aurora-Modders/AuroraLoader/releases) and run the executable.
+Otherwise, there are no requirements to use or develop AuroraLoader - not even Aurora itself. In fact, extracting the AuroraLoader download zip into an empty folder is one of the most reliable ways to use it. Just download the latest release from the [Releases page](https://github.com/Aurora-Modders/AuroraLoader/releases) and run the executable. If you extract AuroraLoader to a directory that contains an existing Aurora installation, it will automatically be detected and backed up.
 
 # Usage
 
-Download the latest release and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora the latest version will be downloaded automatically. Mods in the online registry can be viewed, installed, upgraded, and configured on the 'Manage Mods' tab. 
+Download the latest release and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora the latest version will be downloaded automatically. Mods in the online registry can be viewed, installed, upgraded, and configured on the 'Manage Mods' tab.
 
 # Features
 
@@ -25,19 +25,18 @@ Download the latest release and extract to a directory. Run the .exe. If the dir
 
 # Support
 
-Contact the developers [on Discord](https://discordapp.com/channels/314031775892373504/701885084646506628) or [Reddit](https://www.reddit.com/r/aurora4x_mods/comments/g53o3l/auroraloader/), or drop an issue or pull request directly into the repository! Note that the latest available version of AuroraLoader can always be obtained from the [Releases page](https://github.com/Aurora-Modders/AuroraLoader/releases) or by clicking the Update button within the loader itself. 
+Contact the developers [on Discord](https://discordapp.com/channels/314031775892373504/701885084646506628) or [Reddit](https://www.reddit.com/r/aurora4x_mods/comments/g53o3l/auroraloader/), or drop an issue or pull request directly into the repository! Note that the latest available version of AuroraLoader can always be obtained from the [Releases page](https://github.com/Aurora-Modders/AuroraLoader/releases) or by clicking the Update button within the loader itself.
 
 # For developers
 
 ## Mod registry
 
-https://github.com/Aurora-Modders/AuroraRegistry is the primary Aurora mod registry and will soon contain instructions for setting up additional registries alongside examples. AuroraLoader is designed to work with multiple registries as defined in https://github.com/Aurora-Modders/AuroraLoader/blob/master/AuroraLoader/mirrors.ini. Our goal is to allow members of the Aurora community to autonomously release and update mods that will show up in Aurora Loader while according with the developer's wishes and having a hell of a lot of fun. 
+https://github.com/Aurora-Modders/AuroraRegistry is the primary Aurora mod registry and will soon contain instructions for setting up additional registries alongside examples. AuroraLoader is designed to work with multiple registries as defined in https://github.com/Aurora-Modders/AuroraLoader/blob/master/AuroraLoader/mirrors.ini. Our goal is to allow members of the Aurora community to autonomously release and update mods that will show up in Aurora Loader while according with the developer's wishes and having a hell of a lot of fun.
 
 ## Creating releases
 
-AuroraLoader is currently published using Visual Studio 2019's built-in Publish functionality (although we'd love to set up true CD) with the following options:
-![](https://media.discordapp.net/attachments/701885084646506628/704427823342944387/unknown.png?width=709&height=618)
-Note that since AuroraLoader is still under active development, we tend to publish releases using the Debug configuration for convenience.
+After pushing to `master` or a branch, navigate to the [Actions page](https://github.com/Aurora-Modders/AuroraLoader/actions?query=workflow%3A%22.NET+Core%22) and find the build corresponding to the change you just pushed. Download the published artifact (`AuroraLoader.zip.zip`, i.e. it contains the `Aurora.zip` file you'll be uploading).
 
-After releases are published, we manually zip up the result and upload them as GitHub releases. New AuroraLoader releases become available for automatic updates when added to https://github.com/Aurora-Modders/AuroraLoader/blob/master/updates.txt.
+Create a new release. If you're releasing from master, choose a valid SemVer version such as `0.24.1` and use it as your tag. If you're releasing from a branch, choose a SemVer version such as `0.24.1-rc1` and make sure you select your branch when configuring the tab. Name the release `AuroraLoader <tag>` and mark it as a prerelease if not on master.
 
+Finally, update `AuroraLoader/mod.json` with a new version and link to the raw .zip you just uploaded.
