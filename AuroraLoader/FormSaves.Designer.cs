@@ -32,6 +32,7 @@
             this.LabelSave = new System.Windows.Forms.Label();
             this.ButtonLoadSaves = new System.Windows.Forms.Button();
             this.ButtonResetSaves = new System.Windows.Forms.Button();
+            this.ButtonNewGame = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ListViewSaves
@@ -73,11 +74,21 @@
             this.ButtonResetSaves.UseVisualStyleBackColor = true;
             this.ButtonResetSaves.Click += new System.EventHandler(this.ButtonResetSaves_Click);
             // 
+            // ButtonNewGame
+            // 
+            this.ButtonNewGame.Location = new System.Drawing.Point(174, 232);
+            this.ButtonNewGame.Name = "ButtonNewGame";
+            this.ButtonNewGame.Size = new System.Drawing.Size(75, 23);
+            this.ButtonNewGame.TabIndex = 4;
+            this.ButtonNewGame.Text = "New Game";
+            this.ButtonNewGame.UseVisualStyleBackColor = true;
+            // 
             // FormSaves
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 268);
+            this.Controls.Add(this.ButtonNewGame);
             this.Controls.Add(this.ButtonResetSaves);
             this.Controls.Add(this.ButtonLoadSaves);
             this.Controls.Add(this.LabelSave);
@@ -97,5 +108,6 @@
         private System.Windows.Forms.Label LabelSave;
         private System.Windows.Forms.Button ButtonLoadSaves;
         private System.Windows.Forms.Button ButtonResetSaves;
+        private System.Windows.Forms.Button ButtonNewGame;
     }
 }
