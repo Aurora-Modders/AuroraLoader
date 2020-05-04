@@ -92,6 +92,7 @@
             this.Controls.Add(this.ButtonGetMod);
             this.Controls.Add(this.ListViewRegistryMods);
             this.Controls.Add(this.ManageModslabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FormModDownload";
             this.Text = "Install and Configure Mods";
             this.Load += new System.EventHandler(this.FormModDownload_Load);

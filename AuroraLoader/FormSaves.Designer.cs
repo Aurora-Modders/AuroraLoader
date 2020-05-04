@@ -82,6 +82,7 @@
             this.Controls.Add(this.ButtonLoadSaves);
             this.Controls.Add(this.LabelSave);
             this.Controls.Add(this.ListViewSaves);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FormSaves";
             this.Text = "Manage Savegames";
             this.Load += new System.EventHandler(this.FormSaves_Load);

@@ -338,6 +338,7 @@ namespace AuroraLoader
             this.Controls.Add(this.ButtonUpdateAurora);
             this.Controls.Add(this.LabelAuroraVersion);
             this.Controls.Add(this.ButtonSinglePlayer);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(635, 346);
             this.Name = "FormMain";
