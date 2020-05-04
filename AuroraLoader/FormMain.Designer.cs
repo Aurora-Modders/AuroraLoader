@@ -301,6 +301,7 @@ namespace AuroraLoader
             // 
             // ButtonMangeSaves
             // 
+            this.ButtonMangeSaves.Enabled = false;
             this.ButtonMangeSaves.Location = new System.Drawing.Point(12, 12);
             this.ButtonMangeSaves.Name = "ButtonMangeSaves";
             this.ButtonMangeSaves.Size = new System.Drawing.Size(84, 27);
