@@ -429,29 +429,6 @@ namespace AuroraLoader
             RefreshAuroraInstallData();
         }
 
-        private void ButtonReadme_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var file = Path.Combine(Program.AuroraLoaderExecutableDirectory, "loader_readme.txt");
-                if (!File.Exists(file))
-                {
-                    File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"), file);
-                }
-
-                var info = new ProcessStartInfo()
-                {
-                    FileName = file,
-                    UseShellExecute = true
-                };
-                Process.Start(info);
-            }
-            catch (Exception exc)
-            {
-                Log.Error($"Couldn't load readme from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md")}", exc);
-                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
-            }
-        }
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)
         {
@@ -468,6 +445,11 @@ namespace AuroraLoader
         private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
         {
             // TODO display description
+        }
+
+        private void ButtonReadme_Click(object sender, EventArgs e)
+        {
+            Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
         }
 
         private void LinkModSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
