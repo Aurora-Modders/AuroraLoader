@@ -55,6 +55,7 @@ namespace AuroraLoader
                     Log.Error($"Failed to launch {mod.Mod.Name}", e);
                 }
             }
+
             foreach (var modVersion in modVersions.Where(v => v.Mod.Type == ModType.ROOTUTILITY || v.Mod.Type == ModType.UTILITY))
             {
                 try
