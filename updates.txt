@@ -13,4 +13,3 @@
 0.23.4=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.23.4/AuroraLoader-0.23.4.zip
 0.23.5=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.23.5/AuroraLoader-0.23.5.zip
 0.24.0=https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.24.0/AuroraLoader.zip
-
