@@ -43,11 +43,23 @@ namespace AuroraLoader
             var processes = new List<Process>();
 
             // Install selected mods (including executable, if provided)
-            foreach (var modVersion in modVersions)
+            foreach (var mod in modVersions.Where(v => v.Mod.Type == ModType.DATABASE || v.Mod.Type == ModType.THEME))
             {
                 try
                 {
-                    modVersion.Uninstall(this);
+                    mod.Uninstall(this);
+                    mod.Install(this);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to launch {mod.Mod.Name}", e);
+                }
+            }
+
+            foreach (var modVersion in modVersions.Where(v => v.Mod.Type == ModType.ROOTUTILITY || v.Mod.Type == ModType.UTILITY))
+            {
+                try
+                {
                     modVersion.Install(this);
                     processes.Add(modVersion.Run());
                 }
@@ -55,7 +67,6 @@ namespace AuroraLoader
                 {
                     var message = $"Failed to launch {modVersion.Mod.Name} {modVersion.Version}";
                     Log.Error(message, e);
-                    MessageBox.Show(message);
                 }
             }
 

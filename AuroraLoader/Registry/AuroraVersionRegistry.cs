@@ -15,7 +15,7 @@ namespace AuroraLoader.Registry
     /// </summary>
     public class AuroraVersionRegistry
     {
-        public IList<AuroraVersion> AuroraVersions { get; private set; } = new List<AuroraVersion>();
+        public List<AuroraVersion> AuroraVersions { get; private set; } = new List<AuroraVersion>();
 
         public AuroraVersion CurrentAuroraVersion { get; private set; }
 
@@ -33,11 +33,13 @@ namespace AuroraLoader.Registry
             {
                 throw new Exception($"Aurora version cache not found at {_versionCachePath} and no mirrors provided");
             }
-            else if (File.Exists(_versionCachePath) && mirrors == null)
+            
+            if (File.Exists(_versionCachePath))
             {
                 UpdateKnownVersionsFromCache();
             }
-            else if (mirrors != null)
+            
+            if (mirrors != null)
             {
                 UpdateKnownAuroraVersionsFromMirrors(mirrors);
             }
@@ -46,7 +48,7 @@ namespace AuroraLoader.Registry
             Log.Debug($"Identified checksum {checksum}");
             try
             {
-                CurrentAuroraVersion = AuroraVersions.Single(v => v.Checksum.Equals(checksum));
+                CurrentAuroraVersion = AuroraVersions.First(v => v.Checksum.Equals(checksum));
             }
             catch (Exception e)
             {
@@ -62,7 +64,7 @@ namespace AuroraLoader.Registry
             try
             {
                 var rawFileContents = File.ReadAllText(Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"));
-                AuroraVersions = ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList();
+                AuroraVersions.AddRange(ModConfigurationReader.AuroraVersionsFromString(rawFileContents).ToList());
             }
             catch (Exception e)
             {
@@ -98,7 +100,7 @@ namespace AuroraLoader.Registry
                     }
                 }
             }
-            AuroraVersions = allKnownVersions;
+            AuroraVersions.AddRange(allKnownVersions);
 
             UpdateCache();
         }
@@ -111,7 +113,7 @@ namespace AuroraLoader.Registry
             Log.Debug($"Updating cache with {String.Join("\n\r", versions)}");
             File.WriteAllLines(
                 Path.Combine(Program.AuroraLoaderExecutableDirectory, "aurora_versions.ini"),
-                AuroraVersions.Select(v => $"{v.Version}={v.Checksum}"));
+                AuroraVersions.Select(v => $"{v.Version}={v.Checksum}").Distinct());
         }
 
         internal string GetChecksum(byte[] bytes)
