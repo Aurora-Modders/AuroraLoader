@@ -16,13 +16,17 @@ namespace AuroraLoader
 {
     public partial class FormMain : Form
     {
-        private readonly IConfiguration _configuration;
+
 
         private Thread auroraThread = null;
         private AuroraInstallation auroraInstallation;
 
+        private readonly IConfiguration _configuration;
         private readonly AuroraVersionRegistry _auroraVersionRegistry;
         private readonly ModRegistry _modRegistry;
+
+        private FormModDownload _modMangementWindow;
+        private FormSaves _saveMangementWindow;
 
         public FormMain(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry, ModRegistry modRegistry)
         {
@@ -60,12 +64,13 @@ namespace AuroraLoader
             _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, true);
             RefreshAuroraInstallData();
             UpdateListViews();
-            UpdateManageModsListView();
 
             Cursor = Cursors.Default;
         }
 
-        private void ButtonUpdateAurora_Click(object sender, EventArgs e)
+
+
+        private void UpdateAurora()
         {
             var result = MessageBox.Show($"Most Aurora updates are not save-game compatible!{Environment.NewLine}We'll back up your database.{Environment.NewLine}Are you sure you want to continue?", "Warning!", MessageBoxButtons.OKCancel);
             if (result != DialogResult.OK)
@@ -94,7 +99,7 @@ namespace AuroraLoader
             }
         }
 
-        private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e)
+        private void UpdateLoader()
         {
             MessageBox.Show($"Installing AuroraLoader {_modRegistry.AuroraLoaderMod.LatestVersion.Version}");
             try
@@ -112,6 +117,41 @@ namespace AuroraLoader
             {
                 Log.Error("Failed to update AuroraLoader", exc);
                 MessageBox.Show("Update failed.");
+            }
+        }
+
+        private void ButtonUpdateAuroraLoader_Click(object sender, EventArgs e) { UpdateLoader(); }
+
+        private void ButtonUpdateAurora_Click(object sender, EventArgs e) { UpdateAurora(); }
+
+        private void AuroraUpdateUI(bool update)
+        {
+            PictureBoxUpdateAurora.Enabled = update;
+            PictureBoxUpdateAurora.Visible = update;
+            if (update == true)
+            {
+                var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} avalilbe, Update?", "Update Aurora", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    UpdateAurora();
+                }
+                else { }
+            }
+
+        }
+
+        private void LoaderUpdateUI(bool update)
+        {
+            PictureBoxUpdateLoader.Enabled = update;
+            PictureBoxUpdateLoader.Visible = update;
+            if (update == true)
+            {
+                var dialog = MessageBox.Show($"Loader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} avalilbe, Update?", "Update Loader", MessageBoxButtons.YesNo);
+                if (dialog == DialogResult.Yes)
+                {
+                    UpdateLoader();
+                }
+                else { }
             }
         }
 
@@ -143,15 +183,11 @@ namespace AuroraLoader
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max()?.Version) < 0)
                 {
-                    ButtonUpdateAurora.Text = $"Update to {_auroraVersionRegistry.AuroraVersions.Max().Version}";
-                    ButtonUpdateAurora.ForeColor = Color.Green;
-                    ButtonUpdateAurora.Enabled = true;
+                    AuroraUpdateUI(true);
                 }
                 else
                 {
-                    ButtonUpdateAurora.Text = "Aurora up to date";
-                    ButtonUpdateAurora.ForeColor = Color.Black;
-                    ButtonUpdateAurora.Enabled = false;
+                    AuroraUpdateUI(false);
                 }
             }
 
@@ -160,23 +196,13 @@ namespace AuroraLoader
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
                 if (auroraLoaderMod.CanBeUpdated(auroraInstallation.InstalledVersion))
                 {
-                    ButtonUpdateAuroraLoader.Text = $"Update Loader to {auroraLoaderMod.LatestVersion.Version}";
-                    ButtonUpdateAuroraLoader.ForeColor = Color.Green;
-                    ButtonUpdateAuroraLoader.Enabled = true;
+                    LoaderUpdateUI(true);
 
-                    // Disable 'update aurora' button if there is a loader update that should be grabbed first
-                    if (ButtonUpdateAurora.Enabled == true)
-                    {
-                        ButtonUpdateAurora.Text = "Update loader";
-                        ButtonUpdateAurora.ForeColor = Color.Black;
-                        ButtonUpdateAurora.Enabled = false;
-                    }
+                    AuroraUpdateUI(false);
                 }
                 else
                 {
-                    ButtonUpdateAuroraLoader.Text = "Loader up to date";
-                    ButtonUpdateAuroraLoader.ForeColor = Color.Black;
-                    ButtonUpdateAuroraLoader.Enabled = false;
+                    LoaderUpdateUI(false);
                 }
             }
             catch (Exception exc)
@@ -278,157 +304,8 @@ namespace AuroraLoader
             UpdateListViews();
         }
 
-        /// <summary>
-        /// Call this to update the list of mods in the Manage tab
-        /// Note that this implies a mod registry update
-        /// </summary>
-        public void UpdateManageModsListView()
-        {
-            ListManageMods.BeginUpdate();
-            ListManageMods.Clear();
-            ListManageMods.AllowColumnReorder = true;
-            ListManageMods.FullRowSelect = true;
-            ListManageMods.View = View.Details;
-            ListManageMods.Columns.Add("Name");
-            ListManageMods.Columns.Add("Status");
-            ListManageMods.Columns.Add("Type");
-            ListManageMods.Columns.Add("Current");
-            ListManageMods.Columns.Add("Latest Compatible");
-            ListManageMods.Columns.Add("Aurora Compatibility");
-            ListManageMods.Columns.Add("Description");
 
-            foreach (var mod in _modRegistry.Mods)
-            {
-                if (mod.Name != "AuroraLoader")
-                {
-                    var li = new ListViewItem(new string[] {
-                        mod.Name,
-                        mod.Status.ToString(),
-                        mod.Type.ToString(),
-                        mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion)?.Version?.ToString() ?? "Not Installed",
-                        mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion)?.Version == mod.LatestVersion?.Version
-                            ? "Up to date"
-                            : mod.LatestVersion?.Version?.ToString()
-                            ?? "-",
-                        mod.LatestVersion.TargetAuroraVersion?.Pretty(),
-                        mod.Description
-                    });
-                    ListManageMods.Items.Add(li);
-                }
-            }
 
-            ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            ListManageMods.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            ListManageMods.EndUpdate();
-
-            ButtonInstallOrUpdateMod.Enabled = false;
-            ButtonConfigureMod.Enabled = false;
-        }
-
-        private void ListManageMods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ButtonInstallOrUpdateMod.Enabled = false;
-            ButtonConfigureMod.Enabled = false;
-
-            if (ListManageMods.SelectedItems.Count > 0)
-            {
-                var selected = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-                if (selected.Installed)
-                {
-                    ButtonInstallOrUpdateMod.Text = "Update";
-                    if (selected.CanBeUpdated(auroraInstallation.InstalledVersion))
-                    {
-                        ButtonInstallOrUpdateMod.Enabled = true;
-                    }
-                    if (selected.ConfigurationFile != null)
-                    {
-                        ButtonConfigureMod.Enabled = true;
-                    }
-                }
-                else if (selected.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null)
-                {
-                    ButtonInstallOrUpdateMod.Text = "Install";
-                    ButtonInstallOrUpdateMod.Enabled = true;
-                }
-                else if (selected.LatestVersion != null && !_auroraVersionRegistry.CurrentAuroraVersion.CompatibleWith(selected.LatestVersion.TargetAuroraVersion))
-                {
-                    ButtonInstallOrUpdateMod.Text = "Incompatible";
-                    ButtonInstallOrUpdateMod.Enabled = false;
-                }
-                else
-                {
-                    ButtonInstallOrUpdateMod.Text = "Install";
-                    ButtonInstallOrUpdateMod.Enabled = false;
-                }
-            }
-            else
-            {
-                ButtonInstallOrUpdateMod.Text = "Update";
-                ButtonInstallOrUpdateMod.Enabled = false;
-            }
-        }
-
-        private void ButtonInstallOrUpdateMods_Click(object sender, EventArgs e)
-        {
-            Cursor = Cursors.WaitCursor;
-            var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-            mod.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion).Download();
-            mod.UpdateCache();
-            UpdateManageModsListView();
-            UpdateListViews();
-            Cursor = Cursors.Default;
-        }
-
-        /// <summary>
-        /// Open selected mod's ModInternalConfigFile (defined in mod configuration)
-        /// </summary>
-        private void ButtonConfigureMod_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var mod = _modRegistry.Mods.Single(mod => mod.Name == ListManageMods.SelectedItems[0].Text);
-                if (mod.ModFolder == null || mod.ConfigurationFile == null)
-                {
-                    throw new Exception("Invalid mod selected for configuration");
-                }
-
-                var pieces = mod.ConfigurationFile.Split(' ');
-                var exe = pieces[0];
-                var args = "";
-                if (pieces.Length > 1)
-                {
-                    for (int i = 1; i < pieces.Length; i++)
-                    {
-                        args += " " + pieces[i];
-                    }
-
-                    args = args.Substring(1);
-                }
-
-                var modVersion = mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion);
-                Log.Debug($"{mod.Name} config file: run {exe} in {modVersion.DownloadPath} with args {args}");
-                if (!File.Exists(Path.Combine(modVersion.DownloadPath, exe)))
-                {
-                    MessageBox.Show($"Couldn't launch {Path.Combine(modVersion.DownloadPath, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.json")} is correctly configured.");
-                    return;
-                }
-                var info = new ProcessStartInfo()
-                {
-                    WorkingDirectory = modVersion.DownloadPath,
-                    FileName = exe,
-                    Arguments = args,
-                    UseShellExecute = true,
-                    CreateNoWindow = true
-                };
-
-                Process.Start(info);
-            }
-            catch (Exception exc)
-            {
-                Log.Error($"Failed while trying to open {ListManageMods.SelectedItems[0]} config file", exc);
-            }
-
-        }
 
         private void ButtonSinglePlayer_Click(object sender, EventArgs e)
         {
@@ -461,7 +338,8 @@ namespace AuroraLoader
             }
 
             ButtonSinglePlayer.Enabled = false;
-            ButtonUpdateAurora.Enabled = false;
+            LoaderUpdateUI(false);
+            AuroraUpdateUI(false);
 
             var modVersions = _modRegistry.Mods.Where(mod =>
             (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
@@ -551,29 +429,6 @@ namespace AuroraLoader
             RefreshAuroraInstallData();
         }
 
-        private void ButtonReadme_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var file = Path.Combine(Program.AuroraLoaderExecutableDirectory, "loader_readme.txt");
-                if (!File.Exists(file))
-                {
-                    File.Copy(Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md"), file);
-                }
-
-                var info = new ProcessStartInfo()
-                {
-                    FileName = file,
-                    UseShellExecute = true
-                };
-                Process.Start(info);
-            }
-            catch (Exception exc)
-            {
-                Log.Error($"Couldn't load readme from {Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md")}", exc);
-                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
-            }
-        }
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)
         {
@@ -590,6 +445,11 @@ namespace AuroraLoader
         private void ListUtilityMods_SelectedIndexChanged(object sender, EventArgs e)
         {
             // TODO display description
+        }
+
+        private void ButtonReadme_Click(object sender, EventArgs e)
+        {
+            Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
         }
 
         private void LinkModSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -620,6 +480,28 @@ namespace AuroraLoader
         private void LabelAuroraLoaderVersion_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void ButtonManageMods_Click(object sender, EventArgs e)
+        {
+            UpdateListViews();
+            if(_modMangementWindow != null) 
+            {
+                _modMangementWindow.Close();
+            }
+            _modMangementWindow = new FormModDownload(_configuration);
+            _modMangementWindow.Show();
+        }
+
+        private void ButtonMangeSaves_Click(object sender, EventArgs e)
+        {
+            UpdateListViews();
+            if (_saveMangementWindow != null)
+            {
+                _saveMangementWindow.Close();
+            }
+            _saveMangementWindow = new FormSaves();
+            _saveMangementWindow.Show();
         }
     }
 }
