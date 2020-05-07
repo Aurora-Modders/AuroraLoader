@@ -68,6 +68,11 @@ namespace AuroraLoader
             var games = new List<string>();
 
             var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games");
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+
             foreach (var game in Directory.EnumerateDirectories(folder))
             {
                 games.Add(Path.GetRelativePath(folder, game));
