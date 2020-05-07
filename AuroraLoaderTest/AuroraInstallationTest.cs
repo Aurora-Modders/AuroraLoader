@@ -33,8 +33,8 @@ namespace AuroraLoaderTest
                 }
             };
 
-            using (File.Create(Path.Combine(installationPath, "Aurora.exe"))) ;
-            using (File.Create(Path.Combine(installationPath, "AuroraDB.db"))) ;
+            using (File.Create(Path.Combine(installationPath, "Aurora.exe")));
+            using (File.Create(Path.Combine(installationPath, "AuroraDB.db")));
         }
 
         [TearDown]

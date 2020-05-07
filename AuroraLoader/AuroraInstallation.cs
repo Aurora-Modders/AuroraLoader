@@ -61,7 +61,7 @@ namespace AuroraLoader
                 try
                 {
                     modVersion.Install(this);
-                    processes.Add(modVersion.Run());
+                    processes.Add(modVersion.Run(this));
                 }
                 catch (Exception e)
                 {
@@ -74,7 +74,7 @@ namespace AuroraLoader
             {
                 executableMod.Uninstall(this);
                 executableMod.Install(this);
-                var process = executableMod.Run();
+                var process = executableMod.Run(this);
                 processes.Insert(0, process);
             }
             else
