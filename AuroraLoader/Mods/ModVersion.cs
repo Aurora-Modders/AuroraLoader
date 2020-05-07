@@ -106,7 +106,7 @@ namespace AuroraLoader.Mods
         {
             if (Mod.Type == ModType.THEME)
             {
-                UninstallThemeMod();
+                UninstallThemeMod(installation);
             }
             else if (Mod.Type == ModType.DATABASE)
             {
@@ -228,7 +228,7 @@ namespace AuroraLoader.Mods
             }
         }
 
-        internal void UninstallThemeMod()
+        internal void UninstallThemeMod(AuroraInstallation installation)
         {
             if (!Downloaded)
             {
@@ -237,7 +237,7 @@ namespace AuroraLoader.Mods
 
             foreach (var fileInMod in Directory.EnumerateFiles(DownloadPath, "*.*", SearchOption.AllDirectories))
             {
-                var out_file = Path.Combine(Program.AuroraLoaderExecutableDirectory, Path.GetRelativePath(DownloadPath, fileInMod));
+                var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(DownloadPath, fileInMod));
                 if (File.Exists(out_file))
                 {
                     File.Delete(out_file);
