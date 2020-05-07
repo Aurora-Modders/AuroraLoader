@@ -80,7 +80,6 @@ namespace AuroraLoader
 
             try
             {
-                auroraInstallation.CreateBackup();
                 var thread = new Thread(() =>
                 {
                     var aurora_files = Installer.GetLatestAuroraFiles();
