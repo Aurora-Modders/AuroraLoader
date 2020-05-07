@@ -62,6 +62,7 @@ namespace AuroraLoader
             // 
             // ButtonSinglePlayer
             // 
+            this.ButtonSinglePlayer.Enabled = false;
             this.ButtonSinglePlayer.Location = new System.Drawing.Point(12, 46);
             this.ButtonSinglePlayer.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonSinglePlayer.Name = "ButtonSinglePlayer";
@@ -74,7 +75,7 @@ namespace AuroraLoader
             // LabelAuroraVersion
             // 
             this.LabelAuroraVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraVersion.Location = new System.Drawing.Point(410, 249);
+            this.LabelAuroraVersion.Location = new System.Drawing.Point(410, 252);
             this.LabelAuroraVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraVersion.Name = "LabelAuroraVersion";
             this.LabelAuroraVersion.Size = new System.Drawing.Size(133, 15);
@@ -119,7 +120,7 @@ namespace AuroraLoader
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(231, 249);
+            this.LabelAuroraLoaderVersion.Location = new System.Drawing.Point(231, 252);
             this.LabelAuroraLoaderVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabelAuroraLoaderVersion.Name = "LabelAuroraLoaderVersion";
             this.LabelAuroraLoaderVersion.Size = new System.Drawing.Size(133, 15);
@@ -154,9 +155,9 @@ namespace AuroraLoader
             // 
             this.ComboSelectExecutableMod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ComboSelectExecutableMod.FormattingEnabled = true;
-            this.ComboSelectExecutableMod.Location = new System.Drawing.Point(188, 14);
+            this.ComboSelectExecutableMod.Location = new System.Drawing.Point(262, 77);
             this.ComboSelectExecutableMod.Name = "ComboSelectExecutableMod";
-            this.ComboSelectExecutableMod.Size = new System.Drawing.Size(241, 23);
+            this.ComboSelectExecutableMod.Size = new System.Drawing.Size(216, 23);
             this.ComboSelectExecutableMod.TabIndex = 27;
             // 
             // ListDatabaseMods
@@ -275,18 +276,17 @@ namespace AuroraLoader
             this.SelectedSavelabel.AutoSize = true;
             this.SelectedSavelabel.Location = new System.Drawing.Point(102, 18);
             this.SelectedSavelabel.Name = "SelectedSavelabel";
-            this.SelectedSavelabel.Size = new System.Drawing.Size(65, 15);
+            this.SelectedSavelabel.Size = new System.Drawing.Size(72, 15);
             this.SelectedSavelabel.TabIndex = 42;
-            this.SelectedSavelabel.Text = "Save: XXXX";
+            this.SelectedSavelabel.Text = "Game: XXXX";
             // 
             // ButtonMangeSaves
             // 
-            this.ButtonMangeSaves.Enabled = false;
             this.ButtonMangeSaves.Location = new System.Drawing.Point(12, 12);
             this.ButtonMangeSaves.Name = "ButtonMangeSaves";
             this.ButtonMangeSaves.Size = new System.Drawing.Size(84, 27);
             this.ButtonMangeSaves.TabIndex = 41;
-            this.ButtonMangeSaves.Text = "Select Save";
+            this.ButtonMangeSaves.Text = "Select Game";
             this.ButtonMangeSaves.UseVisualStyleBackColor = true;
             this.ButtonMangeSaves.Click += new System.EventHandler(this.ButtonMangeSaves_Click);
             // 
@@ -316,7 +316,7 @@ namespace AuroraLoader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(605, 284);
+            this.ClientSize = new System.Drawing.Size(605, 287);
             this.Controls.Add(this.PictureBoxUpdateLoader);
             this.Controls.Add(this.PictureBoxUpdateAurora);
             this.Controls.Add(this.ButtonMangeSaves);

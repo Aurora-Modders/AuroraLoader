@@ -118,11 +118,7 @@ namespace AuroraLoader.Registry
 
         internal string GetChecksum(byte[] bytes)
         {
-            using var sha = SHA256.Create();
-            var hash = sha.ComputeHash(bytes);
-            var str = Convert.ToBase64String(hash);
-
-            return str.Replace("/", "").Replace("+", "").Replace("=", "").Substring(0, 6);
+            return Program.GetChecksum(bytes);
         }
     }
 }
