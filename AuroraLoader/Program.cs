@@ -99,6 +99,12 @@ namespace AuroraLoader
             {
                 var raw = File.ReadAllText(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json"));
                 var auroraLoader = Mod.DeserializeMod(raw);
+
+                if (auroraLoader.Name != "AuroraLoader")
+                {
+                    throw new Exception(Path.Combine(AuroraLoaderExecutableDirectory, "mod.json") + " does not belong to AuroraLoader.");
+                }
+
                 if (!Directory.Exists(auroraLoader.LatestVersion.DownloadPath))
                 {
                     Directory.CreateDirectory(auroraLoader.LatestVersion.DownloadPath);
@@ -107,8 +113,6 @@ namespace AuroraLoader
                 }
             }
         }
-
-
 
         public static void OpenBrowser(string url)
         {
