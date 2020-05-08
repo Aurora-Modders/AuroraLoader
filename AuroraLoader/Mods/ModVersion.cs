@@ -130,7 +130,7 @@ namespace AuroraLoader.Mods
             }
         }
 
-        internal void InstallDbMod(AuroraInstallation installation)
+        private void InstallDbMod(AuroraInstallation installation)
         {
             const string TABLE = "CREATE TABLE IF NOT EXISTS A_THIS_SAVE_IS_MODDED (ModName Text PRIMARY KEY);";
 
@@ -173,7 +173,7 @@ namespace AuroraLoader.Mods
             }
         }
 
-        internal void UninstallDbMod(AuroraInstallation installation)
+        private void UninstallDbMod(AuroraInstallation installation)
         {
             var uninstallScript = Path.Combine(DownloadPath, "uninstall.sql");
             if (!File.Exists(uninstallScript))
@@ -228,13 +228,8 @@ namespace AuroraLoader.Mods
             }
         }
 
-        internal void UninstallThemeMod(AuroraInstallation installation)
+        private void UninstallThemeMod(AuroraInstallation installation)
         {
-            if (!Downloaded)
-            {
-                Log.Debug($"UninstallThemeMod called for {Mod.Name} {Version}, but it is not installed");
-            }
-
             foreach (var fileInMod in Directory.EnumerateFiles(DownloadPath, "*.*", SearchOption.AllDirectories))
             {
                 var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(DownloadPath, fileInMod));
@@ -251,7 +246,8 @@ namespace AuroraLoader.Mods
         {
             foreach (var file in Directory.EnumerateFiles(DownloadPath, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.json")))
             {
-                File.Copy(file, Path.Combine(folder, Path.GetFileName(file)), true);
+                var out_file = Path.Combine(folder, Path.GetRelativePath(DownloadPath, file));
+                File.Copy(file, out_file, true);
             }
         }
 
