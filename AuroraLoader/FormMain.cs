@@ -16,8 +16,6 @@ namespace AuroraLoader
 {
     public partial class FormMain : Form
     {
-
-
         private Thread auroraThread = null;
         private AuroraInstallation auroraInstallation;
 
@@ -72,18 +70,13 @@ namespace AuroraLoader
 
         private void UpdateAurora()
         {
-            var result = MessageBox.Show($"Most Aurora updates are not save-game compatible!{Environment.NewLine}We'll back up your database.{Environment.NewLine}Are you sure you want to continue?", "Warning!", MessageBoxButtons.OKCancel);
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-
             try
             {
                 var thread = new Thread(() =>
                 {
                     var aurora_files = Installer.GetLatestAuroraFiles();
-                    auroraInstallation.UpdateAurora(aurora_files);
+                    var clean = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Path.Combine(Program.AuroraLoaderExecutableDirectory, "Clean"));
+                    clean.UpdateAurora(aurora_files);
                 });
                 thread.Start();
 
@@ -134,7 +127,6 @@ namespace AuroraLoader
                 {
                     UpdateAurora();
                 }
-                else { }
             }
 
         }
@@ -351,8 +343,8 @@ namespace AuroraLoader
                 executableModVersion = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem).LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion);
             }
 
-            var process = auroraInstallation.Launch(modVersions, executableModVersion);
-            auroraThread = new Thread(() => RunGame(process))
+            var processes = auroraInstallation.Launch(modVersions, executableModVersion);
+            auroraThread = new Thread(() => RunGame(processes, modVersions))
             {
                 IsBackground = true
             };
@@ -360,8 +352,10 @@ namespace AuroraLoader
             auroraThread.Start();
         }
 
-        private void RunGame(Process process)
+        private void RunGame(List<Process> processes, List<ModVersion> modVersions)
         {
+            var aurora = processes[0];
+
             var songs = new List<Song>();
             var folder = Path.Combine(auroraInstallation.InstallationPath, "Music");
             if (Directory.Exists(folder))
@@ -374,7 +368,7 @@ namespace AuroraLoader
 
             var rng = new Random();
 
-            while (!process.HasExited)
+            while (!aurora.HasExited)
             {
                 if (CheckEnableMusic.Checked && songs.Count > 0)
                 {
@@ -410,9 +404,21 @@ namespace AuroraLoader
                 song.Stop();
             }
 
+            foreach (var process in processes)
+            {
+                if (!process.HasExited)
+                {
+                    process.Kill();
+                }
+            }
+
             Invoke((MethodInvoker)delegate
             {
-                EndGame();
+                auroraInstallation.Cleanup(modVersions);
+                Log.Debug("Game ended, cleaned up instalation");
+
+                ButtonSinglePlayer.Enabled = true;
+                RefreshAuroraInstallData();
             });
 
             lock (this)
@@ -420,14 +426,6 @@ namespace AuroraLoader
                 auroraThread = null;
             }
         }
-
-        private void EndGame()
-        {
-            MessageBox.Show("Game ended. Those filthy xenos never saw you coming.");
-            ButtonSinglePlayer.Enabled = true;
-            RefreshAuroraInstallData();
-        }
-
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)
         {
@@ -494,7 +492,6 @@ namespace AuroraLoader
 
         private void ButtonMangeSaves_Click(object sender, EventArgs e)
         {
-            UpdateListViews();
             if (_saveMangementWindow != null)
             {
                 _saveMangementWindow.Close();
@@ -511,7 +508,6 @@ namespace AuroraLoader
                 var version = _auroraVersionRegistry.AuroraVersions.First(v => v.Checksum == checksum);
                 auroraInstallation = new AuroraInstallation(version, Path.GetDirectoryName(exe));
 
-                RefreshAuroraInstallData();
                 UpdateListViews();
 
                 SelectedSavelabel.Text = "Game: " + name;

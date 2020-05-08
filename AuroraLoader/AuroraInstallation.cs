@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using AuroraLoader.Mods;
+using AuroraLoader.Registry;
 using Semver;
 [assembly: InternalsVisibleTo("AuroraLoaderTest")]
 
@@ -31,17 +32,15 @@ namespace AuroraLoader
             InstallationPath = installationPath;
         }
 
-        public Process Launch(IList<ModVersion> modVersions, ModVersion executableMod = null)
+        public List<Process> Launch(IList<ModVersion> modVersions, ModVersion executableMod = null)
         {
             Log.Debug($"Launching from {InstallationPath}");
             var processes = new List<Process>();
 
-            // Install selected mods (including executable, if provided)
             foreach (var mod in modVersions.Where(v => v.Mod.Type == ModType.DATABASE || v.Mod.Type == ModType.THEME))
             {
                 try
                 {
-                    mod.Uninstall(this);
                     mod.Install(this);
                 }
                 catch (Exception e)
@@ -83,7 +82,22 @@ namespace AuroraLoader
                 processes.Insert(0, Process.Start(processStartInfo));
             }
 
-            return processes[0];
+            return processes;
+        }
+
+        public void Cleanup(IList<ModVersion> modVersions)
+        {
+            foreach (var mod in modVersions.Where(v => v.Mod.Type == ModType.DATABASE || v.Mod.Type == ModType.THEME))
+            {
+                try
+                {
+                    mod.Uninstall(this);
+                }
+                catch (Exception e)
+                {
+                    Log.Error($"Failed to uninstall {mod.Mod.Name}", e);
+                }
+            }
         }
 
         public void UpdateAurora(Dictionary<string, string> aurora_files)
