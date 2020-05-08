@@ -16,8 +16,6 @@ namespace AuroraLoader
 {
     public partial class FormMain : Form
     {
-
-
         private Thread auroraThread = null;
         private AuroraInstallation auroraInstallation;
 
@@ -351,8 +349,8 @@ namespace AuroraLoader
                 executableModVersion = _modRegistry.Mods.Single(mod => mod.Name == (string)ComboSelectExecutableMod.SelectedItem).LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion);
             }
 
-            var process = auroraInstallation.Launch(modVersions, executableModVersion);
-            auroraThread = new Thread(() => RunGame(process))
+            var processes = auroraInstallation.Launch(modVersions, executableModVersion);
+            auroraThread = new Thread(() => RunGame(processes, modVersions))
             {
                 IsBackground = true
             };
@@ -360,8 +358,10 @@ namespace AuroraLoader
             auroraThread.Start();
         }
 
-        private void RunGame(Process process)
+        private void RunGame(List<Process> processes, List<ModVersion> modVersions)
         {
+            var aurora = processes[0];
+
             var songs = new List<Song>();
             var folder = Path.Combine(auroraInstallation.InstallationPath, "Music");
             if (Directory.Exists(folder))
@@ -374,7 +374,7 @@ namespace AuroraLoader
 
             var rng = new Random();
 
-            while (!process.HasExited)
+            while (!aurora.HasExited)
             {
                 if (CheckEnableMusic.Checked && songs.Count > 0)
                 {
@@ -410,9 +410,21 @@ namespace AuroraLoader
                 song.Stop();
             }
 
+            foreach (var process in processes)
+            {
+                if (!process.HasExited)
+                {
+                    process.Kill();
+                }
+            }
+
             Invoke((MethodInvoker)delegate
             {
-                EndGame();
+                auroraInstallation.Cleanup(modVersions);
+                Log.Debug("Game ended, cleaned up instalation");
+
+                ButtonSinglePlayer.Enabled = true;
+                RefreshAuroraInstallData();
             });
 
             lock (this)
@@ -420,14 +432,6 @@ namespace AuroraLoader
                 auroraThread = null;
             }
         }
-
-        private void EndGame()
-        {
-            MessageBox.Show("Game ended. Those filthy xenos never saw you coming.");
-            ButtonSinglePlayer.Enabled = true;
-            RefreshAuroraInstallData();
-        }
-
 
         private void CheckMusic_CheckedChanged(object sender, EventArgs e)
         {
