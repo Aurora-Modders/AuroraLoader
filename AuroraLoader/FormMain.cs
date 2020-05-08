@@ -70,18 +70,13 @@ namespace AuroraLoader
 
         private void UpdateAurora()
         {
-            var result = MessageBox.Show($"Most Aurora updates are not save-game compatible!{Environment.NewLine}We'll back up your database.{Environment.NewLine}Are you sure you want to continue?", "Warning!", MessageBoxButtons.OKCancel);
-            if (result != DialogResult.OK)
-            {
-                return;
-            }
-
             try
             {
                 var thread = new Thread(() =>
                 {
                     var aurora_files = Installer.GetLatestAuroraFiles();
-                    auroraInstallation.UpdateAurora(aurora_files);
+                    var clean = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Path.Combine(Program.AuroraLoaderExecutableDirectory, "Clean"));
+                    clean.UpdateAurora(aurora_files);
                 });
                 thread.Start();
 
@@ -132,7 +127,6 @@ namespace AuroraLoader
                 {
                     UpdateAurora();
                 }
-                else { }
             }
 
         }
@@ -498,7 +492,6 @@ namespace AuroraLoader
 
         private void ButtonMangeSaves_Click(object sender, EventArgs e)
         {
-            UpdateListViews();
             if (_saveMangementWindow != null)
             {
                 _saveMangementWindow.Close();
@@ -515,7 +508,6 @@ namespace AuroraLoader
                 var version = _auroraVersionRegistry.AuroraVersions.First(v => v.Checksum == checksum);
                 auroraInstallation = new AuroraInstallation(version, Path.GetDirectoryName(exe));
 
-                RefreshAuroraInstallData();
                 UpdateListViews();
 
                 SelectedSavelabel.Text = "Game: " + name;
