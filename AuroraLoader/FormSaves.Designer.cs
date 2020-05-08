@@ -33,16 +33,19 @@
             this.ButtonLoadSaves = new System.Windows.Forms.Button();
             this.ButtonResetSaves = new System.Windows.Forms.Button();
             this.ButtonNewGame = new System.Windows.Forms.Button();
+            this.TextNewGame = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // ListViewSaves
             // 
             this.ListViewSaves.HideSelection = false;
             this.ListViewSaves.Location = new System.Drawing.Point(12, 27);
+            this.ListViewSaves.MultiSelect = false;
             this.ListViewSaves.Name = "ListViewSaves";
-            this.ListViewSaves.Size = new System.Drawing.Size(389, 199);
+            this.ListViewSaves.Size = new System.Drawing.Size(571, 199);
             this.ListViewSaves.TabIndex = 0;
             this.ListViewSaves.UseCompatibleStateImageBehavior = false;
+            this.ListViewSaves.View = System.Windows.Forms.View.List;
             this.ListViewSaves.SelectedIndexChanged += new System.EventHandler(this.ListViewSaves_SelectedIndexChanged);
             // 
             // LabelSave
@@ -66,6 +69,7 @@
             // 
             // ButtonResetSaves
             // 
+            this.ButtonResetSaves.Enabled = false;
             this.ButtonResetSaves.Location = new System.Drawing.Point(93, 232);
             this.ButtonResetSaves.Name = "ButtonResetSaves";
             this.ButtonResetSaves.Size = new System.Drawing.Size(75, 23);
@@ -82,12 +86,22 @@
             this.ButtonNewGame.TabIndex = 4;
             this.ButtonNewGame.Text = "New Game";
             this.ButtonNewGame.UseVisualStyleBackColor = true;
+            this.ButtonNewGame.Click += new System.EventHandler(this.ButtonNewGame_Click);
+            // 
+            // TextNewGame
+            // 
+            this.TextNewGame.Location = new System.Drawing.Point(255, 232);
+            this.TextNewGame.Name = "TextNewGame";
+            this.TextNewGame.Size = new System.Drawing.Size(328, 23);
+            this.TextNewGame.TabIndex = 5;
+            this.TextNewGame.Text = "New game name";
             // 
             // FormSaves
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 268);
+            this.ClientSize = new System.Drawing.Size(595, 268);
+            this.Controls.Add(this.TextNewGame);
             this.Controls.Add(this.ButtonNewGame);
             this.Controls.Add(this.ButtonResetSaves);
             this.Controls.Add(this.ButtonLoadSaves);
@@ -95,6 +109,7 @@
             this.Controls.Add(this.ListViewSaves);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FormSaves";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Manage Savegames";
             this.Load += new System.EventHandler(this.FormSaves_Load);
             this.ResumeLayout(false);
@@ -109,5 +124,6 @@
         private System.Windows.Forms.Button ButtonLoadSaves;
         private System.Windows.Forms.Button ButtonResetSaves;
         private System.Windows.Forms.Button ButtonNewGame;
+        private System.Windows.Forms.TextBox TextNewGame;
     }
 }

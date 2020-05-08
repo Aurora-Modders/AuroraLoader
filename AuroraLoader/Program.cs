@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
 using AuroraLoader.Mods;
@@ -28,7 +29,7 @@ namespace AuroraLoader
             Log.Clear();
             Log.Debug("Start logging");
 
-            if (!File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "aurora.exe")))
+            if (!File.Exists(Path.Combine(AuroraLoaderExecutableDirectory, "Clean", "aurora.exe")))
             {
                 Log.Debug("Aurora not installed");
                 var dialog = MessageBox.Show("Aurora not installed. Download and install? This might take a while.", "Install Aurora", MessageBoxButtons.YesNo);
@@ -62,7 +63,7 @@ namespace AuroraLoader
             var thread = new Thread(() =>
             {
                 var aurora_files = Installer.GetLatestAuroraFiles();
-                Installer.DownloadAuroraPieces(AuroraLoaderExecutableDirectory, aurora_files);
+                Installer.DownloadAuroraPieces(Path.Combine(AuroraLoaderExecutableDirectory, "Clean"), aurora_files);
             });
             thread.Start();
 
@@ -78,8 +79,8 @@ namespace AuroraLoader
                 Log.Debug("Copying SQLite interop dlls");
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86"));
                 Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"));
-                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
-                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "Clean", "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
+                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "Clean", "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
             }
             catch (Exception exc)
             {
@@ -141,6 +142,15 @@ namespace AuroraLoader
                     throw;
                 }
             }
+        }
+
+        public static string GetChecksum(byte[] bytes)
+        {
+            using var sha = SHA256.Create();
+            var hash = sha.ComputeHash(bytes);
+            var str = Convert.ToBase64String(hash);
+
+            return str.Replace("/", "").Replace("+", "").Replace("=", "").Substring(0, 6);
         }
     }
 }

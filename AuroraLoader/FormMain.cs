@@ -59,7 +59,7 @@ namespace AuroraLoader
 
             // Only check mirrors for new versions at app startup
             _auroraVersionRegistry.Update(_modRegistry.Mirrors);
-            auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Program.AuroraLoaderExecutableDirectory);
+            auroraInstallation = new AuroraInstallation(_auroraVersionRegistry.CurrentAuroraVersion, Path.Combine(Program.AuroraLoaderExecutableDirectory, "Clean"));
 
             _modRegistry.Update(_auroraVersionRegistry.CurrentAuroraVersion, true);
             RefreshAuroraInstallData();
@@ -80,7 +80,6 @@ namespace AuroraLoader
 
             try
             {
-                auroraInstallation.CreateBackup();
                 var thread = new Thread(() =>
                 {
                     var aurora_files = Installer.GetLatestAuroraFiles();
@@ -223,14 +222,14 @@ namespace AuroraLoader
             ListUtilities.Items.AddRange(_modRegistry.Mods.Where(mod =>
                 (mod.Type == ModType.UTILITY || mod.Type == ModType.ROOTUTILITY)
                 && mod.Name != "AuroraLoader"
-                && mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null)
+                && mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion) != null)
                 .Select(mod => mod.Name).ToArray());
 
             ListDatabaseMods.Items.Clear();
             ListDatabaseMods.Items.AddRange(_modRegistry.Mods.Where(
                 mod => mod.Type == ModType.DATABASE
                 && GetAllowedModStatuses().Contains(mod.Status)
-                && mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null)
+                && mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion) != null)
                 .Select(mod => mod.Name).ToArray());
 
             ComboSelectExecutableMod.Items.Clear();
@@ -239,7 +238,7 @@ namespace AuroraLoader
             foreach (var mod in _modRegistry.Mods.Where(
                 mod => mod.Type == ModType.EXECUTABLE
                 && GetAllowedModStatuses().Contains(mod.Status)
-                && mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null))
+                && mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion) != null))
             {
                 ComboSelectExecutableMod.Items.Add(mod.Name);
             }
@@ -501,7 +500,28 @@ namespace AuroraLoader
                 _saveMangementWindow.Close();
             }
             _saveMangementWindow = new FormSaves();
-            _saveMangementWindow.Show();
+            _saveMangementWindow.ShowDialog();
+
+            var name = _saveMangementWindow.Game;
+            if (name != null)
+            {
+                var exe = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", name, "Aurora.exe");
+                var bytes = File.ReadAllBytes(exe);
+                var checksum = Program.GetChecksum(bytes);
+                var version = _auroraVersionRegistry.AuroraVersions.First(v => v.Checksum == checksum);
+                auroraInstallation = new AuroraInstallation(version, Path.GetDirectoryName(exe));
+
+                RefreshAuroraInstallData();
+                UpdateListViews();
+
+                SelectedSavelabel.Text = "Game: " + name;
+                ButtonSinglePlayer.Enabled = true;
+            }
+            else
+            {
+                SelectedSavelabel.Text = "Game: XXXX";
+                ButtonSinglePlayer.Enabled = false;
+            }
         }
     }
 }

@@ -29,12 +29,6 @@ namespace AuroraLoader
 
             InstalledVersion = version;
             InstallationPath = installationPath;
-
-            if (!Directory.Exists(VersionedDirectory))
-            {
-                // Create backup immediately on launch if one doesn't exist
-                CreateBackup();
-            }
         }
 
         public Process Launch(IList<ModVersion> modVersions, ModVersion executableMod = null)
@@ -61,7 +55,7 @@ namespace AuroraLoader
                 try
                 {
                     modVersion.Install(this);
-                    processes.Add(modVersion.Run());
+                    processes.Add(modVersion.Run(this));
                 }
                 catch (Exception e)
                 {
@@ -74,7 +68,7 @@ namespace AuroraLoader
             {
                 executableMod.Uninstall(this);
                 executableMod.Install(this);
-                var process = executableMod.Run();
+                var process = executableMod.Run(this);
                 processes.Insert(0, process);
             }
             else
@@ -90,14 +84,6 @@ namespace AuroraLoader
             }
 
             return processes[0];
-        }
-
-        public void CreateBackup()
-        {
-            Log.Debug($"Creating backup at {VersionedDirectory}");
-            Directory.CreateDirectory(VersionedDirectory);
-            File.Copy(Path.Combine(InstallationPath, "Aurora.exe"), Path.Combine(VersionedDirectory, "Aurora.exe"), true);
-            File.Copy(Path.Combine(InstallationPath, "AuroraDB.db"), Path.Combine(VersionedDirectory, "AuroraDB.db"), true);
         }
 
         public void UpdateAurora(Dictionary<string, string> aurora_files)

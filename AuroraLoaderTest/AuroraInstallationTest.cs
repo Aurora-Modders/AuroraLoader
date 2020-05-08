@@ -33,8 +33,8 @@ namespace AuroraLoaderTest
                 }
             };
 
-            using (File.Create(Path.Combine(installationPath, "Aurora.exe"))) ;
-            using (File.Create(Path.Combine(installationPath, "AuroraDB.db"))) ;
+            using (File.Create(Path.Combine(installationPath, "Aurora.exe")));
+            using (File.Create(Path.Combine(installationPath, "AuroraDB.db")));
         }
 
         [TearDown]
@@ -51,31 +51,6 @@ namespace AuroraLoaderTest
         {
             var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
             Assert.That(defaultAuroraInstallation.ConnectionString, Is.EqualTo($"Data Source={Path.Combine(installationPath, "AuroraDB.db")};Version=3;New=False;Compress=True;"));
-        }
-
-        public void VersionedDirectory_DefaultInput_EqualsKnownString()
-        {
-            var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            Assert.That(defaultAuroraInstallation.VersionedDirectory, Is.EqualTo(Path.Combine(installationPath, "Aurora", auroraVersionString)));
-        }
-
-        [Test]
-        public void CreateBackup_FolderCreated()
-        {
-            var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            defaultAuroraInstallation.CreateBackup();
-            Assert.That(Directory.Exists(defaultAuroraInstallation.VersionedDirectory));
-            Assert.That(File.Exists(Path.Combine(defaultAuroraInstallation.VersionedDirectory, "Aurora.exe")));
-            Assert.That(File.Exists(Path.Combine(defaultAuroraInstallation.VersionedDirectory, "AuroraDB.db")));
-        }
-
-        [Test]
-        public void VersionedDirectory_Exists_AfterInitializing()
-        {
-            var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            Directory.Delete(defaultAuroraInstallation.VersionedDirectory, true);
-            _ = new AuroraInstallation(auroraVersion, installationPath);
-            Assert.That(Directory.Exists(defaultAuroraInstallation.VersionedDirectory));
         }
 
         [Test]

@@ -11,7 +11,7 @@ using Semver;
 
 namespace AuroraLoader.Mods
 {
-    public class ModVersion : IModVersion
+    public class ModVersion
     {
         [JsonPropertyName("version")]
         [JsonConverter(typeof(SemVersionJsonConverter))]
@@ -98,7 +98,7 @@ namespace AuroraLoader.Mods
             }
             else if (Mod.Type == ModType.ROOTUTILITY || Mod.Type == ModType.EXECUTABLE || Mod.Type == ModType.THEME)
             {
-                MoveToRootFolder();
+                CopyToFolder(installation.InstallationPath);
             }
         }
 
@@ -106,7 +106,7 @@ namespace AuroraLoader.Mods
         {
             if (Mod.Type == ModType.THEME)
             {
-                UninstallThemeMod();
+                UninstallThemeMod(installation);
             }
             else if (Mod.Type == ModType.DATABASE)
             {
@@ -114,7 +114,7 @@ namespace AuroraLoader.Mods
             }
         }
 
-        public Process Run()
+        public Process Run(AuroraInstallation installation)
         {
             if (Mod.Type == ModType.UTILITY)
             {
@@ -122,7 +122,7 @@ namespace AuroraLoader.Mods
             }
             else if (Mod.Type == ModType.ROOTUTILITY || Mod.Type == ModType.EXECUTABLE)
             {
-                return Run(Program.AuroraLoaderExecutableDirectory, Mod.LaunchCommand);
+                return Run(installation.InstallationPath, Mod.LaunchCommand);
             }
             else
             {
@@ -228,7 +228,7 @@ namespace AuroraLoader.Mods
             }
         }
 
-        internal void UninstallThemeMod()
+        internal void UninstallThemeMod(AuroraInstallation installation)
         {
             if (!Downloaded)
             {
@@ -237,7 +237,7 @@ namespace AuroraLoader.Mods
 
             foreach (var fileInMod in Directory.EnumerateFiles(DownloadPath, "*.*", SearchOption.AllDirectories))
             {
-                var out_file = Path.Combine(Program.AuroraLoaderExecutableDirectory, Path.GetRelativePath(DownloadPath, fileInMod));
+                var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(DownloadPath, fileInMod));
                 if (File.Exists(out_file))
                 {
                     File.Delete(out_file);
@@ -247,11 +247,11 @@ namespace AuroraLoader.Mods
             Log.Debug($"Uninstalled theme mod: {Mod.Name}");
         }
 
-        private void MoveToRootFolder()
+        private void CopyToFolder(string folder)
         {
             foreach (var file in Directory.EnumerateFiles(DownloadPath, "*.*", SearchOption.AllDirectories).Where(f => !Path.GetFileName(f).Equals("mod.json")))
             {
-                File.Copy(file, Path.Combine(Program.AuroraLoaderExecutableDirectory, Path.GetFileName(file)), true);
+                File.Copy(file, Path.Combine(folder, Path.GetFileName(file)), true);
             }
         }
 
