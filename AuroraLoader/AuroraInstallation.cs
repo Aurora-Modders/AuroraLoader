@@ -16,7 +16,7 @@ namespace AuroraLoader
     {
         public readonly AuroraVersion InstalledVersion;
         public readonly string InstallationPath;
-        public string ConnectionString => $"Data Source={Path.Combine(InstallationPath, "AuroraDB.db")};Version=3;New=False;Compress=True;";
+        public string ConnectionString => $"Data Source={Path.Combine(InstallationPath, "AuroraDB.db")}";
 
         // e.g. <install dir>/Aurora/1.8.0
         public string VersionedDirectory => Path.Combine(InstallationPath, "Aurora", InstalledVersion.Version.ToString());

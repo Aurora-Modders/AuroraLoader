@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -7,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
+using Microsoft.Data.Sqlite;
 using Semver;
 
 namespace AuroraLoader.Mods
@@ -134,10 +134,10 @@ namespace AuroraLoader.Mods
         {
             const string TABLE = "CREATE TABLE IF NOT EXISTS A_THIS_SAVE_IS_MODDED (ModName Text PRIMARY KEY);";
 
-            using (var connection = new SQLiteConnection(installation.ConnectionString))
+            using (var connection = new SqliteConnection(installation.ConnectionString))
             {
                 connection.Open();
-                var table = new SQLiteCommand(TABLE, connection);
+                var table = new SqliteCommand(TABLE, connection);
                 table.ExecuteNonQuery();
 
                 var files = Directory.EnumerateFiles(DownloadPath, "*.sql").ToList();
@@ -156,14 +156,14 @@ namespace AuroraLoader.Mods
                 foreach (var file in files)
                 {
                     var sql = File.ReadAllText(file);
-                    var command = new SQLiteCommand(sql, connection);
+                    var command = new SqliteCommand(sql, connection);
                     command.ExecuteNonQuery();
 
                     sql = $"INSERT INTO A_THIS_SAVE_IS_MODDED(ModName)" +
                             $"SELECT '{Mod.Name}'" +
                             $"WHERE NOT EXISTS(SELECT 1 FROM A_THIS_SAVE_IS_MODDED WHERE ModName = '{Mod.Name}');";
 
-                    command = new SQLiteCommand(sql, connection);
+                    command = new SqliteCommand(sql, connection);
                     command.ExecuteNonQuery();
 
                     Log.Debug($"Installed db mod: {Mod.Name}");
@@ -181,12 +181,12 @@ namespace AuroraLoader.Mods
                 throw new Exception($"Db mod {Mod.Name} uninstall.sql not found at {DownloadPath}");
             }
 
-            using (var connection = new SQLiteConnection(installation.ConnectionString))
+            using (var connection = new SqliteConnection(installation.ConnectionString))
             {
                 connection.Open();
 
                 var sql = "SELECT * FROM sqlite_master WHERE name ='A_THIS_SAVE_IS_MODDED' and type='table';";
-                var command = new SQLiteCommand(sql, connection);
+                var command = new SqliteCommand(sql, connection);
                 var reader = command.ExecuteReader();
 
                 if (!reader.Read())
@@ -202,7 +202,7 @@ namespace AuroraLoader.Mods
                 }
 
                 sql = $"SELECT * FROM A_THIS_SAVE_IS_MODDED WHERE ModName = '{Mod.Name}'";
-                command = new SQLiteCommand(sql, connection);
+                command = new SqliteCommand(sql, connection);
                 reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -216,7 +216,7 @@ namespace AuroraLoader.Mods
                     {
                         sql = File.ReadAllText(uninstallScript);
                         sql += $"\nDELETE FROM A_THIS_SAVE_IS_MODDED\nWHERE ModName = '{name}';";
-                        command = new SQLiteCommand(sql, connection);
+                        command = new SqliteCommand(sql, connection);
                         command.ExecuteNonQuery();
 
                         Log.Debug($"Uninstalled db mod: {name}");
