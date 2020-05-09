@@ -44,7 +44,6 @@ namespace AuroraLoader
                 }
             }
 
-            CopySqlInteropAssemblies();
             PrepareModDirectory();
 
             // TODO would love to set up dependency injection
@@ -69,23 +68,6 @@ namespace AuroraLoader
 
             var progress = new FormProgress(thread) { Text = "Installing Aurora" };
             progress.ShowDialog();
-        }
-
-        internal static void CopySqlInteropAssemblies()
-        {
-            // Grab ourselves a copy of the existing SQLite interops. If it's good enough for Aurora, it's good enough for us...
-            try
-            {
-                Log.Debug("Copying SQLite interop dlls");
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86"));
-                Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64"));
-                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "Clean", "x86", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x86", "SQLite.Interop.dll"), true);
-                File.Copy(Path.Combine(AuroraLoaderExecutableDirectory, "Clean", "x64", "SQLite.Interop.dll"), Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "x64", "SQLite.Interop.dll"), true);
-            }
-            catch (Exception exc)
-            {
-                Log.Error("Failure while copying SQLite interop DLLs", exc);
-            }
         }
 
         internal static void PrepareModDirectory()
