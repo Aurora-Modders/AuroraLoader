@@ -50,7 +50,7 @@ namespace AuroraLoaderTest
         public void ConnectionString_DefaultInput_EqualsKnownString()
         {
             var defaultAuroraInstallation = new AuroraInstallation(auroraVersion, installationPath);
-            Assert.That(defaultAuroraInstallation.ConnectionString, Is.EqualTo($"Data Source={Path.Combine(installationPath, "AuroraDB.db")};Version=3;New=False;Compress=True;"));
+            Assert.That(defaultAuroraInstallation.ConnectionString, Is.EqualTo($"Data Source={Path.Combine(installationPath, "AuroraDB.db")}"));
         }
 
         [Test]
