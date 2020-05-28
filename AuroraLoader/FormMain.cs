@@ -64,8 +64,6 @@ namespace AuroraLoader
             Cursor = Cursors.Default;
         }
 
-
-
         private void UpdateAurora()
         {
             var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} available. Update?", "Update Aurora", MessageBoxButtons.YesNo);
@@ -87,6 +85,7 @@ namespace AuroraLoader
                 var progress = new FormProgress(thread) { Text = "Updating Aurora" };
                 progress.ShowDialog();
                 RefreshAuroraInstallData();
+                MessageBox.Show($"Update complete - you can now start new games using Aurora {_auroraVersionRegistry.CurrentAuroraVersion}!");
             }
             catch (Exception ecp)
             {
@@ -149,7 +148,13 @@ namespace AuroraLoader
             }
             else
             {
-                if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
+                // If a game is loaded, show the version of Aurora that game targets
+                if (auroraInstallation.InstalledVersion != null && auroraInstallation?.InstalledVersion != _auroraVersionRegistry.CurrentAuroraVersion)
+                {
+                    LabelAuroraVersion.Text = $"Aurora v{auroraInstallation.InstalledVersion.Version} ({auroraInstallation.InstalledVersion.Checksum})";
+                }
+                // Show only the checksum if we can't identify the version of Aurora
+                else if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
                 {
                     LabelAuroraVersion.Text = $"Aurora.exe ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
                 }
@@ -285,9 +290,6 @@ namespace AuroraLoader
         {
             UpdateListViews();
         }
-
-
-
 
         private void ButtonSinglePlayer_Click(object sender, EventArgs e)
         {
@@ -465,11 +467,6 @@ namespace AuroraLoader
             Program.OpenBrowser(@"https://discordapp.com/channels/314031775892373504/701885084646506628");
         }
 
-        private void LabelAuroraLoaderVersion_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ButtonManageMods_Click(object sender, EventArgs e)
         {
             UpdateListViews();
@@ -481,13 +478,13 @@ namespace AuroraLoader
             _modManagementWindow.Show();
         }
 
-        private void ButtonMangeSaves_Click(object sender, EventArgs e)
+        private void ButtonManageSaves_Click(object sender, EventArgs e)
         {
             if (_saveManagementWindow != null)
             {
                 _saveManagementWindow.Close();
             }
-            _saveManagementWindow = new FormSaves();
+            _saveManagementWindow = new FormSaves(auroraInstallation);
             _saveManagementWindow.ShowDialog();
 
             var name = _saveManagementWindow.Game;
@@ -500,6 +497,7 @@ namespace AuroraLoader
                 auroraInstallation = new AuroraInstallation(version, Path.GetDirectoryName(exe));
 
                 UpdateListViews();
+                RefreshAuroraInstallData();
 
                 SelectedSavelabel.Text = "Game: " + name;
                 ButtonSinglePlayer.Enabled = true;

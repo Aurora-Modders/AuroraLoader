@@ -13,10 +13,12 @@ namespace AuroraLoader
     public partial class FormSaves : Form
     {
         internal string Game { get; private set; } = null;
+        private AuroraInstallation _auroraInstallation;
 
-        public FormSaves()
+        public FormSaves(AuroraInstallation auroraInstallation)
         {
             InitializeComponent();
+            _auroraInstallation = auroraInstallation;
         }
 
         private void FormSaves_Load(object sender, EventArgs e)
@@ -64,7 +66,7 @@ namespace AuroraLoader
 
         private void ButtonNewGame_Click(object sender, EventArgs e)
         {
-            var dialog = MessageBox.Show($"Create a new game in a fresh database called '{TextNewGame.Text}'?", "Create New Game", MessageBoxButtons.YesNo);
+            var dialog = MessageBox.Show($"Create a new game in a fresh Aurora {_auroraInstallation.InstalledVersion} database called '{TextNewGame.Text}'?", "Create New Game", MessageBoxButtons.YesNo);
             if (dialog != DialogResult.Yes)
             {
                 return;

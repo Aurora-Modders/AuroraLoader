@@ -127,7 +127,6 @@ namespace AuroraLoader
             this.LabelAuroraLoaderVersion.TabIndex = 7;
             this.LabelAuroraLoaderVersion.Text = "Loader v#.##.#";
             this.LabelAuroraLoaderVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.LabelAuroraLoaderVersion.Click += new System.EventHandler(this.LabelAuroraLoaderVersion_Click);
             // 
             // CheckEnableMods
             // 
@@ -288,7 +287,7 @@ namespace AuroraLoader
             this.ButtonMangeSaves.TabIndex = 41;
             this.ButtonMangeSaves.Text = "Select Game";
             this.ButtonMangeSaves.UseVisualStyleBackColor = true;
-            this.ButtonMangeSaves.Click += new System.EventHandler(this.ButtonMangeSaves_Click);
+            this.ButtonMangeSaves.Click += new System.EventHandler(this.ButtonManageSaves_Click);
             // 
             // PictureBoxUpdateAurora
             // 
