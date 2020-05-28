@@ -85,7 +85,7 @@ namespace AuroraLoader
                 var progress = new FormProgress(thread) { Text = "Updating Aurora" };
                 progress.ShowDialog();
                 RefreshAuroraInstallData();
-                MessageBox.Show($"Update complete - you can now start new games using Aurora {_auroraVersionRegistry.CurrentAuroraVersion}!");
+                MessageBox.Show($"Update complete - you can now start new games using Aurora {_auroraVersionRegistry.CurrentAuroraVersion.Version}!");
             }
             catch (Exception ecp)
             {
@@ -148,13 +148,8 @@ namespace AuroraLoader
             }
             else
             {
-                // If a game is loaded, show the version of Aurora that game targets
-                if (auroraInstallation.InstalledVersion != null && auroraInstallation?.InstalledVersion != _auroraVersionRegistry.CurrentAuroraVersion)
-                {
-                    LabelAuroraVersion.Text = $"Aurora v{auroraInstallation.InstalledVersion.Version} ({auroraInstallation.InstalledVersion.Checksum})";
-                }
                 // Show only the checksum if we can't identify the version of Aurora
-                else if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
+                if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
                 {
                     LabelAuroraVersion.Text = $"Aurora.exe ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
                 }
@@ -500,7 +495,7 @@ namespace AuroraLoader
                 UpdateListViews();
                 RefreshAuroraInstallData();
 
-                SelectedSavelabel.Text = "Game: " + name;
+                SelectedSavelabel.Text = $"Game: {name} (Aurora v{auroraInstallation.InstalledVersion.Version})";
                 ButtonSinglePlayer.Enabled = true;
             }
             else
