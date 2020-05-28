@@ -45,8 +45,6 @@ namespace AuroraLoader
                 Log.Debug("Failed to load icon");
             }
 
-            // Show message on top
-            _ = MessageBox.Show(new Form { TopMost = true }, "AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
 
             CheckEnableMods.Enabled = true;
