@@ -70,7 +70,7 @@ namespace AuroraLoader
 
         private void UpdateAurora()
         {
-            var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} available, Update?", "Update Aurora", MessageBoxButtons.YesNo);
+            var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} available. Update?", "Update Aurora", MessageBoxButtons.YesNo);
             if (dialog != DialogResult.Yes)
             {
                 return;
@@ -99,7 +99,7 @@ namespace AuroraLoader
 
         private void UpdateLoader()
         {
-            var dialog = MessageBox.Show($"AuroraLoader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} available, Update?", "Update Loader", MessageBoxButtons.YesNo);
+            var dialog = MessageBox.Show($"AuroraLoader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} available. Update?", "Update Loader", MessageBoxButtons.YesNo);
             if (dialog != DialogResult.Yes)
             {
                 return;
