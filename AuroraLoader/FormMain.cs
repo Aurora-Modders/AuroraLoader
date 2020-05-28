@@ -122,7 +122,7 @@ namespace AuroraLoader
             PictureBoxUpdateAurora.Visible = update;
             if (update == true)
             {
-                var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} avalilbe, Update?", "Update Aurora", MessageBoxButtons.YesNo);
+                var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} available, Update?", "Update Aurora", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
                     UpdateAurora();
@@ -137,7 +137,7 @@ namespace AuroraLoader
             PictureBoxUpdateLoader.Visible = update;
             if (update == true)
             {
-                var dialog = MessageBox.Show($"Loader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} avalilbe, Update?", "Update Loader", MessageBoxButtons.YesNo);
+                var dialog = MessageBox.Show($"Loader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} available, Update?", "Update Loader", MessageBoxButtons.YesNo);
                 if (dialog == DialogResult.Yes)
                 {
                     UpdateLoader();
@@ -482,7 +482,7 @@ namespace AuroraLoader
         private void ButtonManageMods_Click(object sender, EventArgs e)
         {
             UpdateListViews();
-            if(_modMangementWindow != null) 
+            if(_modMangementWindow != null)
             {
                 _modMangementWindow.Close();
             }
