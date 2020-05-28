@@ -70,6 +70,12 @@ namespace AuroraLoader
 
         private void UpdateAurora()
         {
+            var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} available, Update?", "Update Aurora", MessageBoxButtons.YesNo);
+            if (dialog != DialogResult.Yes)
+            {
+                return;
+            }
+
             try
             {
                 var thread = new Thread(() =>
@@ -93,7 +99,12 @@ namespace AuroraLoader
 
         private void UpdateLoader()
         {
-            MessageBox.Show($"Installing AuroraLoader {_modRegistry.AuroraLoaderMod.LatestVersion.Version}");
+            var dialog = MessageBox.Show($"AuroraLoader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} available, Update?", "Update Loader", MessageBoxButtons.YesNo);
+            if (dialog != DialogResult.Yes)
+            {
+                return;
+            }
+
             try
             {
                 var thread = new Thread(() => _modRegistry.UpdateAuroraLoader());
@@ -116,34 +127,16 @@ namespace AuroraLoader
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e) { UpdateAurora(); }
 
-        private void AuroraUpdateUI(bool update)
+        private void SetCanUpdateAurora(bool update)
         {
             PictureBoxUpdateAurora.Enabled = update;
             PictureBoxUpdateAurora.Visible = update;
-            if (update == true)
-            {
-                var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} available, Update?", "Update Aurora", MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes)
-                {
-                    UpdateAurora();
-                }
-            }
-
         }
 
-        private void LoaderUpdateUI(bool update)
+        private void SetCanUpdateLoader(bool update)
         {
             PictureBoxUpdateLoader.Enabled = update;
             PictureBoxUpdateLoader.Visible = update;
-            if (update == true)
-            {
-                var dialog = MessageBox.Show($"Loader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} available, Update?", "Update Loader", MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes)
-                {
-                    UpdateLoader();
-                }
-                else { }
-            }
         }
 
         /// <summary>
@@ -174,11 +167,11 @@ namespace AuroraLoader
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max()?.Version) < 0)
                 {
-                    AuroraUpdateUI(true);
+                    SetCanUpdateAurora(true);
                 }
                 else
                 {
-                    AuroraUpdateUI(false);
+                    SetCanUpdateAurora(false);
                 }
             }
 
@@ -187,13 +180,13 @@ namespace AuroraLoader
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
                 if (auroraLoaderMod.CanBeUpdated(auroraInstallation.InstalledVersion))
                 {
-                    LoaderUpdateUI(true);
+                    SetCanUpdateLoader(true);
 
-                    AuroraUpdateUI(false);
+                    SetCanUpdateAurora(false);
                 }
                 else
                 {
-                    LoaderUpdateUI(false);
+                    SetCanUpdateLoader(false);
                 }
             }
             catch (Exception exc)
@@ -329,8 +322,8 @@ namespace AuroraLoader
             }
 
             ButtonSinglePlayer.Enabled = false;
-            LoaderUpdateUI(false);
-            AuroraUpdateUI(false);
+            SetCanUpdateLoader(false);
+            SetCanUpdateAurora(false);
 
             var modVersions = _modRegistry.Mods.Where(mod =>
             (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
