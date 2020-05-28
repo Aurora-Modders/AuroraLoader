@@ -28,7 +28,6 @@
     "configuration_file": "mod.json",
 
     // Optional
-    // Not yet implemented
     "changelog_file": "",
 
     // Optional
@@ -36,52 +35,37 @@
     "url": "https://github.com/Aurora-Modders/AuroraLoader",
 
   "downloads": [
+    // Order is not important
     {
       // Required
       // SemVer. Version of the mod.
-      "version": "0.25.2",
+      "version": "0.25.3",
 
       // Optional (but highly encouraged)
       // Target Aurora version. May be imprecise, i.e. '1.8' targets '1.8.*'
       "target_aurora_version": "1",
 
       // Required
+      "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.25.3/AuroraLoader.zip"
+    },
+    {
+      "version": "0.25.2",
+      "target_aurora_version": "1",
       "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.25.2/AuroraLoader.zip"
     },
     {
-      // Required
-      // SemVer. Version of the mod.
       "version": "0.25.1",
-
-      // Optional (but highly encouraged)
-      // Target Aurora version. May be imprecise, i.e. '1.8' targets '1.8.*'
       "target_aurora_version": "1",
-
-      // Required
       "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.25.1/AuroraLoader.zip"
     },
     {
-      // Required
-      // SemVer. Version of the mod.
       "version": "0.25.0",
-
-      // Optional (but highly encouraged)
-      // Target Aurora version. May be imprecise, i.e. '1.8' targets '1.8.*'
       "target_aurora_version": "1",
-
-      // Required
       "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.25.0/AuroraLoader.zip"
     },
     {
-      // Required
-      // SemVer. Version of the mod.
       "version": "0.24.0",
-
-      // Optional (but highly encouraged)
-      // Target Aurora version. May be imprecise, i.e. '1.8' targets '1.8.*'
       "target_aurora_version": "1",
-
-      // Required
       "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.24.0/AuroraLoader.zip"
     },
     {
@@ -89,7 +73,6 @@
       "target_aurora_version": "1",
       "download_url": "https://github.com/Aurora-Modders/AuroraLoader/releases/download/0.23.5/AuroraLoader-0.23.5.zip"
     },
-    // Order is not important
     {
       "version": "0.23.4",
       "target_aurora_version": "1",

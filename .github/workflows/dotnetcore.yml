@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.4
     - name: Install dependencies
       run: dotnet restore
     - name: Build
@@ -32,7 +32,7 @@ jobs:
     - name: "Zip"
       env:
         SHA: ${{ steps.vars.outputs.sha_short }}
-      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader-$SHA.zip
+      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader-$($env:SHA).zip
     - name: Upload AuroraLoader artifact
       uses: actions/upload-artifact@v2
       with:
