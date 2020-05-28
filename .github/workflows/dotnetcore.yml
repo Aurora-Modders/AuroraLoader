@@ -26,9 +26,9 @@ jobs:
     - name: Publish
       run: dotnet publish AuroraLoader -c Release -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-restore --self-contained false --nologo -f netcoreapp3.1 -r win-x86
     - name: "Zip"
-      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader.zip
+      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader-${GITHUB_SHA::8}.zip
     - name: Upload AuroraLoader artifact
       uses: actions/upload-artifact@v1
       with:
-        name: AuroraLoader.zip
-        path: ./AuroraLoader.zip
+        name: AuroraLoader-${GITHUB_SHA::8}.zip
+        path: ./AuroraLoader-${GITHUB_SHA::8}.zip
