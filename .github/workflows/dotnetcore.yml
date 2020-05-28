@@ -24,7 +24,7 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: "Zip"
-      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader-$(git rev-parse --short=5 ${{ github.sha }}).zip
+      run: Compress-Archive -Path "./Release/*", "./README.md" -DestinationPath "AuroraLoader-$(git rev-parse --short=5 ${{ github.sha }}).zip"
     - name: Upload AuroraLoader artifact
       uses: actions/upload-artifact@v2
       with:
