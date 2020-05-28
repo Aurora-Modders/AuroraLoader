@@ -43,6 +43,12 @@ namespace AuroraLoader
         private void ButtonNewGame_Click(object sender, EventArgs e)
         {
             var name = TextNewGame.Text;
+            var dialog = MessageBox.Show($"Create a new game in a fresh database called '{name}'?", "Create New Game", MessageBoxButtons.YesNo);
+            if (dialog != DialogResult.Yes)
+            {
+                return;
+            }
+
             for (int i = 0; i < ListViewSaves.Items.Count; i++)
             {
                 var item = ListViewSaves.Items[i];
@@ -55,7 +61,7 @@ namespace AuroraLoader
 
             Cursor = Cursors.WaitCursor;
 
-            
+
             var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", name);
             Installer.CopyClean(folder);
             UpdateList();
