@@ -158,6 +158,7 @@ namespace AuroraLoader
                 {
                     LabelAuroraVersion.Text = $"Aurora.exe ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
                 }
+                // Default to showing the most recent installed Aurora version
                 else
                 {
                     LabelAuroraVersion.Text = $"Aurora v{_auroraVersionRegistry.CurrentAuroraVersion.Version} ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
