@@ -66,7 +66,7 @@ namespace AuroraLoader
 
         private void ButtonNewGame_Click(object sender, EventArgs e)
         {
-            var dialog = MessageBox.Show($"Create a new game in a fresh Aurora {_auroraInstallation.InstalledVersion} database called '{TextNewGame.Text}'?", "Create New Game", MessageBoxButtons.YesNo);
+            var dialog = MessageBox.Show($"Create a new game in a fresh Aurora {_auroraInstallation.InstalledVersion.Version} database called '{TextNewGame.Text}'?", "Create New Game", MessageBoxButtons.YesNo);
             if (dialog != DialogResult.Yes)
             {
                 return;
