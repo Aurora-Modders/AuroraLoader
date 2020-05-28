@@ -2,6 +2,23 @@
 
 ![](https://i.ibb.co/JxJhfyY/0-24-0.png)
 
+# Features
+
+- Discover and install mods from the [Aurora Registry](https://github.com/Aurora-Modders/AuroraRegistry)
+- Safely update Aurora
+- Manage multiple games that use different versions of Aurora
+- Access community resources and file bug reports
+- Play background music!
+
+## Details
+
+- Supports running Aurora with custom exe launchers, database modifications, and any launching number of utilities*
+- Automatically detects and installs updates to both Aurora and itself
+- Displays mods by type, version, Aurora version compatibility, and whether or not they've been approved by the developer
+- Supports externally-hosted mirrors other than the [Aurora Registry](https://github.com/Aurora-Modders/AuroraRegistry)
+- Validates mod structure and compatibility with your version of Aurora
+- Allows easy access to mod config and changelog files
+
 # Installation Requirements
 
 You must have the .NET Core 3.1 x86 runtime installed - download it [here](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer). This is a system-level prerequisite similar to a Java JRE or the dependency that Aurora itself has on the .NET Framework 4.0. We decided to publish a small executable that relies on this library rather than releasing a large (>60mb) executable without that dependency for convenience, but the latter can easily be created (let us know!).
@@ -10,18 +27,7 @@ Otherwise, there are no requirements to use or develop AuroraLoader - not even A
 
 # Usage
 
-Download the latest release and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora the latest version will be downloaded automatically. Mods in the online registry can be viewed, installed, upgraded, and configured on the 'Manage Mods' tab.
-
-# Features
-
-- Automatically installs, backs up, and updates both Aurora and itself
-- Browse mods on the Aurora Registry by type, version, and whether or not they've been approved by the developer
-- Validates mod structure and compatibility with your version of Aurora
-- Supports running Aurora with custom exe launchers, database modifications, and any launching number of utilities*
-- Supports configuring many mods
-- Adds optional in-game music
-
-*Using mods carries with it the risk of unintended behavior - we ask that you not submit bug reports to the developer when using mods outside of the 'Approved' category and make this clear in the UI.
+Download the latest release and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora the latest version of Aurora will be downloaded automatically. Mods in the online registry can be viewed, installed, upgraded, and configured on the 'Manage Mods' tab.
 
 # Support
 
