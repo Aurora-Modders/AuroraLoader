@@ -23,16 +23,10 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Publish
-      run: dotnet publish AuroraLoader -c Release -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-restore --self-contained false --nologo -f netcoreapp3.1 -r win-x86
-    - name: get shortsha
-      id: vars
-      run: |
-        echo ::set-output name=sha_short::$(git rev-parse --short=5 ${{ github.sha }})
     - name: "Zip"
       env:
         SHA: ${{ steps.vars.outputs.sha_short }}
-      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader-$($env:SHA).zip
+      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader-$($(git rev-parse --short=5 ${{ github.sha }})).zip
     - name: Upload AuroraLoader artifact
       uses: actions/upload-artifact@v2
       with:
