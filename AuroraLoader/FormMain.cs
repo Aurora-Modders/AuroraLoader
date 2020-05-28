@@ -23,8 +23,8 @@ namespace AuroraLoader
         private readonly AuroraVersionRegistry _auroraVersionRegistry;
         private readonly ModRegistry _modRegistry;
 
-        private FormModDownload _modMangementWindow;
-        private FormSaves _saveMangementWindow;
+        private FormModDownload _modManagementWindow;
+        private FormSaves _saveManagementWindow;
 
         public FormMain(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry, ModRegistry modRegistry)
         {
@@ -473,24 +473,24 @@ namespace AuroraLoader
         private void ButtonManageMods_Click(object sender, EventArgs e)
         {
             UpdateListViews();
-            if(_modMangementWindow != null)
+            if (_modManagementWindow != null)
             {
-                _modMangementWindow.Close();
+                _modManagementWindow.Close();
             }
-            _modMangementWindow = new FormModDownload(_configuration);
-            _modMangementWindow.Show();
+            _modManagementWindow = new FormModDownload(_configuration);
+            _modManagementWindow.Show();
         }
 
         private void ButtonMangeSaves_Click(object sender, EventArgs e)
         {
-            if (_saveMangementWindow != null)
+            if (_saveManagementWindow != null)
             {
-                _saveMangementWindow.Close();
+                _saveManagementWindow.Close();
             }
-            _saveMangementWindow = new FormSaves();
-            _saveMangementWindow.ShowDialog();
+            _saveManagementWindow = new FormSaves();
+            _saveManagementWindow.ShowDialog();
 
-            var name = _saveMangementWindow.Game;
+            var name = _saveManagementWindow.Game;
             if (name != null)
             {
                 var exe = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", name, "Aurora.exe");
