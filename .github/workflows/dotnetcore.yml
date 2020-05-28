@@ -30,5 +30,4 @@ jobs:
     - name: Upload AuroraLoader artifact
       uses: actions/upload-artifact@v1
       with:
-        name: AuroraLoader-${GITHUB_SHA::8}.zip
         path: ./AuroraLoader-${GITHUB_SHA::8}.zip
