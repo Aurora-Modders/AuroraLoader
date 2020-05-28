@@ -28,7 +28,7 @@
     "configuration_file": "mod.json",
 
     // Optional
-    "changelog_file": "",
+    "changelog_file": "CHANGELOG.md",
 
     // Optional
     // Point to your mod's repository, forum, AAR, etc

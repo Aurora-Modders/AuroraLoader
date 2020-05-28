@@ -36,6 +36,7 @@ namespace AuroraLoader
             this.TrackMusicVolume = new System.Windows.Forms.TrackBar();
             this.CheckEnableMusic = new System.Windows.Forms.CheckBox();
             this.ButtonReadme = new System.Windows.Forms.Button();
+            this.ButtonChangelog = new System.Windows.Forms.Button();
             this.LabelAuroraLoaderVersion = new System.Windows.Forms.Label();
             this.CheckEnableMods = new System.Windows.Forms.CheckBox();
             this.CheckEnablePoweruserMods = new System.Windows.Forms.CheckBox();
@@ -108,7 +109,7 @@ namespace AuroraLoader
             // 
             // ButtonReadme
             // 
-            this.ButtonReadme.Location = new System.Drawing.Point(495, 12);
+            this.ButtonReadme.Location = new System.Drawing.Point(395, 12);
             this.ButtonReadme.Margin = new System.Windows.Forms.Padding(4);
             this.ButtonReadme.Name = "ButtonReadme";
             this.ButtonReadme.Size = new System.Drawing.Size(84, 24);
@@ -117,6 +118,17 @@ namespace AuroraLoader
             this.ButtonReadme.UseVisualStyleBackColor = true;
             this.ButtonReadme.Click += new System.EventHandler(this.ButtonReadme_Click);
             // 
+            // ButtonChangelog
+            //
+            this.ButtonChangelog.Location = new System.Drawing.Point(495, 12);
+            this.ButtonChangelog.Margin = new System.Windows.Forms.Padding(4);
+            this.ButtonChangelog.Name = "ButtonChangelog";
+            this.ButtonChangelog.Size = new System.Drawing.Size(84, 24);
+            this.ButtonChangelog.TabIndex = 14;
+            this.ButtonChangelog.Text = "Changelog";
+            this.ButtonChangelog.UseVisualStyleBackColor = true;
+            this.ButtonChangelog.Click += new System.EventHandler(this.ButtonChangelog_Click);
+            //
             // LabelAuroraLoaderVersion
             // 
             this.LabelAuroraLoaderVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -336,6 +348,7 @@ namespace AuroraLoader
             this.Controls.Add(this.CheckEnableMods);
             this.Controls.Add(this.LabelAuroraLoaderVersion);
             this.Controls.Add(this.ButtonReadme);
+            this.Controls.Add(this.ButtonChangelog);
             this.Controls.Add(this.CheckEnableMusic);
             this.Controls.Add(this.TrackMusicVolume);
             this.Controls.Add(this.LabelAuroraVersion);
@@ -361,6 +374,7 @@ namespace AuroraLoader
         private System.Windows.Forms.TrackBar TrackMusicVolume;
         private System.Windows.Forms.CheckBox CheckEnableMusic;
         private System.Windows.Forms.Button ButtonReadme;
+        private System.Windows.Forms.Button ButtonChangelog;
         private System.Windows.Forms.Label LabelAuroraLoaderVersion;
         private System.Windows.Forms.CheckBox CheckEnableMods;
         private System.Windows.Forms.CheckBox CheckEnablePoweruserMods;

@@ -19,15 +19,15 @@
 - Validates mod structure and compatibility with your version of Aurora
 - Allows easy access to mod config and changelog files
 
-# Installation Requirements
+# Requirements
 
-You must have the .NET Core 3.1 x86 runtime installed - download it [here](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer). This is a system-level prerequisite similar to a Java JRE or the dependency that Aurora itself has on the .NET Framework 4.0. We decided to publish a small executable that relies on this library rather than releasing a large (>60mb) executable without that dependency for convenience, but the latter can easily be created (let us know!).
-
-Otherwise, there are no requirements to use or develop AuroraLoader - not even Aurora itself. In fact, extracting the AuroraLoader download zip into an empty folder is one of the most reliable ways to use it. Just download the latest release from the [Releases page](https://github.com/Aurora-Modders/AuroraLoader/releases) and run the executable. If you extract AuroraLoader to a directory that contains an existing Aurora installation, it will automatically be detected and backed up.
+You must have the [.NET Core 3.1 x86 runtime](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.4-windows-x86-installer) installed.
 
 # Usage
 
-Download the latest release and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora the latest version of Aurora will be downloaded automatically. Mods in the online registry can be viewed, installed, upgraded, and configured on the 'Manage Mods' tab.
+Download the [latest release](https://github.com/Aurora-Modders/AuroraLoader/releases) and extract AuroraLoader.zip to a new folder; it will automatically download a fresh copy of Aurora the first time it is run.
+
+If you'd like AuroraLoader to manage any of your existing games of Aurora, move the folders containing them (the entire Aurora installation!) into `<AuroraLoader install dir>/Games`. You'll be able to select those games from the interface, and AuroraLoader will make sure to load your games using the version of Aurora they're designed for even after you've updated to newer versions.
 
 # Support
 

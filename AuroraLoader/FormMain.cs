@@ -435,7 +435,38 @@ namespace AuroraLoader
 
         private void ButtonReadme_Click(object sender, EventArgs e)
         {
-            Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
+            if (File.Exists(Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md")))
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    WorkingDirectory = Program.AuroraLoaderExecutableDirectory,
+                    FileName = "README.md",
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                });
+            }
+            else
+            {
+                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
+            }
+        }
+
+        private void ButtonChangelog_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Path.Combine(Program.AuroraLoaderExecutableDirectory, "CHANGELOG.md")))
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    WorkingDirectory = Program.AuroraLoaderExecutableDirectory,
+                    FileName = "CHANGELOG.md",
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                });
+            }
+            else
+            {
+                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/CHANGELOG.md");
+            }
         }
 
         private void LinkModSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
