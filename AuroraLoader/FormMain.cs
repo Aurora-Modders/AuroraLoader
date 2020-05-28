@@ -66,7 +66,7 @@ namespace AuroraLoader
 
         private void UpdateAurora()
         {
-            var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} available. Update?", "Update Aurora", MessageBoxButtons.YesNo);
+            var dialog = MessageBox.Show($"Aurora v{_auroraVersionRegistry.AuroraVersions.Max()?.Version} is available. Download now? This is safe and won't affect your existing games.", "Download new Aurora version", MessageBoxButtons.YesNo);
             if (dialog != DialogResult.Yes)
             {
                 return;
