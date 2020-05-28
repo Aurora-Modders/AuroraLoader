@@ -55,11 +55,11 @@ namespace AuroraLoader
                     {
                         ButtonGetMod.Enabled = true;
                     }
-                    if (selected.ConfigurationFile != null)
+                    if (selected.Installed && selected.ConfigurationFile != null)
                     {
                         ButtonConfigMod.Enabled = true;
                     }
-                    if (selected.ChangelogFile != null)
+                    if (selected.Installed && selected.ChangelogFile != null)
                     {
                         ButtonChangelog.Enabled = true;
                     }
