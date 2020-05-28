@@ -40,32 +40,42 @@ namespace AuroraLoader
 
         }
 
-        private void ButtonNewGame_Click(object sender, EventArgs e)
+        private void TextNewGame_Changed(object sender, EventArgs e)
         {
-            var name = TextNewGame.Text;
-            var dialog = MessageBox.Show($"Create a new game in a fresh database called '{name}'?", "Create New Game", MessageBoxButtons.YesNo);
-            if (dialog != DialogResult.Yes)
+            if (!string.IsNullOrEmpty(TextNewGame.Text))
             {
-                return;
+                ButtonNewGame.Enabled = true;
+            }
+            else
+            {
+                ButtonNewGame.Enabled = false;
             }
 
             for (int i = 0; i < ListViewSaves.Items.Count; i++)
             {
                 var item = ListViewSaves.Items[i];
-                if (item.Text == name)
+                if (item.Text == TextNewGame.Text)
                 {
-                    MessageBox.Show("A game with that name already exists.");
-                    return;
+                    ButtonNewGame.Enabled = false;
+                    break;
                 }
+            }
+        }
+
+        private void ButtonNewGame_Click(object sender, EventArgs e)
+        {
+            var dialog = MessageBox.Show($"Create a new game in a fresh database called '{TextNewGame.Text}'?", "Create New Game", MessageBoxButtons.YesNo);
+            if (dialog != DialogResult.Yes)
+            {
+                return;
             }
 
             Cursor = Cursors.WaitCursor;
 
-
-            var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", name);
+            var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", TextNewGame.Text);
             Installer.CopyClean(folder);
             UpdateList();
-
+            TextNewGame.Text = null;
             Cursor = Cursors.Default;
         }
 

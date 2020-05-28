@@ -86,6 +86,7 @@
             this.ButtonNewGame.TabIndex = 4;
             this.ButtonNewGame.Text = "New Game";
             this.ButtonNewGame.UseVisualStyleBackColor = true;
+            this.ButtonNewGame.Enabled = false;
             this.ButtonNewGame.Click += new System.EventHandler(this.ButtonNewGame_Click);
             // 
             // TextNewGame
@@ -94,7 +95,8 @@
             this.TextNewGame.Name = "TextNewGame";
             this.TextNewGame.Size = new System.Drawing.Size(328, 23);
             this.TextNewGame.TabIndex = 5;
-            this.TextNewGame.Text = "New game name";
+            this.TextNewGame.PlaceholderText = "New game name";
+            this.TextNewGame.TextChanged += new System.EventHandler(this.TextNewGame_Changed);
             // 
             // FormSaves
             // 
