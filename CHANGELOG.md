@@ -4,19 +4,21 @@
 
 ### Changes
 - `mod.json` and AuroraLoader now support changelog files (there's a Changelog button next to the Config File button in the mod manager now)
+- AuroraLoader now has a changelog as well, and there's a button for accessing it
 - Aurora version targeted by the currently loaded game is shown in parenthesis (and only mods compatible with the loaded game's version are shown - but that was already the case)
 - Additional message after updating Aurora telling user to create a new game in order to use the new version
 - Got rid of modal dialogs prompting user to update Aurora/the loader on launch (there are a lot of cases where people want to hang back at 1.9.5 and I don't want to annoy them - IMHO the snazzy new update icons are obvious enough). This also means that the dialogs aren't re-shown every time `RefreshInstallData()` is called.
 - Behavior when creating new save games is a bit more intuitive (the 'new game' button is disabled when it can't be clicked, and the user is presented with a confirmation dialog before creating a fresh DB that tells them the version of Aurora that the new game will target - in later Loader versions, we may allow them to select this manually)
-- (Devs) GitHub Action now builds the loader on the LTS version of .NET Core 3.1 and appends the built commit to the artifact's name
+- Selected executable mod is no longer reset after checking or unchecking 'Enable Poweruser Mods'
+- Lists of available mods are now updated after making changes in the Mod Manager window
+- (Devs) GitHub Action now builds the loader on the LTS version of .NET Core 3.1, produces a self-contained executable, and appends the built commit to the artifact's name
 
 ### Bugfixes
 - Buttons for opening a mod's config & changelog files are disabled if the mod hasn't actually been installed yet
 - Fixed typo in Aurora & loader update confirmation dialogs
 - Confirmation dialogs are now shown when the user decides to manually update either Aurora or the loader (previously behavior was inconsistent)
 - Removed an unused click handler & fixed some typos in the codebase
-
-[AuroraLoader-096cd.zip](https://github.com/Aurora-Modders/AuroraLoader/files/4693370/AuroraLoader-096cd.zip)
+- Mod manager is now modal
 
 ## [0.25.2]
 
