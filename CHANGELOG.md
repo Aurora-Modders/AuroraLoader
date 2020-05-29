@@ -6,7 +6,6 @@
 - `mod.json` and AuroraLoader now support changelog files (there's a Changelog button next to the Config File button in the mod manager now)
 - Aurora version targeted by the currently loaded game is shown in parenthesis (and only mods compatible with the loaded game's version are shown - but that was already the case)
 - Additional message after updating Aurora telling user to create a new game in order to use the new version
-- Got rid of the modal dialog on launch, AuroraLoader opens snappily enough
 - Got rid of modal dialogs prompting user to update Aurora/the loader on launch (there are a lot of cases where people want to hang back at 1.9.5 and I don't want to annoy them - IMHO the snazzy new update icons are obvious enough). This also means that the dialogs aren't re-shown every time `RefreshInstallData()` is called.
 - Behavior when creating new save games is a bit more intuitive (the 'new game' button is disabled when it can't be clicked, and the user is presented with a confirmation dialog before creating a fresh DB that tells them the version of Aurora that the new game will target - in later Loader versions, we may allow them to select this manually)
 - (Devs) GitHub Action now builds the loader on the LTS version of .NET Core 3.1 and appends the built commit to the artifact's name
