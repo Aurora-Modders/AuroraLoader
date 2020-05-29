@@ -8,20 +8,17 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.300
-    - name: Test
-      run: dotnet test
-    - name: Build and Publish
+        dotnet-version: 3.1.x
+    - run: dotnet test
+    - name: Build and publish
       run: dotnet publish AuroraLoader --no-restore --self-contained true --nologo -f netcoreapp3.1 -r win-x86 -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true
-    - name: Upload AuroraLoader artifact
+    - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
         path: ./Release/*
