@@ -44,7 +44,7 @@ namespace AuroraLoader
 
         private void TextNewGame_Changed(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(TextNewGame.Text))
+            if (!string.IsNullOrWhiteSpace(TextNewGame.Text))
             {
                 ButtonNewGame.Enabled = true;
             }

@@ -217,6 +217,7 @@ namespace AuroraLoader
                 && mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion) != null)
                 .Select(mod => mod.Name).ToArray());
 
+            string currentlySelectedExecutableModName = (string)ComboSelectExecutableMod.SelectedItem;
             ComboSelectExecutableMod.Items.Clear();
             ComboSelectExecutableMod.Items.Add("Base game");
 
@@ -227,7 +228,11 @@ namespace AuroraLoader
             {
                 ComboSelectExecutableMod.Items.Add(mod.Name);
             }
-            if (ComboSelectExecutableMod.Items.Count > 0)
+            if (!string.IsNullOrWhiteSpace(currentlySelectedExecutableModName) && ComboSelectExecutableMod.Items.Contains(currentlySelectedExecutableModName))
+            {
+                ComboSelectExecutableMod.SelectedIndex = ComboSelectExecutableMod.Items.IndexOf(currentlySelectedExecutableModName);
+            }
+            else if (ComboSelectExecutableMod.Items.Count > 0)
             {
                 ComboSelectExecutableMod.SelectedIndex = 0;
             }
