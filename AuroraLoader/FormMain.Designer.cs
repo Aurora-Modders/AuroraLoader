@@ -289,7 +289,7 @@ namespace AuroraLoader
             this.SelectedSavelabel.Name = "SelectedSavelabel";
             this.SelectedSavelabel.Size = new System.Drawing.Size(72, 15);
             this.SelectedSavelabel.TabIndex = 42;
-            this.SelectedSavelabel.Text = "Game: XXXX";
+            this.SelectedSavelabel.Text = "No game selected";
             // 
             // ButtonMangeSaves
             // 

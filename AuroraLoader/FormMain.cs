@@ -502,13 +502,13 @@ namespace AuroraLoader
 
         private void ButtonManageMods_Click(object sender, EventArgs e)
         {
-            UpdateListViews();
             if (_modManagementWindow != null)
             {
                 _modManagementWindow.Close();
             }
             _modManagementWindow = new FormModDownload(_configuration);
-            _modManagementWindow.Show();
+            _modManagementWindow.ShowDialog();
+            UpdateListViews();
         }
 
         private void ButtonManageSaves_Click(object sender, EventArgs e)
@@ -537,7 +537,7 @@ namespace AuroraLoader
             }
             else
             {
-                SelectedSavelabel.Text = "Game: XXXX";
+                SelectedSavelabel.Text = "No game selected";
                 ButtonSinglePlayer.Enabled = false;
             }
         }
