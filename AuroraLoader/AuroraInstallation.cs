@@ -1,13 +1,11 @@
-﻿using System;
+﻿using AuroraLoader.Mods;
+using Semver;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
-using AuroraLoader.Mods;
-using AuroraLoader.Registry;
-using Semver;
 [assembly: InternalsVisibleTo("AuroraLoaderTest")]
 
 namespace AuroraLoader

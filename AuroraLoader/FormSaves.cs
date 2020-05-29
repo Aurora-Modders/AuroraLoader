@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace AuroraLoader
 {
     public partial class FormSaves : Form
     {
-        internal string Game { get; private set; } = null;
-        private AuroraInstallation _auroraInstallation;
+        internal string SelectedGameName { get; private set; } = null;
+        private readonly AuroraInstallation _auroraInstallation;
 
         public FormSaves(AuroraInstallation auroraInstallation)
         {
@@ -26,20 +23,10 @@ namespace AuroraLoader
             UpdateList();
         }
 
-        private void ListViewSaves_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void ButtonLoadSaves_Click(object sender, EventArgs e)
         {
-            Game = ListViewSaves.SelectedItems[0].Text;
+            SelectedGameName = ListViewSaves.SelectedItems[0].Text;
             Close();
-        }
-
-        private void ButtonResetSaves_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void TextNewGame_Changed(object sender, EventArgs e)

@@ -1,4 +1,8 @@
-﻿using System;
+﻿using AuroraLoader.Mods;
+using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
+using Semver;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -7,10 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using AuroraLoader.Mods;
-using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
-using Semver;
 
 namespace AuroraLoader
 {
@@ -520,7 +520,7 @@ namespace AuroraLoader
             _saveManagementWindow = new FormSaves(auroraInstallation);
             _saveManagementWindow.ShowDialog();
 
-            var name = _saveManagementWindow.Game;
+            var name = _saveManagementWindow.SelectedGameName;
             if (name != null)
             {
                 var exe = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", name, "Aurora.exe");

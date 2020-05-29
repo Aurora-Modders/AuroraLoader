@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AuroraLoader.Mods;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
-using AuroraLoader.Mods;
-using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader.Registry
 {
@@ -26,7 +26,7 @@ namespace AuroraLoader.Registry
         public ModRegistry(IConfiguration configuration)
         {
             _configuration = configuration;
-            Mirrors = ModConfigurationReader.GetMirrorsFromIni(_configuration);
+            Mirrors = ModConfigurationReader.GetMirrorsFromIni();
         }
 
         public void Update(AuroraVersion version, bool updateRemote = false, bool updateCache = false)

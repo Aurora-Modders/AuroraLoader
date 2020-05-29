@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-
+﻿using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Diagnostics;
 using System.Windows.Forms;
-
-using Microsoft.Extensions.Configuration;
-
-using AuroraLoader.Mods;
-using AuroraLoader.Registry;
 
 namespace AuroraLoader
 {

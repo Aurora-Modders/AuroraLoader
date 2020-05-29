@@ -1,13 +1,11 @@
-﻿using System;
+﻿using AuroraLoader.Mods;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
-using AuroraLoader.Mods;
-using Semver;
 
 namespace AuroraLoader
 {

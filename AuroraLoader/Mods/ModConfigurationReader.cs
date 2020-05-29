@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Semver;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
-using Semver;
 
 namespace AuroraLoader.Mods
 {
@@ -15,7 +14,7 @@ namespace AuroraLoader.Mods
             return settings.Select(kvp => new AuroraVersion(SemVersion.Parse(kvp.Key), kvp.Value));
         }
 
-        public static IList<string> GetMirrorsFromIni(IConfiguration configuration)
+        public static IList<string> GetMirrorsFromIni()
         {
             var mirrors = new List<string>();
             try

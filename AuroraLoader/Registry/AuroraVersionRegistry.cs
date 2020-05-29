@@ -1,12 +1,11 @@
-﻿using System;
+﻿using AuroraLoader.Mods;
+using Microsoft.Extensions.Configuration;
+using Semver;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
-using AuroraLoader.Mods;
-using Microsoft.Extensions.Configuration;
-using Semver;
 
 namespace AuroraLoader.Registry
 {
@@ -33,12 +32,12 @@ namespace AuroraLoader.Registry
             {
                 throw new Exception($"Aurora version cache not found at {_versionCachePath} and no mirrors provided");
             }
-            
+
             if (File.Exists(_versionCachePath))
             {
                 UpdateKnownVersionsFromCache();
             }
-            
+
             if (mirrors != null)
             {
                 UpdateKnownAuroraVersionsFromMirrors(mirrors);

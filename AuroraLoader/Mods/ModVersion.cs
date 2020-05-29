@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using Semver;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -6,8 +8,6 @@ using System.Linq;
 using System.Net;
 using System.Text.Json.Serialization;
 using System.Windows.Forms;
-using Microsoft.Data.Sqlite;
-using Semver;
 
 namespace AuroraLoader.Mods
 {
