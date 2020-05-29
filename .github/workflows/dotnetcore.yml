@@ -17,17 +17,17 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.300
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
-    - name: Publish
-      run: dotnet publish AuroraLoader -c Release -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-restore --self-contained true --nologo -f netcoreapp3.1 -r win-x86
-    - name: "Zip"
-      run: Compress-Archive -Path "./Release/*", "./README.md", "./CHANGELOG.md" -DestinationPath "AuroraLoader-$(git rev-parse --short=5 ${{ github.sha }}).zip"
+      run: dotnet test
+    - name: Build and Publish
+      run: dotnet publish AuroraLoader --no-restore --self-contained true --nologo -f netcoreapp3.1 -r win-x86 -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true
     - name: Upload AuroraLoader artifact
       uses: actions/upload-artifact@v2
       with:
-        path: ./AuroraLoader*.zip
+        path: ./Release/*
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ./README.md
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ./CHANGELOG.md
