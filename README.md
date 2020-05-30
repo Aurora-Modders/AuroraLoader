@@ -2,26 +2,32 @@
 
 ![](https://i.ibb.co/JxJhfyY/0-24-0.png)
 
-# Installation Requirements
+# Features
 
-You must have the .NET Core 3.1 x86 runtime installed - download it [here](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer). This is a system-level prerequisite similar to a Java JRE or the dependency that Aurora itself has on the .NET Framework 4.0. We decided to publish a small executable that relies on this library rather than releasing a large (>60mb) executable without that dependency for convenience, but the latter can easily be created (let us know!).
+- Discover and install mods from the [Aurora Registry](https://github.com/Aurora-Modders/AuroraRegistry)
+- Safely update Aurora
+- Manage multiple games that use different versions of Aurora
+- Access community resources and file bug reports
+- Play background music!
 
-Otherwise, there are no requirements to use or develop AuroraLoader - not even Aurora itself. In fact, extracting the AuroraLoader download zip into an empty folder is one of the most reliable ways to use it. Just download the latest release from the [Releases page](https://github.com/Aurora-Modders/AuroraLoader/releases) and run the executable. If you extract AuroraLoader to a directory that contains an existing Aurora installation, it will automatically be detected and backed up.
+## Details
+
+- Supports running Aurora with custom exe launchers, database modifications, and any launching number of utilities*
+- Automatically detects and installs updates to both Aurora and itself
+- Displays mods by type, version, Aurora version compatibility, and whether or not they've been approved by the developer
+- Supports externally-hosted mirrors other than the [Aurora Registry](https://github.com/Aurora-Modders/AuroraRegistry)
+- Validates mod structure and compatibility with your version of Aurora
+- Allows easy access to mod config and changelog files
+
+# Requirements
+
+You must have the [.NET Core 3.1 x86 runtime](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.4-windows-x86-installer) installed.
 
 # Usage
 
-Download the latest release and extract to a directory. Run the .exe. If the directory doesn't contain a copy of Aurora the latest version will be downloaded automatically. Mods in the online registry can be viewed, installed, upgraded, and configured on the 'Manage Mods' tab.
+Download the [latest release](https://github.com/Aurora-Modders/AuroraLoader/releases) and extract AuroraLoader.zip to a new folder; it will automatically download a fresh copy of Aurora the first time it is run.
 
-# Features
-
-- Automatically installs, backs up, and updates both Aurora and itself
-- Browse mods on the Aurora Registry by type, version, and whether or not they've been approved by the developer
-- Validates mod structure and compatibility with your version of Aurora
-- Supports running Aurora with custom exe launchers, database modifications, and any launching number of utilities*
-- Supports configuring many mods
-- Adds optional in-game music
-
-*Using mods carries with it the risk of unintended behavior - we ask that you not submit bug reports to the developer when using mods outside of the 'Approved' category and make this clear in the UI.
+If you'd like AuroraLoader to manage any of your existing games of Aurora, move the folders containing them (the entire Aurora installation!) into `<AuroraLoader install dir>/Games`. You'll be able to select those games from the interface, and AuroraLoader will make sure to load your games using the version of Aurora they're designed for even after you've updated to newer versions.
 
 # Support
 

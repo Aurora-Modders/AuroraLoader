@@ -8,27 +8,23 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+    - uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-    - name: Install dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
-    - name: Publish
-      run: dotnet publish AuroraLoader -c Release -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true --no-restore --self-contained false --nologo -f netcoreapp3.1 -r win-x86
-    - name: "Zip"
-      run: Compress-Archive -Path ./Release/*, ./README.md -DestinationPath AuroraLoader.zip
-    - name: Upload AuroraLoader artifact
-      uses: actions/upload-artifact@v1
+        dotnet-version: 3.1.300
+    - run: dotnet test
+    - name: Build and publish
+      run: dotnet publish AuroraLoader --no-restore --self-contained true -f netcoreapp3.1 -r win-x86 -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
       with:
-        name: AuroraLoader.zip
-        path: ./AuroraLoader.zip
+        path: ./Release/*
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ./README.md
+    - uses: actions/upload-artifact@v2
+      with:
+        path: ./CHANGELOG.md

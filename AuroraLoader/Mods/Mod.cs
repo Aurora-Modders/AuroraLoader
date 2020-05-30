@@ -29,6 +29,9 @@ namespace AuroraLoader.Mods
         [JsonPropertyName("configuration_file")]
         public string ConfigurationFile { get; set; }
 
+        [JsonPropertyName("changelog_file")]
+        public string ChangelogFile { get; set; }
+
         [JsonPropertyName("downloads")]
         public List<ModVersion> Downloads { get; set; } = new List<ModVersion>();
 

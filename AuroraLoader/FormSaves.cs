@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace AuroraLoader
 {
     public partial class FormSaves : Form
     {
-        internal string Game { get; private set; } = null;
+        internal string SelectedGameName { get; private set; } = null;
+        private readonly AuroraInstallation _auroraInstallation;
 
-        public FormSaves()
+        public FormSaves(AuroraInstallation auroraInstallation)
         {
             InitializeComponent();
+            _auroraInstallation = auroraInstallation;
         }
 
         private void FormSaves_Load(object sender, EventArgs e)
@@ -24,42 +23,48 @@ namespace AuroraLoader
             UpdateList();
         }
 
-        private void ListViewSaves_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void ButtonLoadSaves_Click(object sender, EventArgs e)
         {
-            Game = ListViewSaves.SelectedItems[0].Text;
+            SelectedGameName = ListViewSaves.SelectedItems[0].Text;
             Close();
         }
 
-        private void ButtonResetSaves_Click(object sender, EventArgs e)
+        private void TextNewGame_Changed(object sender, EventArgs e)
         {
+            if (!string.IsNullOrWhiteSpace(TextNewGame.Text))
+            {
+                ButtonNewGame.Enabled = true;
+            }
+            else
+            {
+                ButtonNewGame.Enabled = false;
+            }
 
+            for (int i = 0; i < ListViewSaves.Items.Count; i++)
+            {
+                var item = ListViewSaves.Items[i];
+                if (item.Text == TextNewGame.Text)
+                {
+                    ButtonNewGame.Enabled = false;
+                    break;
+                }
+            }
         }
 
         private void ButtonNewGame_Click(object sender, EventArgs e)
         {
-            var name = TextNewGame.Text;
-            for (int i = 0; i < ListViewSaves.Items.Count; i++)
+            var dialog = MessageBox.Show($"Create a new game in a fresh Aurora {_auroraInstallation.InstalledVersion.Version} database called '{TextNewGame.Text}'?", "Create New Game", MessageBoxButtons.YesNo);
+            if (dialog != DialogResult.Yes)
             {
-                var item = ListViewSaves.Items[i];
-                if (item.Text == name)
-                {
-                    MessageBox.Show("A game with that name already exists.");
-                    return;
-                }
+                return;
             }
 
             Cursor = Cursors.WaitCursor;
 
-            
-            var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", name);
+            var folder = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", TextNewGame.Text);
             Installer.CopyClean(folder);
             UpdateList();
-
+            TextNewGame.Text = null;
             Cursor = Cursors.Default;
         }
 

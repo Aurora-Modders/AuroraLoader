@@ -1,6 +1,6 @@
-﻿using System;
-using AuroraLoader.Mods;
+﻿using AuroraLoader.Mods;
 using Semver;
+using System;
 
 namespace AuroraLoader
 {

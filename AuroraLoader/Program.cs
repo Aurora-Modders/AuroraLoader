@@ -1,3 +1,6 @@
+using AuroraLoader.Mods;
+using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -5,9 +8,6 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Windows.Forms;
-using AuroraLoader.Mods;
-using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
 
 namespace AuroraLoader
 {

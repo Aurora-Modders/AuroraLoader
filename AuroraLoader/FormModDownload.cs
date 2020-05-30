@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-
+﻿using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Diagnostics;
 using System.Windows.Forms;
-
-using Microsoft.Extensions.Configuration;
-
-using AuroraLoader.Mods;
-using AuroraLoader.Registry;
 
 namespace AuroraLoader
 {
@@ -28,7 +19,7 @@ namespace AuroraLoader
             InitializeComponent();
             _configuration = configuration;
             _auroraVersionRegistry = new AuroraVersionRegistry(configuration);
-            _modRegistry = new ModRegistry(configuration); 
+            _modRegistry = new ModRegistry(configuration);
         }
 
         private void FormModDownload_Load(object sender, EventArgs e)
@@ -42,6 +33,7 @@ namespace AuroraLoader
         {
             ButtonGetMod.Enabled = false;
             ButtonConfigMod.Enabled = false;
+            ButtonChangelog.Enabled = false;
 
             if (ListViewRegistryMods.SelectedItems.Count > 0)
             {
@@ -54,9 +46,13 @@ namespace AuroraLoader
                     {
                         ButtonGetMod.Enabled = true;
                     }
-                    if (selected.ConfigurationFile != null)
+                    if (selected.Installed && selected.ConfigurationFile != null)
                     {
                         ButtonConfigMod.Enabled = true;
+                    }
+                    if (selected.Installed && selected.ChangelogFile != null)
+                    {
+                        ButtonChangelog.Enabled = true;
                     }
                 }
                 else if (selected.LatestVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion) != null)
@@ -132,6 +128,7 @@ namespace AuroraLoader
 
             ButtonGetMod.Enabled = false;
             ButtonConfigMod.Enabled = false;
+            ButtonChangelog.Enabled = false;
         }
 
         private void ButtonConfigMod_Click(object sender, EventArgs e)
@@ -181,6 +178,51 @@ namespace AuroraLoader
             }
         }
 
+        private void ButtonChangelog_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var mod = _modRegistry.Mods.Single(mod => mod.Name == ListViewRegistryMods.SelectedItems[0].Text);
+                if (mod.ModFolder == null || mod.ChangelogFile == null)
+                {
+                    throw new Exception("Invalid mod selected for changelog");
+                }
 
+                var pieces = mod.ChangelogFile.Split(' ');
+                var exe = pieces[0];
+                var args = "";
+                if (pieces.Length > 1)
+                {
+                    for (int i = 1; i < pieces.Length; i++)
+                    {
+                        args += " " + pieces[i];
+                    }
+
+                    args = args.Substring(1);
+                }
+
+                var modVersion = mod.LatestInstalledVersionCompatibleWith(_auroraVersionRegistry.CurrentAuroraVersion);
+                Log.Debug($"{mod.Name} changelog file: run {exe} in {modVersion.DownloadPath} with args {args}");
+                if (!File.Exists(Path.Combine(modVersion.DownloadPath, exe)))
+                {
+                    MessageBox.Show($"Couldn't launch {Path.Combine(modVersion.DownloadPath, exe)} - make sure {Path.Combine(mod.ModFolder, "mod.json")} is correctly configured.");
+                    return;
+                }
+                var info = new ProcessStartInfo()
+                {
+                    WorkingDirectory = modVersion.DownloadPath,
+                    FileName = exe,
+                    Arguments = args,
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                };
+
+                Process.Start(info);
+            }
+            catch (Exception exc)
+            {
+                Log.Error($"Failed while trying to open {ListViewRegistryMods.SelectedItems[0]} changelog file", exc);
+            }
+        }
     }
 }

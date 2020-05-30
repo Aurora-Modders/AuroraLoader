@@ -1,4 +1,8 @@
-﻿using System;
+﻿using AuroraLoader.Mods;
+using AuroraLoader.Registry;
+using Microsoft.Extensions.Configuration;
+using Semver;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -7,10 +11,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using AuroraLoader.Mods;
-using AuroraLoader.Registry;
-using Microsoft.Extensions.Configuration;
-using Semver;
 
 namespace AuroraLoader
 {
@@ -23,8 +23,8 @@ namespace AuroraLoader
         private readonly AuroraVersionRegistry _auroraVersionRegistry;
         private readonly ModRegistry _modRegistry;
 
-        private FormModDownload _modMangementWindow;
-        private FormSaves _saveMangementWindow;
+        private FormModDownload _modManagementWindow;
+        private FormSaves _saveManagementWindow;
 
         public FormMain(IConfiguration configuration, AuroraVersionRegistry auroraVersionRegistry, ModRegistry modRegistry)
         {
@@ -45,7 +45,6 @@ namespace AuroraLoader
                 Log.Debug("Failed to load icon");
             }
 
-            // Show message on top
             _ = MessageBox.Show(new Form { TopMost = true }, "AuroraLoader will check for updates and then launch, this might take a moment.");
             Cursor = Cursors.WaitCursor;
 
@@ -66,10 +65,14 @@ namespace AuroraLoader
             Cursor = Cursors.Default;
         }
 
-
-
         private void UpdateAurora()
         {
+            var dialog = MessageBox.Show($"Aurora v{_auroraVersionRegistry.AuroraVersions.Max()?.Version} is available. Download now? This is safe and won't affect your existing games.", "Download new Aurora version", MessageBoxButtons.YesNo);
+            if (dialog != DialogResult.Yes)
+            {
+                return;
+            }
+
             try
             {
                 var thread = new Thread(() =>
@@ -83,6 +86,7 @@ namespace AuroraLoader
                 var progress = new FormProgress(thread) { Text = "Updating Aurora" };
                 progress.ShowDialog();
                 RefreshAuroraInstallData();
+                MessageBox.Show($"Update complete - you can now start new games using Aurora {_auroraVersionRegistry.CurrentAuroraVersion.Version}!");
             }
             catch (Exception ecp)
             {
@@ -93,7 +97,12 @@ namespace AuroraLoader
 
         private void UpdateLoader()
         {
-            MessageBox.Show($"Installing AuroraLoader {_modRegistry.AuroraLoaderMod.LatestVersion.Version}");
+            var dialog = MessageBox.Show($"AuroraLoader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} available. Update?", "Update Loader", MessageBoxButtons.YesNo);
+            if (dialog != DialogResult.Yes)
+            {
+                return;
+            }
+
             try
             {
                 var thread = new Thread(() => _modRegistry.UpdateAuroraLoader());
@@ -116,34 +125,16 @@ namespace AuroraLoader
 
         private void ButtonUpdateAurora_Click(object sender, EventArgs e) { UpdateAurora(); }
 
-        private void AuroraUpdateUI(bool update)
+        private void SetCanUpdateAurora(bool update)
         {
             PictureBoxUpdateAurora.Enabled = update;
             PictureBoxUpdateAurora.Visible = update;
-            if (update == true)
-            {
-                var dialog = MessageBox.Show($"Aurora version {_auroraVersionRegistry.AuroraVersions.Max()?.Version} avalilbe, Update?", "Update Aurora", MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes)
-                {
-                    UpdateAurora();
-                }
-            }
-
         }
 
-        private void LoaderUpdateUI(bool update)
+        private void SetCanUpdateLoader(bool update)
         {
             PictureBoxUpdateLoader.Enabled = update;
             PictureBoxUpdateLoader.Visible = update;
-            if (update == true)
-            {
-                var dialog = MessageBox.Show($"Loader version {_modRegistry.AuroraLoaderMod.LatestVersion.Version} avalilbe, Update?", "Update Loader", MessageBoxButtons.YesNo);
-                if (dialog == DialogResult.Yes)
-                {
-                    UpdateLoader();
-                }
-                else { }
-            }
         }
 
         /// <summary>
@@ -158,10 +149,12 @@ namespace AuroraLoader
             }
             else
             {
+                // Show only the checksum if we can't identify the version of Aurora
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version == SemVersion.Parse("1.0.0"))
                 {
                     LabelAuroraVersion.Text = $"Aurora.exe ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
                 }
+                // Default to showing the most recent installed Aurora version
                 else
                 {
                     LabelAuroraVersion.Text = $"Aurora v{_auroraVersionRegistry.CurrentAuroraVersion.Version} ({_auroraVersionRegistry.CurrentAuroraVersion.Checksum})";
@@ -174,11 +167,11 @@ namespace AuroraLoader
 
                 if (_auroraVersionRegistry.CurrentAuroraVersion.Version.CompareTo(_auroraVersionRegistry.AuroraVersions.Max()?.Version) < 0)
                 {
-                    AuroraUpdateUI(true);
+                    SetCanUpdateAurora(true);
                 }
                 else
                 {
-                    AuroraUpdateUI(false);
+                    SetCanUpdateAurora(false);
                 }
             }
 
@@ -187,13 +180,13 @@ namespace AuroraLoader
                 var auroraLoaderMod = _modRegistry.Mods.Single(mod => mod.Name == "AuroraLoader");
                 if (auroraLoaderMod.CanBeUpdated(auroraInstallation.InstalledVersion))
                 {
-                    LoaderUpdateUI(true);
+                    SetCanUpdateLoader(true);
 
-                    AuroraUpdateUI(false);
+                    SetCanUpdateAurora(false);
                 }
                 else
                 {
-                    LoaderUpdateUI(false);
+                    SetCanUpdateLoader(false);
                 }
             }
             catch (Exception exc)
@@ -224,6 +217,7 @@ namespace AuroraLoader
                 && mod.LatestInstalledVersionCompatibleWith(auroraInstallation.InstalledVersion) != null)
                 .Select(mod => mod.Name).ToArray());
 
+            string currentlySelectedExecutableModName = (string)ComboSelectExecutableMod.SelectedItem;
             ComboSelectExecutableMod.Items.Clear();
             ComboSelectExecutableMod.Items.Add("Base game");
 
@@ -234,7 +228,11 @@ namespace AuroraLoader
             {
                 ComboSelectExecutableMod.Items.Add(mod.Name);
             }
-            if (ComboSelectExecutableMod.Items.Count > 0)
+            if (!string.IsNullOrWhiteSpace(currentlySelectedExecutableModName) && ComboSelectExecutableMod.Items.Contains(currentlySelectedExecutableModName))
+            {
+                ComboSelectExecutableMod.SelectedIndex = ComboSelectExecutableMod.Items.IndexOf(currentlySelectedExecutableModName);
+            }
+            else if (ComboSelectExecutableMod.Items.Count > 0)
             {
                 ComboSelectExecutableMod.SelectedIndex = 0;
             }
@@ -295,9 +293,6 @@ namespace AuroraLoader
             UpdateListViews();
         }
 
-
-
-
         private void ButtonSinglePlayer_Click(object sender, EventArgs e)
         {
             StartGame();
@@ -329,8 +324,8 @@ namespace AuroraLoader
             }
 
             ButtonSinglePlayer.Enabled = false;
-            LoaderUpdateUI(false);
-            AuroraUpdateUI(false);
+            SetCanUpdateLoader(false);
+            SetCanUpdateAurora(false);
 
             var modVersions = _modRegistry.Mods.Where(mod =>
             (ListDatabaseMods.CheckedItems != null && ListDatabaseMods.CheckedItems.Contains(mod.Name))
@@ -446,7 +441,38 @@ namespace AuroraLoader
 
         private void ButtonReadme_Click(object sender, EventArgs e)
         {
-            Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
+            if (File.Exists(Path.Combine(Program.AuroraLoaderExecutableDirectory, "README.md")))
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    WorkingDirectory = Program.AuroraLoaderExecutableDirectory,
+                    FileName = "README.md",
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                });
+            }
+            else
+            {
+                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/README.md");
+            }
+        }
+
+        private void ButtonChangelog_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(Path.Combine(Program.AuroraLoaderExecutableDirectory, "CHANGELOG.md")))
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    WorkingDirectory = Program.AuroraLoaderExecutableDirectory,
+                    FileName = "CHANGELOG.md",
+                    UseShellExecute = true,
+                    CreateNoWindow = true
+                });
+            }
+            else
+            {
+                Program.OpenBrowser("https://github.com/Aurora-Modders/AuroraLoader/blob/master/CHANGELOG.md");
+            }
         }
 
         private void LinkModSubreddit_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -474,32 +500,27 @@ namespace AuroraLoader
             Program.OpenBrowser(@"https://discordapp.com/channels/314031775892373504/701885084646506628");
         }
 
-        private void LabelAuroraLoaderVersion_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ButtonManageMods_Click(object sender, EventArgs e)
         {
-            UpdateListViews();
-            if(_modMangementWindow != null) 
+            if (_modManagementWindow != null)
             {
-                _modMangementWindow.Close();
+                _modManagementWindow.Close();
             }
-            _modMangementWindow = new FormModDownload(_configuration);
-            _modMangementWindow.Show();
+            _modManagementWindow = new FormModDownload(_configuration);
+            _modManagementWindow.ShowDialog();
+            UpdateListViews();
         }
 
-        private void ButtonMangeSaves_Click(object sender, EventArgs e)
+        private void ButtonManageSaves_Click(object sender, EventArgs e)
         {
-            if (_saveMangementWindow != null)
+            if (_saveManagementWindow != null)
             {
-                _saveMangementWindow.Close();
+                _saveManagementWindow.Close();
             }
-            _saveMangementWindow = new FormSaves();
-            _saveMangementWindow.ShowDialog();
+            _saveManagementWindow = new FormSaves(auroraInstallation);
+            _saveManagementWindow.ShowDialog();
 
-            var name = _saveMangementWindow.Game;
+            var name = _saveManagementWindow.SelectedGameName;
             if (name != null)
             {
                 var exe = Path.Combine(Program.AuroraLoaderExecutableDirectory, "Games", name, "Aurora.exe");
@@ -509,13 +530,14 @@ namespace AuroraLoader
                 auroraInstallation = new AuroraInstallation(version, Path.GetDirectoryName(exe));
 
                 UpdateListViews();
+                RefreshAuroraInstallData();
 
-                SelectedSavelabel.Text = "Game: " + name;
+                SelectedSavelabel.Text = $"Game: {name} (Aurora v{auroraInstallation.InstalledVersion.Version})";
                 ButtonSinglePlayer.Enabled = true;
             }
             else
             {
-                SelectedSavelabel.Text = "Game: XXXX";
+                SelectedSavelabel.Text = "No game selected";
                 ButtonSinglePlayer.Enabled = false;
             }
         }
