@@ -16,7 +16,7 @@ jobs:
       with:
         dotnet-version: 3.1.300
       env:
-        DOTNET_NOLOGO: true
+        DOTNET_NOLOGO: 1
     - run: dotnet test
     - name: Build and publish
       run: dotnet publish AuroraLoader --no-restore --self-contained true -f netcoreapp3.1 -r win-x86 -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true
