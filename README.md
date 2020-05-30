@@ -1,6 +1,6 @@
 ![.NET Core](https://github.com/Aurora-Modders/AuroraLoader/workflows/.NET%20Core/badge.svg?branch=master)
 
-![](https://i.ibb.co/JxJhfyY/0-24-0.png)
+![](https://i.ibb.co/vq2T3ZL/gc.png)
 
 # Features
 
