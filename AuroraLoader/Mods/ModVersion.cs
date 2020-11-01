@@ -31,7 +31,7 @@ namespace AuroraLoader.Mods
         public bool Downloaded => Directory.Exists(DownloadPath);
 
         [JsonIgnore]
-        public string ContentPath => {
+        public string ContentPath {
             get {
                 // if the DownloadPath contains only a single directory, use that directory instead
                 var dirs = Directory.EnumerateDirectories(DownloadPath).ToList();
