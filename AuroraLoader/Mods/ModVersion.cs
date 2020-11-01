@@ -41,7 +41,7 @@ namespace AuroraLoader.Mods
             } else {
                 return DownloadPath;
             }
-        }
+        };
 
         [JsonIgnore]
         public Mod Mod { get; set; }
