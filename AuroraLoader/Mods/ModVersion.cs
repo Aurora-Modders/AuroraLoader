@@ -36,7 +36,7 @@ namespace AuroraLoader.Mods
                 // if the DownloadPath contains only a single directory, use that directory instead
                 var dirs = Directory.EnumerateDirectories(DownloadPath).ToList();
                 if (dirs.Count == 1) {
-                    return files[0];
+                    return dirs[0];
                 } else {
                     return DownloadPath;
                 }
