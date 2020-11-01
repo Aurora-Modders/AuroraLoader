@@ -32,16 +32,16 @@ namespace AuroraLoader.Mods
 
         [JsonIgnore]
         public string ContentPath => {
-            var files = Directory.EnumerateFiles(DownloadPath).ToList();
-            if (files.Count == 1) {
-                FileAttributes attr = File.GetAttributes(files[0]);
-                if (attr.HasFlag(FileAttributes.Directory)) {
+            get {
+                // if the DownloadPath contains only a single directory, use that directory instead
+                var dirs = Directory.EnumerateDirectories(DownloadPath).ToList();
+                if (dirs.Count == 1) {
                     return files[0];
+                } else {
+                    return DownloadPath;
                 }
-            } else {
-                return DownloadPath;
             }
-        };
+        }
 
         [JsonIgnore]
         public Mod Mod { get; set; }
