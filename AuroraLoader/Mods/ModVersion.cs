@@ -31,6 +31,19 @@ namespace AuroraLoader.Mods
         public bool Downloaded => Directory.Exists(DownloadPath);
 
         [JsonIgnore]
+        public string ContentPath {
+            get {
+                // if the DownloadPath contains only a single directory, use that directory instead
+                var dirs = Directory.EnumerateDirectories(DownloadPath).ToList();
+                if (dirs.Count == 1) {
+                    return dirs[0];
+                } else {
+                    return DownloadPath;
+                }
+            }
+        }
+
+        [JsonIgnore]
         public Mod Mod { get; set; }
 
 
@@ -118,7 +131,7 @@ namespace AuroraLoader.Mods
         {
             if (Mod.Type == ModType.UTILITY)
             {
-                return Run(DownloadPath, Mod.LaunchCommand);
+                return Run(ContentPath, Mod.LaunchCommand);
             }
             else if (Mod.Type == ModType.ROOTUTILITY || Mod.Type == ModType.EXECUTABLE)
             {
@@ -140,7 +153,7 @@ namespace AuroraLoader.Mods
                 var table = new SqliteCommand(TABLE, connection);
                 table.ExecuteNonQuery();
 
-                var files = Directory.EnumerateFiles(DownloadPath, "*.sql").ToList();
+                var files = Directory.EnumerateFiles(ContentPath, "*.sql").ToList();
                 try
                 {
                     var uninstall = files.Single(f => Path.GetFileName(f).Equals("uninstall.sql"));
@@ -175,10 +188,10 @@ namespace AuroraLoader.Mods
 
         private void UninstallDbMod(AuroraInstallation installation)
         {
-            var uninstallScript = Path.Combine(DownloadPath, "uninstall.sql");
+            var uninstallScript = Path.Combine(ContentPath, "uninstall.sql");
             if (!File.Exists(uninstallScript))
             {
-                throw new Exception($"Db mod {Mod.Name} uninstall.sql not found at {DownloadPath}");
+                throw new Exception($"Db mod {Mod.Name} uninstall.sql not found at {ContentPath}");
             }
 
             using (var connection = new SqliteConnection(installation.ConnectionString))
@@ -230,9 +243,9 @@ namespace AuroraLoader.Mods
 
         private void UninstallThemeMod(AuroraInstallation installation)
         {
-            foreach (var fileInMod in Directory.EnumerateFiles(DownloadPath, "*.*", SearchOption.AllDirectories))
+            foreach (var fileInMod in Directory.EnumerateFiles(ContentPath, "*.*", SearchOption.AllDirectories))
             {
-                var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(DownloadPath, fileInMod));
+                var out_file = Path.Combine(installation.InstallationPath, Path.GetRelativePath(ContentPath, fileInMod));
                 if (File.Exists(out_file))
                 {
                     File.Delete(out_file);
