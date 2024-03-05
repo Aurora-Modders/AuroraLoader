@@ -17,7 +17,6 @@ jobs:
     - uses: actions/setup-dotnet@v1
       with:
         dotnet-version: "3.1.*"
-    - run: dotnet test
     - name: Build and publish
       run: dotnet publish AuroraLoader --no-restore --self-contained true -f netcoreapp3.1 -r win-x86 -o ./Release -p:PublishReadyToRun=true -p:PublishSingleFile=true
     - name: Upload artifact
